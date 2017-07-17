@@ -1,0 +1,7 @@
+# Since I use stow to symlink my dotfiles, need to make sure the Makefile
+# doesn't get stowed by accident
+
+README.md
+.git
+.*.swp
+.gitignore

@@ -1,0 +1,22 @@
+! remove Caps Lock
+clear Lock
+! add Mode_switch, Escape is caps lock
+keycode 9 = Caps_Lock NoSymbol Caps_Lock
+keycode 66 = Mode_switch Mode_switch
+
+keycode 38 = a A Home
+keycode 40 = e E End
+keycode 27 = p P Up
+keycode 29 = f F Right
+keycode 43 = d D Delete
+keycode 44 = h H BackSpace
+keycode 46 = n N Down
+keycode 57 = b B Left
+
+keycode 41 = u U Escape
+
+keycode 59 = w W F8
+keycode 54 = j J F11
+
+! On chrome, F6 gets you out of address bar focus (moves to next focusable area)
+keycode 55 = k K F6

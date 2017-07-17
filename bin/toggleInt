@@ -1,0 +1,10 @@
+#!/bin/sh
+
+if [[ $(setxkbmap -query | grep 'variant') =~ "intl" ]]; then
+	setxkbmap us -variant dvorak
+else
+	setxkbmap us -variant dvorak-intl
+fi
+
+xmodmap ~/.xmodmap
+xset r rate 150 60

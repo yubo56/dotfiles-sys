@@ -1,0 +1,282 @@
+#!/usr/bin/python
+"""
+Program to solve and play and compute for 24. Optimized for clarity of code
+    rather than speed...
+Supported convention for drawing conventions include:
+    each card = iid in range [1, n_max]
+    each congruent scenario is weighted equally
+    drawn from n_nums * n_max card poker deck (WIP)
+"""
+# random statistics (n_max, n_numbers, target, method):
+# (13, 4, 24, uniform)
+#   Solvable: 22615         Total: 28561             Probability: 79.18%
+# (13, 4, 24, scenario)
+#   Solvable: 1362          Total: 1820              Probability: 74.84%
+# (13, 4, 24, deck)
+# Solvable: 0.8046          Total: 1.000             Probability: 80.46%
+import math
+import random
+import operator
+import sys
+import time
+
+OPS = [
+    operator.add,
+    operator.sub,
+    operator.mul,
+    operator.truediv
+]
+OP_NAMES = ['+', '-', '*', '/']
+
+def solve(nums, conf):
+    """
+    recursive function to attempt to identify whether nums can solve to 24
+    this implementation is slightly inefficient since it double counts many
+        solutions, but seems to be the cleanest implementation
+    """
+    curr_len = len(nums)
+    if curr_len == 1: # base case
+        return abs(nums[0] - conf['target']) <\
+            1 / (conf['max'] ** conf['count']),\
+            str(conf['target'])
+    else: # recursive case
+        for i in range(curr_len):
+            for j in list(range(i)) + list(range(i + 1, curr_len)):
+                for idx, opt in enumerate(OPS):
+                    # print(nums, i, j, OP_NAMES[idx]) # debug
+                    child_nums = list(nums)
+                    try:
+                        child_nums[min(i, j)] = opt(child_nums[i],
+                                                    child_nums[j])
+                        child_nums.pop(max(i, j))
+                    except ZeroDivisionError:
+                        continue
+
+                    sol, sol_str = solve(child_nums, conf)
+                    if sol:
+                        return True, '({} {} {}), {}'.format(nums[i],
+                                                             OP_NAMES[idx],
+                                                             nums[j],
+                                                             sol_str)
+        return False, ''
+
+def solve_wrap(command, nums, conf):
+    """wrapper that handles command parsing for solver"""
+    if command.isdigit():
+        nums.append(command)
+    if len(nums) != conf['count']:
+        print('Error, expected {} numbers, please try again'
+              .format(conf['count']))
+        return False
+    try:
+        nums = list(map(int, nums))
+    except ValueError:
+        print('Error, expected integers, please try again')
+        return False
+    if not all(map(lambda x: x > 0 and x <= conf['max'], nums)):
+        print('Error, expected all integers between 0 and {}'.format(conf['max'])
+              + ', please try again')
+        return False
+    # solve w/ array of floats since intermediate fractions are allowed
+    solved, sol_str = solve(list(map(float, nums)), conf)
+    if solved:
+        print(sol_str if command == 'show' else 'Solution found')
+    else:
+        print('No solution found')
+
+def generate(arg, conf):
+    """ generate num_gen tuples that are guaranteed to have solutions """
+    if not (len(arg) == 1 and arg[0].isdigit()):
+        print('Error, invoke generate with exactly one number')
+        return
+
+    num_gen = int(arg[0])
+    tuples = []
+    i = 0
+    while i < num_gen:
+        cand_tuple = list(map(lambda _: random.randint(1, conf['max']),
+                              [0] * conf['count']))
+        if solve(cand_tuple, conf)[0]:
+            tuples.append(cand_tuple)
+            print(" ".join([str(i) for i in cand_tuple]))
+            i += 1
+    return tuples
+
+def solve_game(args, conf):
+    """
+    brute-force solve cases.
+    only examine tuples in ascending order and keep careful count using
+        permutations to avoid double counting
+    """
+    # Before/after double-counting optimization: 162.45s/11.34s
+    def occurence_dict(tup):
+        """ helper function, produces dict of # times a value occurs """
+        digits = {}
+        for val in tup:
+            if val not in digits:
+                digits[val] = 1
+            else:
+                digits[val] += 1
+        return digits
+
+    def count_perms(tup):
+        """ counts number of permutations for a tuple """
+        digits = occurence_dict(tup)
+        double_counting = 1
+        for val in digits.values():
+            double_counting *= math.factorial(val)
+        return int(math.factorial(len(tup)) / double_counting)
+
+    def card_prob(tup):
+        """ calculates probability tup shows up in a fresh deck of cards,
+        assuming conf['count'] occurrences of conf['max'] cards """
+        prob = 1
+        denom = conf['count'] * conf['max']
+        digits = occurence_dict(tup)
+
+        # multiply out probabilities corresponding to each number
+        for val in digits.values():
+            while val > 0:
+                prob *= (conf['count'] + 1 - val) / denom
+                val -= 1
+                denom -= 1
+        return prob * count_perms(tup)
+
+    def renormalize_tuple(tup):
+        """
+        ensures all members of tuple below n_max and in ascending order.
+        Returns False if overflow
+        """
+        try:
+            for i in range(len(tup)):
+                if tup[i] > conf['max']:
+                    tup[i] -= conf['max']
+                    tup[i + 1] += 1
+            # have to do this ascending check after overflow check b/c tup[i +
+            # 1] has to be processed for overflow first
+            for i in range(len(tup)):
+                tup[i] = max(tup[i: ])
+            return True
+        except IndexError:
+            return False
+
+    if len(args) < 1:
+        print('Error, solve expected argument')
+        return
+    if args[0] == "uniform":
+        counter = count_perms
+    elif args[0] == "scenario":
+        counter = lambda x: 1
+    elif args[0] == "deck":
+        counter = card_prob
+    else:
+        print('Error: unsupported argument to solve')
+        return
+
+    count_success = 0
+    count_total = 0
+    cand_tuple = [1] * conf['count']
+    while renormalize_tuple(cand_tuple):
+        sol, _ = solve(cand_tuple, conf)
+        print('{} - {}'.format(cand_tuple, 'SUCCESS' if sol else 'FAILURE'))
+        count_total += counter(cand_tuple)
+        if sol:
+            count_success += counter(cand_tuple)
+        cand_tuple[0] += 1
+    print('Solvable: {}\t\tTotal: {}\t\t Probability: {}%'
+          .format(round(count_success, 3),
+                  round(count_total, 3),
+                  round(100 * count_success / count_total, 2)))
+
+def print_help(conf):
+    """ print help """
+    print('Allowed inputs are:\n' +
+          '\t"help" -- prints this usage message\n' +
+          '\t"exit" -- exit\n' +
+          '\t"N1 N2 N3 ..." -- solves given numbers, prints bool\n' +
+          '\t"show N1 N2 N3 ..." -- prints solution if found\n' +
+          '\t"generate N1" -- generate N1 many problems with ' + \
+              'guaranteed solutions\n' +
+          '\t"solve [method]" -- brute-forces probability that an ' + \
+              'arbitrary hand is solvable. Runs with parameters: ' + \
+              'n_max: {}, n_numbers {}, target: {}.\n\t\t'\
+              .format(conf['max'], conf['count'], conf['target']) + \
+              '[method] is one of "uniform", "scenario", or "deck"')
+
+def parse_input(nums, conf):
+    """ parse the inputted string. Return True if need to exit event loop """
+    command = nums.pop(0)
+    if command == 'exit':
+        return True
+    elif command == 'help':
+        print_help(conf)
+    elif command == 'generate':
+        generate(nums, conf)
+    elif command == 'solve':
+        start_time = time.time()
+        solve_game(nums, conf)
+        print('Took {} s'.format(round(time.time() - start_time, 2)))
+    elif command == 'show' or command.isdigit():
+        solve_wrap(command, nums, conf)
+    else:
+        print('Unrecognized command {}'.format(command))
+    return False
+
+def main_loop(conf):
+    """
+    Runs an infinite loop with the following allowed inputs
+    "N1 N2 N3 N4" -- determines whether solution w/ four numbers exists
+    "show N1 N2 N3 N4" -- prints solution if exists
+    "generate N1" -- generates N1 many sets of 4 numbers with a guaranteed solution
+    "exit" -- exit
+    "help" -- prints usage message (also prints by default when starting up
+    "solve" -- brute-forces probability that an arbitrary hand is solvable, assuming
+        N1-N4 are chosen uniformly
+    """
+    to_exit = False
+    print_help(conf)
+    while not to_exit:
+        nums = input('\nInput (type \'help\' for additional information) > ')\
+            .split()
+        to_exit = parse_input(nums, conf)
+
+def parse_flags(input_arr):
+    """
+    parses input string for optional parameters
+    assumes input_arr is an array of words
+    """
+    def parse_flag(flag):
+        """asserts flag is of form --[flag] and strips double dashes"""
+        assert flag[ :2] == '--'
+        return flag[2: ]
+
+    flags = list(map(parse_flag, input_arr[ ::2]))
+    vals = list(map(int, input_arr[1::2]))
+    return dict(zip(flags, vals))
+
+if __name__ == '__main__':
+    MAIN_USAGE = 'python solve24 [args]\n' + \
+        '\t--max [int] Maximum number allowed, inclusive. Default 13\n' + \
+        '\t--count [int] Number of numbers to use per problem. Default 4\n' + \
+        '\t--target [int] Target number. Default 24\n' + \
+        '\t--help Prints this help message'
+    ARGS = {'max': 13, 'count': 4, 'target': 24}
+    try:
+        if '--help' in sys.argv:
+            print(MAIN_USAGE)
+            exit(0)
+        ARGS.update(parse_flags(sys.argv[1: ]))
+    except AssertionError:
+        print('Error, expected flags to start with two dashes.\n{}'
+              .format(MAIN_USAGE))
+        exit(1)
+    except ValueError:
+        print('Error, expected integers for flag arguments.\n{}'
+              .format(MAIN_USAGE))
+        exit(1)
+
+    try:
+        main_loop(ARGS)
+    except (EOFError, KeyboardInterrupt):
+        print()
+    print('Exiting, good-bye!')

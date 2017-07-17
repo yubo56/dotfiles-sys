@@ -1,0 +1,47 @@
+URxvt*transparent: true
+URxvt*shading: 15
+URxvt*scrollBar: false
+URxvt*font: xft:xos4 Terminus-15
+URxvt*foreground: rgb:b9/80/00
+URxvt*background: black
+
+! disable urxvt perl extensions
+URxvt.perl-ext:
+URxvt.perl-ext-common:
+
+! neutralize highlight blue a bit
+! command to print all colors out
+! x=`tput op` y=`printf %76s`;for i in {0..256};do o=00$i;echo -e ${o:${#o}-3:3} `tput setaf $i;tput setab $i`${y// /=}$x;done
+URxvt.color12: #1f57ff
+
+! disable "keycap picture insert mode"
+URxvt.iso14755: false
+URxvt.iso14755_52: false
+
+! Font stuff
+xterm*faceName: Terminus
+xterm*faceSize: 17
+xterm*cjk_width:  true
+xterm*faceNameDoublesize:  AR PL UKai CN:style=Book
+
+!disable bold text
+xterm*boldFont: Dejavu Sans Mono Book
+XTerm*boldMode: false
+
+!correct backspace key
+xterm*backarrowKey: false
+
+!highlight Selection
+xterm*highlightSelection:true
+
+!color
+xterm*foreground: rgb:b9/80/00
+xterm*background: black
+XTerm*fastScroll: True
+
+!Xcursor
+Xcursor.theme: whiteglass
+Xcursor.size: 32
+
+!locale
+XTerm*locale: true

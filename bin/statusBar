@@ -1,0 +1,112 @@
+#!/usr/bin/bash
+
+prevtotal=0
+previdle=0
+monOff=1
+sep='|'
+# sep='·'
+
+while true; do
+    #--------------------------------------------------------TOGGLE SCREEN WHEN CONNECTED----------------------------------------
+    if [[ "$(hostname)" =~ ArchTest ]]; then
+        xrandr --output HDMI1 --auto --left-of eDP1
+    else
+        xrandr --output DP-1 --auto --right-of eDP-1 && \
+            xrandr --output DP-2 --auto --right-of DP-1 --rotate left
+    fi
+
+    #--------------------------------------------------------CALCULATE CPU USAGE----------------------------------------
+    abc=`cat /proc/stat | grep 'cpu ' | sed 's/cpu//g'`
+    total=0
+    count=0
+    for i in $abc; do
+        if [ $count -eq 3 ]; then
+            idle=$i
+        fi
+        count=$(echo "$count + 1" | 'bc')
+        total=$(echo "$total+$i" | 'bc')
+    done
+    usage=$(echo "scale=1;100 *(($total - $prevtotal) - ($idle - $previdle))/($total - $prevtotal)" | bc)
+    prevtotal=$total
+    previdle=$idle
+
+    #-------------------------------------------------------MEMSTATS--------------------------------------------
+    total=$(cat /proc/meminfo | grep MemTotal | sed -e 's/MemTotal://g' -e 's/kB//g' -e 's/ //g')
+    free=$(cat /proc/meminfo | grep MemFree | sed -e 's/MemFree://g' -e's/kB//g' -e 's/ //g')
+    mem=$(echo "scale=0;($total - $free)*100/$total" | 'bc')
+
+    #-------------------------------------------------------BATTSTATS--------------------------------------------
+    battstat="N/A"
+    [[ -e /sys/class/power_supply/BAT0/status ]] &&
+        battstat=$(cat /sys/class/power_supply/BAT0/status | awk '{print substr($0,0,1)}') &&
+        battperc=$(cat /sys/class/power_supply/BAT0/capacity)
+
+
+    #-------------------------------------------------------VOLUME--------------------------------------------
+    vol=$(amixer get Master | grep 'Mono:' | perl -e "my \$string = <>;print \"Mu\" if \$string =~ /off/;\$string =~ s/\[(\d+)%\]// if \$string =~ /\[on\]/;print \$1;")
+
+    #------------------------------------------------------BRIGHTNESS------------------------------------------
+    bright=$(echo "scale=0;$(cat $brightfile) * 100 / $(cat $brightmax)" | bc)
+
+
+    #-------------------------------------------------------SET INTERNET RELATED STUFF--------------------------------------------
+
+    #format weather string
+    if [[ -s /tmp/weather ]]; then
+        weather="$(cat /tmp/weather)${sep}"
+    else
+        weather=""
+    fi
+
+    #---------------------------------------------------FIND KBLAYOUT----------------------------------------
+    layout=$(setxkbmap -query | grep variant)
+    if [[ $layout =~ "dvorak-l" ]]; then layout="L"
+    else if [[ $layout =~ "dvorak-intl" ]]; then layout="DI"
+    else if [[ $layout =~ "dvorak" ]]; then layout="D"
+    else  layout="U";fi;fi;fi
+
+    #---------------------------------------------------------- TEMPERATURE ----------------------------------------------------------
+    # if [[ "$(hostname)" =~ ArchTest ]]; then
+    #     temp=$(acpi -t | grep "Thermal 0:" | grep -v "trip point" | awk '{print($4)}' | sed 's/\.0//g')
+    #     temp="$temp/$(acpi -t | grep "Thermal 1:" | grep -v "trip point" | awk '{print($4)}' | sed 's/\.0//g')"
+    # fi
+    temp=$(sensors coretemp-isa-0000 -u | 'grep' temp1_input | tr -d ' ' | sed -nE 's/.*:(.*)\..*/\1/p')
+    temp="${sep}T:$temp"
+    # temp="·온도:$temp"
+
+    #---------------------------------------------------------- SIGNAL STRENGTH QUALITY/LEVEL -----------------------------------------
+    # net=$(cat /proc/net/wireless | grep ':' | sed 's/\.//g' | awk '{print $3"/"$4}')
+    net=$(iw dev $WIFI link | grep signal | awk '{print $2}' | sed 's/\ //g')
+
+    #---------------------------------------------------------- PACUPDATE -----------------------------------------
+    # is pacman updating/status?
+    pu=$([[ -n "$(systemctl status pacupdate.service | grep failed)" ]] && echo '(!!) ' || echo '')
+
+    #---------------------------------------------------VPN----------------------------------------
+    vpn=''
+    devlog='/tmp/devlog'
+    prodlog='/tmp/prodlog'
+    completed='Initialization Sequence Completed'
+
+    if [[ -f $prodlog && $(tail -n 1 $prodlog) =~ $completed ]]; then vpn="${vpn}P"; fi
+    if [[ -f $devlog && $(tail -n 1 $devlog) =~ $completed ]]; then vpn="${vpn}D"; fi
+    if [[ $vpn != '' ]]; then vpn="P:$vpn"; fi
+
+    #-------------------------------------------------------SET REPLY--------------------------------------------
+    # REPLY="${pu}电:$battperc$battstat$temp${sep}亮:$bright${sep}网:$net${sep}声:$vol${sep}脑:$usage${sep}内:$mem${sep}$weather`date +%a|~/bin/dateWeek``date +'%d/%m/%y %H:%M:%S'`$layout"
+    # REPLY="${pu}B:$battperc$battstat$temp${sep}B:$bright${sep}W:$net${sep}V:$vol${sep}C:$usage${sep}M:$mem${sep}$weather`date +%a|~/bin/dateWeek``date +'%m/%d/%y %H:%M:%S'`$layout"
+    # REPLY="${pu}전기:$battperc$battstat$temp·명도:$bright·랜:$net·체적:$vol·심장:$usage·기억:$mem·$weather`date +%a|~/bin/dateWeek``date +'%m/%d/%y %H:%M:%S'`$layout"
+    if [[ $net  == '' ]]
+    then
+        REPLY="${pu}B:$battperc$battstat$temp${sep}V:$vol${sep}C:$usage${sep}M:$mem${sep}$weather`date +%a|~/bin/dateWeek``date +'%m/%d/%y %H:%M:%S'`$layout"
+    else
+        REPLY="${pu}B:$battperc$battstat$temp${sep}W:$net${sep}$vpn${sep}V:$vol${sep}C:$usage${sep}M:$mem${sep}$weather`date +%a|~/bin/dateWeek``date +'%m/%d/%y %H:%M:%S'`$layout"
+    fi
+
+
+    xsetroot -name "$REPLY"
+    if [[ $battperc -ne "" ]]; then
+        [[ $(echo "$battperc < 5" | bc) -eq "1" ]] && [[ $battstat == "D" ]] && sudo pm-suspend
+    fi
+    sleep 1s
+done

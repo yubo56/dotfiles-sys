@@ -1,0 +1,9 @@
+#!/usr/bin/bash
+if [[ "$(hostname)" == ArchTest ]]; then
+    inc=3
+else
+    inc=30
+fi
+curr=`cat $brightfile`
+new=`echo "$curr+$inc" | 'bc'`
+echo $new | sudo tee $brightfile > /dev/null

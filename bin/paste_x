@@ -1,0 +1,12 @@
+#!/usr/bin/zsh
+
+case "$1" in
+    -c)
+        sleep 0.1 && xdotool type --delay 2 --clearmodifiers "$(xclip -selection c -o)" &&
+            xdotool keyup Super_L+shift
+        ;;
+    *)
+        sleep 0.1 && xdotool type --delay 2 --clearmodifiers "$(xclip -o)" &&
+            xdotool keyup Super_L+shift
+        ;;
+esac

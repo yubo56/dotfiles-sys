@@ -1,0 +1,7 @@
+#!/bin/sh
+abcd=$(synclient | grep TouchpadOff)
+if [[ $abcd =~ '0' ]]; then
+	synclient TouchpadOff=1
+else
+	synclient TouchpadOff=0
+fi

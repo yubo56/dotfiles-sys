@@ -1,0 +1,69 @@
+git_status () {
+    if [[ $(git rev-parse --is-inside-git-dir 2> /dev/null) ]]
+        then
+        GIT_BRANCH=$(git rev-parse --abbrev-ref HEAD 2> /dev/null)
+        if [ "$GIT_BRANCH" = "HEAD" ]
+            then
+            echo "(%{$fg[red]%}[HEAD]%{$reset_color%}|$(git_files))"
+        else
+            if [ "$GIT_BRANCH" != "master" ]
+                then
+                GIT_BRANCH="%{$fg[green]%}$GIT_BRANCH%{$reset_color%}"
+            fi
+            echo "($GIT_BRANCH|$(git_files)$(git_commits)) "
+        fi
+    fi
+}
+
+# outputs red-, green+ or nothing
+git_commits () {
+    # if no upstream then no stdout, fail fast
+    if [ "$(git rev-parse --abbrev-ref @{u} 2>/dev/null)" != "" ]
+        then
+        NUM_AHEAD=$(git rev-list @{u}..HEAD --count 2> /dev/null) &&
+        NUM_BEHIND=$(git rev-list HEAD..@{u} --count 2> /dev/null) && {
+            if (( ! $? && $NUM_AHEAD && $NUM_BEHIND ))
+                then
+                echo "%{$fg[yellow]%}?%{$reset_color%}"
+            else
+                # only execute second if first is nonzero
+                (( $NUM_AHEAD )) && echo "%{$fg[green]%}+%{$reset_color%}"
+                (( $NUM_BEHIND )) && echo "%{$fg[red]%}-%{$reset_color%}"
+            fi
+        }
+    fi
+}
+
+# always outputs something
+git_files () {
+    # -n only print if explicitly print, p prints
+    # ^M, ^A, ^D = modified, newly added, deleted
+    # ^\ M, ^\?\?, ^\ D = modified, not yet tracked, deleted
+    STATUS=$(git status --porcelain 2> /dev/null) && {
+        # STATUS reports like 'M  <FN>' or ' M <FN' or even 'MM <FN>', first
+        # character is tracked change second is untracked
+        NUM_ADDED=$(grep -c '^[^\ \?]' <<< $STATUS) # anything non-space first char
+        NUM_TO_ADD=$(grep -c '^.[^\ ]' <<< $STATUS) # anything non-space second char
+
+        # if either is nonzero, short-circuits and doesn't evaluate second statement
+        if (( $NUM_ADDED || $NUM_TO_ADD ))
+            then
+            (( $NUM_ADDED )) || NUM_ADDED=''
+            (( $NUM_TO_ADD )) || NUM_TO_ADD=''
+            echo "%{$fg[green]%}$NUM_ADDED%{$fg[red]%}$NUM_TO_ADD%{$reset_color%}"
+        else
+            echo "%{$fg[green]%}.%{$reset_color%}"
+        fi
+    } || {
+        # print red x if cannot execute git status!
+        echo "%{$fg[red]%}x%{$reset_color%}"
+    }
+}
+
+# autocompletion for tmux sessions
+function __tmux-sessions() {
+    local expl
+    local -a sessions
+    sessions=( ${${(f)"$(command tmux list-sessions)"}/:[ $'\t']##/:} )
+    _describe -t sessions 'sessions' sessions "$@"
+}

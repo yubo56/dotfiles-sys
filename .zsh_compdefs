@@ -1,0 +1,2 @@
+compdef g='git'
+compdef __tmux-sessions ta

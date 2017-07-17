@@ -1,0 +1,69 @@
+[user]
+    email = yubo@blend.com
+    name = Yubo Su
+[push]
+    default = simple
+[merge]
+    conflictstyle = diff3
+[core]
+    editor = vim
+    excludesfile = ~/.globalgitignore
+[alias]
+    al = config --get-regex alias
+    bn = rev-parse --abbrev-ref HEAD
+
+    # add cwd vs add all
+    a = !cd ${GIT_PREFIX:-.} && git add . && git s
+    aa = !git add . && git s
+    c = commit -m
+    ca = commit -a -m
+    s = status
+    l = log
+    lg = log --graph --decorate --oneline
+    rc = rm --cached
+
+    f = fetch -p
+    p = push
+    pf = push --force
+    pu = !git p --set-upstream origin $(git bn)
+    pl = pull
+    plf = pull --force
+    pm = pull origin master
+    mb = merge-base HEAD origin/master
+
+    st = stash
+    sa = stash apply
+    rh = reset --hard HEAD
+    rh1= reset --hard HEAD^1
+    rhm = reset --hard origin/master
+
+    b = branch
+    bd = branch -D
+    ch = checkout
+    cm = checkout master
+    cb = checkout -b
+    dh1 = diff HEAD^1
+    d = "!f() { git diff ${1:-HEAD}; }; f"
+
+    dm = !git diff $(git mb)
+    plp = !git pull && git fetch -p && git gc && git prune
+    pmp = !git pm --no-edit && git p
+    sps = !git stash && git pl && git sa
+    spms = !git stash && git pm && git sa
+    bdm = !export _CURR_GIT=$(git bn) && git cmp && git branch -D $_CURR_GIT
+    cmp = !git ch master && git plp
+
+    rebasestaging = !export _CURR_GIT=$(git bn) && git rebase --onto origin/staging origin/master HEAD && git branch -D $_CURR_GIT && git checkout -b $_CURR_GIT
+    deletehistory = !git checkout --orphan _master && git add -A && git commit -am "initial" && git branch -D master && git branch -m master && git push --set-upstream origin $(git bn) --force
+
+    ; use git checkout <commit> -- <file>
+    ;
+    ; resets a file to $2 or HEAD. fails if no argument provided. 4 lines are:
+    ;   - fail if no arguments
+    ;   - check that diff is not empty
+    ;   - apply the diff with $GIT_PREFIX relative to working directory
+    ;       - ${2:-HEAD} vs ${2:=HEAD} boils down to "substitute" vs "assign"
+    ; http://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.html#tag_18_06_02
+    ; reset-file = "!f() { [[ -n $1 ]] && \
+    ;     [[ \"$(git diff --name-only ${2:-HEAD})\" =~ $1 ]] && \
+    ;     git apply -R <<< \"$(git diff ${2:-HEAD} -- $GIT_PREFIX$1)\"; }; f"

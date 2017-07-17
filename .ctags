@@ -1,0 +1,26 @@
+-f .tags
+--recurse=yes
+
+--exclude=**.git
+--exclude=**log/*
+--exclude=venv/*
+
+--exclude=**node_modules/*
+--exclude=**bower_components/*
+--exclude=**vendor/*
+--exclude=**dev/*
+--exclude=**dist/*
+
+--exclude=**coverage/*
+
+--exclude=**walkme/*
+--exclude=**ext-lib/*
+
+
+--langdef=latex
+--langmap=latex:.tex
+--regex-latex=/\\label\{([^}]*)\}/\1/l,label/
+--regex-latex=/\\section\**\{([^}]+)\}/s: \1/s,section/
+--regex-latex=/\\subsection\**\{([^}]+)\}/ss: \1/s,subsection/
+
+--regex-make=/^([a-z]*):/\1/t,targets/
