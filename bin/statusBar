@@ -105,8 +105,8 @@ while true; do
 
 
     xsetroot -name "$REPLY"
-    if [[ $battperc -ne "" ]]; then
-        [[ $(echo "$battperc < 5" | bc) -eq "1" ]] && [[ $battstat == "D" ]] && sudo pm-suspend
-    fi
+    # if [[ $battperc -ne "" ]]; then
+    #     [[ $(echo "$battperc < 5" | bc) -eq "1" ]] && [[ $battstat == "D" ]] && sudo pm-suspend
+    # fi
     sleep 1s
 done

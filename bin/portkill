@@ -1,0 +1,13 @@
+portkill () {
+  kill -9 $(lsof -t -i :$1)
+}
+
+killem () {
+  ports=( 3001 3002 9000 9001 9002 9003 )
+
+  for i in "${ports[@]}"
+  do
+    echo $i
+    portkill $i
+  done
+}

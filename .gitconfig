@@ -26,6 +26,7 @@
     p = push
     pf = push --force
     pu = !git p --set-upstream origin $(git bn)
+    puf = !git p --set-upstream origin $(git bn) --force
     pl = pull
     plf = pull --force
     pm = pull origin master
