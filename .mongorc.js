@@ -363,7 +363,7 @@ function yubo_enableFF() {
     _id: {
       $nin: [
         'sesEnabled',
-        'skipEmptyFirstTasks20170117',
+        'prefillFlows08012017',
         'pullAssetsWithSSOOAuthToken',
         'reactTaskForm05172017',
         'multipleAccountsTaxTranscriptsWorkflow20170613',
@@ -408,6 +408,18 @@ function yubo_init() {
 function yubo_rmEmail() {
   db.user.remove({ email: { $regex: /yubo.*blendlabs.com/ } });
   print("Emails removed");
+}
+
+function yubo_addIncomes(topicId) {
+  db.parties.update(
+    { topicId: topicId },
+    { $set: { incomes: [{ type: 'SOCIAL_SECURITY', prefillSource: 'Quick App', amount: 5000, _id: "73d04c83-b7b2-415f-aaaa-becc446fdfd9" }] } }
+  );
+  db.parties.update(
+    { topicId: topicId },
+    { $push: { incomes: { type: 'SOCIAL_SECURITY', prefillSource: 'Quick App', amount: 5000, _id: "73d05c83-b7b2-415f-b20d-becc446fdfd8" } } }
+  );
+  printjson(db.parties.findOne({ topicId: topicId }, { incomes: 1 }));
 }
 
 function resetSuper() {
