@@ -27,7 +27,7 @@ alias monoff='xset dpms force off'
 
 # Utilities
 alias g='git'
-alias cleantex='find ./* | grep -E "\.(aux|bbl|out|blg|log|nav|snm|toc|vrb)" | tee /dev/stderr | (xargs rm -f)'
+alias cleantex='find ./* | '\'grep\'' -E "\.(aux|bbl|out|blg|log|nav|snm|toc|vrb)" | tee /dev/stderr | (xargs rm -f)'
 alias clearmem='sync; echo 3 | sudo tee /proc/sys/vm/drop_caches'
 alias pacrmdep='sudo pacman -Qtdq > /dev/null && sudo pacman -Rs $(pacman -Qtdq)'
 alias mountwin='sudo mount /dev/sda3 /mnt'
