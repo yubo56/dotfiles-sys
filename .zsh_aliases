@@ -7,7 +7,7 @@ else
 fi
 
 alias ls="$LS -lhX --color=auto --group-directories-first"
-alias ll="$LS -A"
+alias ll="ls -A"
 alias rm='rm -i' # the mark of a man who has seen things
 
 # options for common programs
