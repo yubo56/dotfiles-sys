@@ -71,11 +71,6 @@ compinit && . ~/.zsh_compdefs
 ### and chose BASH style
 select-word-style bash
 
-# pimp out tab completion a bit
-eval `dircolors -b`
-zstyle ':completion:*' list-colors '${(s.:.)LS_COLORS}'
-zstyle ':completion:*' menu select eval "$(dircolors -b)"
-
 # report time for >5s processes
 REPORTTIME=5
 
@@ -96,6 +91,11 @@ fi
 if [[ "$(hostname)" != "ArchTest" ]]; then
     . ~/.blend_aliases
 fi
+
+# pimp out tab completion a bit
+eval "$($DIRCOLORS -b)"
+zstyle ':completion:*' list-colors '${(s.:.)LS_COLORS}'
+zstyle ':completion:*' menu select eval "$($DIRCOLORS -b)"
 
 # variables
 export EDITOR="vim"
