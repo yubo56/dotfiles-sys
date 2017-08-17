@@ -90,7 +90,7 @@ while true; do
 
     if [[ -f $prodlog && $(tail -n 1 $prodlog) =~ $completed ]]; then vpn="${vpn}P"; fi
     if [[ -f $devlog && $(tail -n 1 $devlog) =~ $completed ]]; then vpn="${vpn}D"; fi
-    if [[ $vpn != '' ]]; then vpn="P:$vpn"; fi
+    if [[ $vpn != '' ]]; then vpn="P:$vpn$sep"; fi
 
     #-------------------------------------------------------SET REPLY--------------------------------------------
     # REPLY="${pu}电:$battperc$battstat$temp${sep}亮:$bright${sep}网:$net${sep}声:$vol${sep}脑:$usage${sep}内:$mem${sep}$weather`date +%a|~/bin/dateWeek``date +'%d/%m/%y %H:%M:%S'`$layout"
@@ -100,7 +100,7 @@ while true; do
     then
         REPLY="${pu}B:$battperc$battstat$temp${sep}V:$vol${sep}C:$usage${sep}M:$mem${sep}$weather`date +%a|~/bin/dateWeek``date +'%m/%d/%y %H:%M:%S'`$layout"
     else
-        REPLY="${pu}B:$battperc$battstat$temp${sep}W:$net${sep}$vpn${sep}V:$vol${sep}C:$usage${sep}M:$mem${sep}$weather`date +%a|~/bin/dateWeek``date +'%m/%d/%y %H:%M:%S'`$layout"
+        REPLY="${pu}B:$battperc$battstat$temp${sep}W:$net${sep}${vpn}V:$vol${sep}C:$usage${sep}M:$mem${sep}$weather`date +%a|~/bin/dateWeek``date +'%m/%d/%y %H:%M:%S'`$layout"
     fi
 
 
