@@ -16,7 +16,7 @@ keycode 57 = b B Left
 keycode 41 = u U Escape
 
 keycode 59 = w W F8
-keycode 54 = j J F11
+keycode 39 = o O F11
 
 ! On chrome, F6 gets you out of address bar focus (moves to next focusable area)
 keycode 55 = k K F6
