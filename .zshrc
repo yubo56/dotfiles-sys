@@ -110,8 +110,12 @@ export QT_IM_MODULE="ibus"
 setopt PROMPT_SUBST
 PS1='$(git_status)%~\$ '
 
-# start ssh-agent
-eval "$(ssh-agent -s)" > /dev/null
+# start shared ssh-agent
+if [ ! -S /tmp/ssh_auth_sock ]; then
+    eval "$(ssh-agent -s)" > /dev/null
+    ln -sf "$SSH_AUTH_SOCK" /tmp/ssh_auth_sock
+fi
+export SSH_AUTH_SOCK=/tmp/ssh_auth_sock
 
 # trigger any venv stuff
 cd .
