@@ -16,6 +16,7 @@
 *.lof
 *.log
 *.lot
+*.toc
 *.nlo
 *.out
 *.run.xml
