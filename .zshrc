@@ -116,6 +116,7 @@ if [ ! -S /tmp/ssh_auth_sock ]; then
     ln -sf "$SSH_AUTH_SOCK" /tmp/ssh_auth_sock
 fi
 export SSH_AUTH_SOCK=/tmp/ssh_auth_sock
+ssh-add -l > /dev/null || ssh-add ~/.ssh/id_rsa
 
 # trigger any venv stuff
 cd .
