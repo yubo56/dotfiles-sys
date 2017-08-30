@@ -2,7 +2,6 @@
 ### BLEND
 ### Put all blend-related stuff here so can source on OSTYPE
 if [[ $OSTYPE =~ "darwin" ]]; then
-    alias ls='gls -lhX --color=auto --group-directories-first'
     export NVM_DIR="/Users/yssu/.nvm"
 
     # OS X settings
@@ -19,6 +18,7 @@ else
     alias blend_mongo='ulimit -n 4096 -u 32768 &&\
         rm -f ~/mongodb/data/db/mongod.lock &&\
         mongod --dbpath ~/mongodb/data/db > /dev/null&!'
+    alias mongo="mongo --eval \"var DOCUSIGN_PW=\\\"$(cat ~/.docusign_pw)\\\"\" --shell"
 fi
 
 alias venv='source ~/blend/venv/bin/activate'
@@ -29,7 +29,6 @@ alias nps='BLEND_LOGGER_LEVEL=debug npm start'
 alias npts='BLEND_LOGGER_LEVEL=error npm test -- --skip-style'
 alias nptr='BLEND_LOGGER_LEVEL=error npm run testFast'
 alias blend_init_dev='mongo centrio <<< db.dropDatabase\(\) && fab init_dev'
-alias mongo="mongo --eval \"var DOCUSIGN_PW=\\\"$(cat ~/.docusign_pw)\\\"\" --shell"
 
 alias docker_rm='docker rm `docker ps -a -q`'
 alias docker_rmi='docker rmi `docker images --format "{{.ID}}"`'
