@@ -1,0 +1,178 @@
+#! /bin/zsh
+### BLEND
+### Put all blend-related stuff here so can source on OSTYPE
+if [[ $OSTYPE =~ "darwin" ]]; then
+    alias ls='gls -lhX --color=auto --group-directories-first'
+    export NVM_DIR="/Users/yssu/.nvm"
+
+    # OS X settings
+    defaults write com.apple.Dock autohide-delay -float 1; killall Dock
+    defaults write .GlobalPreferences com.apple.mouse.scaling -1
+    alias blend_mongo='
+        ulimit -f unlimited -t unlimited -v unlimited -n 1000 -u 1000 &&\
+        rm -f ~/mongodb/data/db/mongod.lock &&\
+        mongod --dbpath ~/mongodb/data/db > /dev/null&!'
+    # increase file descriptors for mongo not bug out, as high as allowed on OS x
+    alias dockerstart='zsh --login "/Applications/Docker/Docker Quickstart Terminal.app/Contents/Resources/Scripts/start.sh"'
+else
+    export NVM_DIR="/home/yssu/.nvm"
+    alias blend_mongo='ulimit -n 4096 -u 32768 &&\
+        rm -f ~/mongodb/data/db/mongod.lock &&\
+        mongod --dbpath ~/mongodb/data/db > /dev/null&!'
+fi
+
+alias venv='source ~/blend/venv/bin/activate'
+alias bfind="find . -not \( -path '*/vendor' -prune \) -not \( -path '*/node_modules' -prune \) -not \( -path '*/.git' -prune \) -not \( -path '*/venv' -prune \) -iname"
+
+alias npt='npm test'
+alias nps='BLEND_LOGGER_LEVEL=debug npm start'
+alias npts='BLEND_LOGGER_LEVEL=error npm test -- --skip-style'
+alias nptr='BLEND_LOGGER_LEVEL=error npm run testFast'
+alias blend_init_dev='mongo centrio <<< db.dropDatabase\(\) && fab init_dev'
+alias mongo="mongo --eval \"var DOCUSIGN_PW=\\\"$(cat ~/.docusign_pw)\\\"\" --shell"
+
+alias docker_rm='docker rm `docker ps -a -q`'
+alias docker_rmi='docker rmi `docker images --format "{{.ID}}"`'
+alias docker_sizes='docker ps -a -s --format "table {{.ID}}\t{{.Size}}" &&
+    docker images --format "{{.Repository}}\t{{.Tag}}\t{{.Size}}"'
+alias docker_build_b='fab build_and_push_docker_images:backend'
+
+function blend_do() {
+    _dir=$(pwd)
+    for i in blend blendTest; do
+        echo "\n\t@@@ $i @@@"
+        cd ~/$i &&
+            eval "$@" &&
+            cd ~
+        done
+    cd $_dir
+}
+function blend_ansible() {
+    sed "s/'/\"/g;s/u\"/\"/g;s/None/null/g;s/True/true/g;s/False/false/g" | \
+    jq -C . | less
+}
+function blend_own() {
+    # counts number owners, number files, number lines, number chars owned by
+    # reviewers. Counts only Dockerfile, js, py, yml, json for now
+    #
+    # Interesting usages are to pipe this into sort -nr -k<num>
+    cd ${1:=~/blend}
+    rm -rf frontend/client{dev,dist}
+    find . -type d \( -name node_modules -o -name bower_components -o -name vendor -o -name apidoc -o -name venv -o -name coverage* \) -exec rm -rf {} \+
+
+    # ${(f)} rejoins its argument, semantic joining
+    # http://zsh.sourceforge.net/Doc/Release/Expansion.html#Command-Substitution
+    # then double quotes + parens to coerce to array
+    # LANG=C sort -r puts all OWNERS files after subdirs
+    OWNERS=("${(f)$(bfind OWNERS | LANG=C sort -r)}")
+    LEN=$(wc -l <<< $OWNERS)
+    # DATA = list of OWNERS_FILE FILES LINES WORDS CHARS
+    # tr -s "squeezes" so collapses repeated instances
+    DATA=$(for i in $OWNERS; do
+        PARENT=${i:gs/\/OWNERS//}
+        WC_RESULTS=$(wc $PARENT/**/{Dockerfile*,*.{js,py,yml}} 2> /dev/null)
+        (( FILE_COUNT = $(wc -l <<< $WC_RESULTS) - 1 ))
+        WC_STATS=$(tail -n 1 <<< $WC_RESULTS | tr -s ' ' | cut -f2,3,4 -d' ')
+        echo $PARENT $FILE_COUNT $WC_STATS
+    done)
+
+    # python script to subtract subdir contributions from superdirs
+    #   sorting above guarantees dirs only look after them for parents
+    # -d'' means won't delimit on new lines
+    # 'EOF' means don't interpret anything in HEREDOC
+    read -r -d '' SUBDIR_DEDUPE_PY <<'EOF'
+import sys
+stats = [line.split() for line in sys.stdin.read().split('\n') if line != '']
+for (i, [paths, files, lines, words, chars]) in enumerate(stats):
+    for otherLines in stats[i + 1: ]:
+        if otherLines[0] in paths:
+            otherLines[1] = str(int(otherLines[1]) - int(files))
+            otherLines[2] = str(int(otherLines[2]) - int(lines))
+            otherLines[3] = str(int(otherLines[3]) - int(words))
+            try:
+                otherLines[4] = str(int(otherLines[4]) - int(chars))
+            except ValueError:
+                otherLines[4] = '0';
+for line in stats:
+    print(' '.join(line))
+EOF
+    DEDUPED=$(python -c "$SUBDIR_DEDUPE_PY" <<< $DATA)
+
+    # compute list of PERSON FILES LINES WORDS CHARS without summing yet
+    ARR=("${(f)$(<<< $DEDUPED)}")
+    PERSON_STATS=$(sort <<< $(for i in $ARR; do
+        FILE=$(cut -f1 -d' ' <<< $i)
+        PEOPLE_ARR=("${(f)$(< $FILE/OWNERS)}")
+        for person in $PEOPLE_ARR; do
+            echo $person $(cut -f2,3,4,5 -d' ' <<< $i)
+        done
+    done))
+
+    # python script to sub screw it
+    # NUM_OWNERS_FILES, FILES, LINES, WORDS, CHARS
+    read -r -d '' SUM_PERSON <<'EOF'
+import sys
+from collections import defaultdict
+stats = [line.split() for line in sys.stdin.read().split('\n') if line != '']
+ret = defaultdict(lambda: [0, 0, 0, 0, 0])
+for [reviewer, files, lines, words, chars] in stats:
+    ret[reviewer][0] += 1
+    ret[reviewer][1] += int(files)
+    ret[reviewer][2] += int(lines)
+    ret[reviewer][3] += int(words)
+    try:
+        ret[reviewer][4] += int(chars)
+    except ValueError:
+        continue
+for reviewer, stats in ret.items():
+    print(' '.join(map(str, [reviewer] + stats)))
+EOF
+    python -c "$SUM_PERSON" <<< $PERSON_STATS | column -t
+}
+
+alias blend_vpn_dev='touch /tmp/devlog && sudo openvpn --log /tmp/devlog --config ~/.openvpn/dev_autologin.ovpn --daemon'
+alias blend_vpn_prod='touch /tmp/prodlog && sudo openvpn --log /tmp/prodlog --config ~/.openvpn/prod.ovpn --daemon'
+alias blend_vpn='blend_vpn_dev; blend_vpn_prod'
+alias blend_ssh='ssh-add ~/.ssh/blend_prod'
+alias blend_rm_tmp='(cd /tmp && rm -rf tmpfile-* *117* npm-* ssh-*)'
+alias blend_enospc='echo fs.inotify.max_user_watches=524288 | sudo tee /etc/sysctl.conf && sudo sysctl -p'
+alias bls='blend_do g bn'
+
+export MONGO_DB='centrio'
+export NODE_ENV=dev
+export DEPLOYMENT=blend-borrower
+export TENANT_LIST=blend-borrower
+export BLEND_LOGGER_LEVEL='warn'
+export SLACK_CHANNEL='build-statistics'
+
+[[ -f /usr/share/nvm/init-nvm.sh ]] && source /usr/share/nvm/init-nvm.sh
+[[ -f ~/blend/venv/bin/aws_zsh_completer.sh ]] && source ~/blend/venv/bin/aws_zsh_completer.sh
+
+# run these only if file doesn't exist
+if [ ! -f /tmp/startedup ]; then
+  blend_mongo
+  touch /tmp/startedup
+fi
+
+# venv (for blend* repos only)
+function cd() {
+    # compatibility with cdr
+    if [[ $1 == '--' ]]; then
+        builtin cd $2;
+    else
+        builtin cd $1;
+    fi
+
+    root=$(git rev-parse --show-toplevel 2> /dev/null || true)
+    # if no git root and in venv, or in git root and virtualenv path is wrong,
+    # deactivate
+    if [[ ( -z $root && $(command -v deactivate || true) == 'deactivate' ) ||
+        ( -n $root && -n $VIRTUAL_ENV && ! ( $VIRTUAL_ENV =~ $root ) ) ]]; then
+        deactivate
+    fi
+
+    # if has git root, has venv and not activated, activate
+    if [[ -n $root && -f $root/venv/bin/activate && $(command -v deactivate || true) != 'deactivate' ]]; then
+        source $root/venv/bin/activate
+    fi
+}
