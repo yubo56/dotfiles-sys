@@ -7,12 +7,6 @@ if [[ $OSTYPE =~ "darwin" ]]; then
     # OS X settings
     defaults write com.apple.Dock autohide-delay -float 1; killall Dock
     defaults write .GlobalPreferences com.apple.mouse.scaling -1
-    alias blend_mongo='
-        ulimit -f unlimited -t unlimited -v unlimited -n 1000 -u 1000 &&\
-        rm -f ~/mongodb/data/db/mongod.lock &&\
-        mongod --dbpath ~/mongodb/data/db > /dev/null&!'
-    # increase file descriptors for mongo not bug out, as high as allowed on OS x
-    alias dockerstart='zsh --login "/Applications/Docker/Docker Quickstart Terminal.app/Contents/Resources/Scripts/start.sh"'
 else
     export NVM_DIR="/home/yssu/.nvm"
     alias blend_mongo='ulimit -n 4096 -u 32768 &&\
