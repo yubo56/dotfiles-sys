@@ -134,7 +134,7 @@ alias blend_vpn_dev='touch /tmp/devlog && sudo openvpn --log /tmp/devlog --confi
 alias blend_vpn_prod='touch /tmp/prodlog && sudo openvpn --log /tmp/prodlog --config ~/.openvpn/prod.ovpn --daemon'
 alias blend_vpn='blend_vpn_dev; blend_vpn_prod'
 alias blend_ssh='ssh-add ~/.ssh/blend_prod'
-alias blend_rm_tmp='(cd /tmp && rm -rf tmpfile-* *117* npm-* ssh-*)'
+alias blend_rm_tmp='(cd /tmp && rm -rf tmpfile-* *117* npm-*)'
 alias blend_enospc='echo fs.inotify.max_user_watches=524288 | sudo tee /etc/sysctl.conf && sudo sysctl -p'
 alias bls='blend_do g bn'
 
