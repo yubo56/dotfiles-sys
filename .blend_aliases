@@ -13,6 +13,12 @@ else
         rm -f ~/mongodb/data/db/mongod.lock &&\
         mongod --dbpath ~/mongodb/data/db > /dev/null&!'
     alias mongo="mongo --eval \"var DOCUSIGN_PW=\\\"$(cat ~/.docusign_pw)\\\"\" --shell"
+
+    # run these only if file doesn't exist
+    if [ ! -f /tmp/startedup ]; then
+      blend_mongo
+      touch /tmp/startedup
+    fi
 fi
 
 alias venv='source ~/blend/venv/bin/activate'
@@ -140,12 +146,6 @@ export SLACK_CHANNEL='build-statistics'
 
 [[ -f /usr/share/nvm/init-nvm.sh ]] && source /usr/share/nvm/init-nvm.sh
 [[ -f ~/blend/venv/bin/aws_zsh_completer.sh ]] && source ~/blend/venv/bin/aws_zsh_completer.sh
-
-# run these only if file doesn't exist
-if [ ! -f /tmp/startedup ]; then
-  blend_mongo
-  touch /tmp/startedup
-fi
 
 # venv (for blend* repos only)
 function cd() {
