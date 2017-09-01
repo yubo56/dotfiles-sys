@@ -99,7 +99,11 @@ zstyle ':completion:*' menu select eval "$($DIRCOLORS -b)"
 
 # variables
 export EDITOR="vim"
-export PATH=/home/yssu/bin:$PATH
+if [ $OSTYPE =~ "linux-gnu" ]; then
+    export PATH=/home/yssu/bin:$PATH
+else
+    export PATH=/Users/yssu/bin:$PATH
+fi
 
 # ibus
 export XMODIFIERS="@im=ibus"

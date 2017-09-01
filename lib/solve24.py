@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#! /usr/bin/python
 """
 Program to solve and play and compute for 24. Optimized for clarity of code
     rather than speed...

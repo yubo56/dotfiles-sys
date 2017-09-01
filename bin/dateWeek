@@ -1,4 +1,4 @@
-#!/bin/sh
+#! /bin/sh
 # [[ `date +%w` = '0' ]] && echo 일 # 日
 # [[ `date +%w` = '1' ]] && echo 월 # 月
 # [[ `date +%w` = '2' ]] && echo 화 # 火

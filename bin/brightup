@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#! /bin/zsh
 if [[ "$(hostname)" == ArchTest ]]; then
     inc=3
 else

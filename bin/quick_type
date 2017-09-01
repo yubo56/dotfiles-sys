@@ -1,4 +1,4 @@
-#!/usr/bin/zsh
+#! /bin/zsh
 
 pasteEmail() {
     xclip -selection CILPBOARD <<< $1

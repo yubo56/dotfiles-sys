@@ -1,4 +1,4 @@
-#! /usr/bin/zsh
+#! /bin/zsh
 # compiletex [filename] <compiler>
 # runs compiler on filename until no more 'Rerun to get references correct' and
 #   -file-line-error's the output
