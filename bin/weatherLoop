@@ -1,10 +1,10 @@
 #!/bin/sh
 while true; do
     #------------------------------------------------------IF ONLINE----------------------------------------------------------------
-	if [[ "$(ip link | grep 'enp8s0' | grep ' UP ')" != "" || "$(iw dev $WIFI link 2> /dev/null | grep "Connected")" != "" ]]; then
+    if [[ "$(ip link | grep 'enp8s0' | grep ' UP ')" != "" || "$(iw dev $WIFI link 2> /dev/null | grep "Connected")" != "" ]]; then
 
         #-----------------------------------------------------------WEATHER------------------------------------------------------------
-        curl "http://rss.accuweather.com/rss/liveweather_rss.asp?metric=0&locCode=94107" > /tmp/weatherGrep 2> /dev/null
+        curl "http://rss.accuweather.com/rss/liveweather_rss.asp?metric=0&locCode=14850" > /tmp/weatherGrep 2> /dev/null
         perl /home/yssu/bin/sbscripts/weatherGrep.pl /tmp/weatherGrep > /tmp/weather
 
     #-------------------------------------------------------------ELSE WE'RE DISCONNECTED-------------------------------------------------
