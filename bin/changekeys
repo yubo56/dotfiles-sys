@@ -1,12 +1,12 @@
 #!/bin/sh
 
 if [[ $(setxkbmap -query | grep 'variant') == "" ]]; then
-	setxkbmap us -variant dvorak
+    setxkbmap us -variant dvorak
     xmodmap ~/.xmodmap
 elif [[ $(setxkbmap -query | grep 'variant') =~ "dvorak-l" ]]; then
-	setxkbmap us
+    setxkbmap us
 else
-	setxkbmap us -variant dvorak-l
+    setxkbmap us -variant dvorak-l
 fi
 
 xset r rate 150 60

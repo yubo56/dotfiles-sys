@@ -39,26 +39,26 @@ def solve(nums, conf):
         return abs(nums[0] - conf['target']) <\
             1 / (conf['max'] ** conf['count']),\
             str(conf['target'])
-    else: # recursive case
-        for i in range(curr_len):
-            for j in list(range(i)) + list(range(i + 1, curr_len)):
-                for idx, opt in enumerate(OPS):
-                    # print(nums, i, j, OP_NAMES[idx]) # debug
-                    child_nums = list(nums)
-                    try:
-                        child_nums[min(i, j)] = opt(child_nums[i],
-                                                    child_nums[j])
-                        child_nums.pop(max(i, j))
-                    except ZeroDivisionError:
-                        continue
+    # recursive case
+    for i in range(curr_len):
+        for j in list(range(i)) + list(range(i + 1, curr_len)):
+            for idx, opt in enumerate(OPS):
+                # print(nums, i, j, OP_NAMES[idx]) # debug
+                child_nums = list(nums)
+                try:
+                    child_nums[min(i, j)] = opt(child_nums[i],
+                                                child_nums[j])
+                    child_nums.pop(max(i, j))
+                except ZeroDivisionError:
+                    continue
 
-                    sol, sol_str = solve(child_nums, conf)
-                    if sol:
-                        return True, '({} {} {}), {}'.format(nums[i],
-                                                             OP_NAMES[idx],
-                                                             nums[j],
-                                                             sol_str)
-        return False, ''
+                sol, sol_str = solve(child_nums, conf)
+                if sol:
+                    return True, '({} {} {}), {}'.format(nums[i],
+                                                         OP_NAMES[idx],
+                                                         nums[j],
+                                                         sol_str)
+    return False, ''
 
 def solve_wrap(command, nums, conf):
     """wrapper that handles command parsing for solver"""
@@ -205,6 +205,8 @@ def print_help(conf):
 
 def parse_input(nums, conf):
     """ parse the inputted string. Return True if need to exit event loop """
+    if not nums:
+        return True
     command = nums.pop(0)
     if command == 'exit':
         return True
