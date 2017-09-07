@@ -16,7 +16,8 @@ else
 
     # run these only if file doesn't exist
     if [ ! -f /tmp/startedup ]; then
-      blend_mongo
+      rm -f ~/mongodb/data/db/mongod.lock
+      mongod --dbpath ~/mongodb/data/db &
       touch /tmp/startedup
     fi
 fi
