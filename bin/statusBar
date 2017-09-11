@@ -1,13 +1,13 @@
-#! /bin/bash
+#!/usr/bin/zsh
 
-prevtotal=0
-previdle=0
 monOff=1
 sep='|'
 # sep='·'
 
 while true; do
     #--------------------------------------------------------TOGGLE SCREEN WHEN CONNECTED----------------------------------------
+    startTime=$(date +%s%N) # sleep (1s - execution time)
+
     if [[ "$(hostname)" =~ ArchTest ]]; then
         xrandr --output HDMI1 --auto --left-of eDP1
     else
@@ -16,18 +16,22 @@ while true; do
     fi
 
     #--------------------------------------------------------CALCULATE CPU USAGE----------------------------------------
-    abc=`cat /proc/stat | grep 'cpu ' | sed 's/cpu//g'`
-    total=0
-    count=0
-    for i in $abc; do
-        if [ $count -eq 3 ]; then
-            idle=$i
-        fi
-        count=$(echo "$count + 1" | 'bc')
-        total=$(echo "$total+$i" | 'bc')
-    done
-    usage=$(echo "scale=1;100 *(($total - $prevtotal) - ($idle - $previdle))/($total - $prevtotal)" | bc)
-    prevtotal=$total
+    cpustat=`cat /proc/stat | head -n 1`
+    prevused=${prevused:-0}
+    previdle=${previdle:-0}
+    used=${used:-0}
+    idle=${idle:-0}
+    read _name user nice system incidle _y <<< $cpustat
+
+    (( used = $user + $nice + $system ))
+    (( idle = $incidle ))
+
+    bccmd="scale=1;\
+        100 * \
+            ($used - $prevused) /\
+            (($used - $prevused) + ($idle - $previdle))"
+    usage=$(bc <<< $bccmd)
+    prevused=$used
     previdle=$idle
 
     #-------------------------------------------------------MEMSTATS--------------------------------------------
@@ -108,5 +112,5 @@ while true; do
     # if [[ $battperc -ne "" ]]; then
     #     [[ $(echo "$battperc < 5" | bc) -eq "1" ]] && [[ $battstat == "D" ]] && sudo pm-suspend
     # fi
-    sleep 1s
+    sleep $((( 1 - ($(date +%s%N) - $startTime) / 1000000000.0 )))s
 done

@@ -14,10 +14,10 @@ else
         mongod --dbpath ~/mongodb/data/db > /dev/null&!'
     alias mongo="mongo --eval \"var DOCUSIGN_PW=\\\"$(cat ~/.docusign_pw)\\\"\" --shell"
 
-    # run these only if file doesn't exist
-    if [ ! -f /tmp/startedup ]; then
-      blend_mongo
-      touch /tmp/startedup
+    # existence of /tmp/mongodb-27017.sock implies mongo started
+    if [ ! -f /tmp/mongodb-27017.sock ]; then
+      rm -f ~/mongodb/data/db/mongod.lock
+      mongod --dbpath ~/mongodb/data/db > /dev/null&!
     fi
 fi
 
