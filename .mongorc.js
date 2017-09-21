@@ -127,7 +127,7 @@ function yubo_dropAll() {
 function yubo_clear() {
   db.user.remove({ appRole: "borrower" });
 
-  dbsToClear = ["tasks", 'topics', "applications", "parties", "userEvents", "partyPermissions", "loanProcesses", "activities", "files", "documents", "loanRequests", "followUps", "loanApplicationTemplates", "entityHistory", "errors", "incomes", "employers"];
+  dbsToClear = ["tasks", 'topics', "applications", "parties", "userEvents", "partyPermissions", "loanProcesses", "activities", "files", "documents", "loanRequests", "followUps", "loanApplicationTemplates", "entityHistory", "errors", "incomes", "employers", "properties"];
   dbsToClear.forEach(function(name) {
     print(`clearing collection ${name}`);
     db.getCollection(name).remove({});
