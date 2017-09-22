@@ -30,6 +30,7 @@ alias npts='BLEND_LOGGER_LEVEL=error npm test -- --skip-style'
 alias nptr='BLEND_LOGGER_LEVEL=error npm run testFast'
 alias blend_init_dev='mongo centrio <<< db.dropDatabase\(\) && fab init_dev'
 alias shutdown='for i in wpa_supplicant docker mongo openvpn chrome goldendict xscreensaver dhcpcd redshift yssu weatherLoop statusBar; do sudo pkill $i; done; sudo shutdown -P 0'
+alias reboot='for i in wpa_supplicant docker mongo openvpn chrome goldendict xscreensaver dhcpcd redshift yssu weatherLoop statusBar; do sudo pkill $i; done; sudo reboot'
 
 alias docker_rm='docker rm `docker ps -a -q`'
 alias docker_rmi='docker rmi `docker images --format "{{.ID}}"`'
@@ -147,26 +148,3 @@ export SLACK_CHANNEL='build-statistics'
 
 [[ -f /usr/share/nvm/init-nvm.sh ]] && source /usr/share/nvm/init-nvm.sh
 [[ -f ~/blend/venv/bin/aws_zsh_completer.sh ]] && source ~/blend/venv/bin/aws_zsh_completer.sh
-
-# venv (for blend* repos only)
-function cd() {
-    # compatibility with cdr
-    if [[ $1 == '--' ]]; then
-        builtin cd $2;
-    else
-        builtin cd $1;
-    fi
-
-    root=$(git rev-parse --show-toplevel 2> /dev/null || true)
-    # if no git root and in venv, or in git root and virtualenv path is wrong,
-    # deactivate
-    if [[ ( -z $root && $(command -v deactivate || true) == 'deactivate' ) ||
-        ( -n $root && -n $VIRTUAL_ENV && ! ( $VIRTUAL_ENV =~ $root ) ) ]]; then
-        deactivate
-    fi
-
-    # if has git root, has venv and not activated, activate
-    if [[ -n $root && -f $root/venv/bin/activate && $(command -v deactivate || true) != 'deactivate' ]]; then
-        source $root/venv/bin/activate
-    fi
-}

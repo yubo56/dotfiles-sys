@@ -67,3 +67,29 @@ function __tmux-sessions() {
     sessions=( ${${(f)"$(command tmux list-sessions)"}/:[ $'\t']##/:} )
     _describe -t sessions 'sessions' sessions "$@"
 }
+
+# source venv
+function cd() {
+    # compatibility with cdr
+    if [[ $1 == '--' ]]; then
+        builtin cd $2;
+    else
+        builtin cd $1;
+    fi
+
+    root=$(git rev-parse --show-toplevel 2> /dev/null || true)
+    # if no git root and in venv, or in git root and virtualenv path is wrong,
+    # deactivate
+    if [[ ( -z $root && $(command -v deactivate || true) == 'deactivate' ) ||
+        ( -n $root && -n $VIRTUAL_ENV && ! ( $VIRTUAL_ENV =~ $root ) ) ]]; then
+        deactivate
+    fi
+
+    # if has git root, try to find venv root. if has venvroot and not activated, activate
+    if [[ -n $root ]]; then
+        venvroot=$(find $root -type d -iname venv | head -n 1)
+        if [[ -f $venvroot/bin/activate && $(command -v deactivate || true) != 'deactivate' ]]; then
+            source $venvroot/bin/activate
+        fi
+    fi
+}
