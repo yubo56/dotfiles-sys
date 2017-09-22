@@ -68,7 +68,7 @@ function __tmux-sessions() {
     _describe -t sessions 'sessions' sessions "$@"
 }
 
-# source venv
+# source set up all venvs
 function cd() {
     # compatibility with cdr
     if [[ $1 == '--' ]]; then
@@ -78,18 +78,34 @@ function cd() {
     fi
 
     root=$(git rev-parse --show-toplevel 2> /dev/null || true)
-    # if no git root and in venv, or in git root and virtualenv path is wrong,
-    # deactivate
-    if [[ ( -z $root && $(command -v deactivate || true) == 'deactivate' ) ||
-        ( -n $root && -n $VIRTUAL_ENV && ! ( $VIRTUAL_ENV =~ $root ) ) ]]; then
-        deactivate
+    # if has a curr_venv and either no root or wrong root, run deactivates
+    if [[ -n $_CURR_VENV && ( -z $root || ! ( $_CURR_VENV =~ $root ) ) ]]; then
+        # python venv
+        if [[ $(command -v deactivate) ]]; then
+            deactivate
+        fi
+
+        # shvenv
+        if [[ $(command -v shdeactivate) ]]; then
+            shdeactivate
+        fi
     fi
 
-    # if has git root, try to find venv root. if has venvroot and not activated, activate
+    # if has git root, try to find venvs, and if exists and not activated activate
+    # sources the first one `find` finds, which is largely dfs...
     if [[ -n $root ]]; then
+        export _CURR_VENV=$root
+
+        # python venv
         venvroot=$(find $root -type d -iname venv | head -n 1)
-        if [[ -f $venvroot/bin/activate && $(command -v deactivate || true) != 'deactivate' ]]; then
+        if [[ -f $venvroot/bin/activate && ! $(command -v deactivate) ]]; then
             source $venvroot/bin/activate
+        fi
+
+        # shvenv
+        shvenvroot=$(find $root -type f -iname .shvenv | head -n 1)
+        if [[ -f $shvenvroot && ! $(command -v shdeactivate) ]]; then
+            source $shvenvroot
         fi
     fi
 }

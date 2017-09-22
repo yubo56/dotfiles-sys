@@ -125,9 +125,6 @@ ssh-add -l > /dev/null || ssh-add ~/.ssh/id_rsa
 # trigger any venv stuff
 cd .
 
-# dedalus
-export PYTHONPATH=$PYTHONPATH:~/research/fall2017_nonlinearBreaking/dedalus
-
 # colors
 # black | 0
 # red | 1
