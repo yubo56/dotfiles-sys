@@ -19,6 +19,8 @@ else
       rm -f ~/mongodb/data/db/mongod.lock
       mongod --dbpath ~/mongodb/data/db > /dev/null&!
     fi
+
+    echo 255 | sudo tee /sys/class/leds/smc::kbd_backlight/brightness > /dev/null
 fi
 
 alias venv='source ~/blend/venv/bin/activate'
@@ -145,6 +147,7 @@ export DEPLOYMENT=blend-borrower
 export TENANT_LIST=blend-borrower
 export BLEND_LOGGER_LEVEL='warn'
 export SLACK_CHANNEL='build-statistics'
+export VAULT_ADDR=https://vault.sandbox.centrio.com:8200
 
 [[ -f /usr/share/nvm/init-nvm.sh ]] && source /usr/share/nvm/init-nvm.sh
 [[ -f ~/blend/venv/bin/aws_zsh_completer.sh ]] && source ~/blend/venv/bin/aws_zsh_completer.sh
