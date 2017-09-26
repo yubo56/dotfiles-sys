@@ -1,8 +1,7 @@
 #!/usr/bin/zsh
 
-monOff=1
 sep='|'
-# sep='·'
+refresh_interval=5
 
 while true; do
     #--------------------------------------------------------TOGGLE SCREEN WHEN CONNECTED----------------------------------------
@@ -112,5 +111,5 @@ while true; do
     # if [[ $battperc -ne "" ]]; then
     #     [[ $(echo "$battperc < 5" | bc) -eq "1" ]] && [[ $battstat == "D" ]] && sudo pm-suspend
     # fi
-    sleep $((( 1 - ($(date +%s%N) - $startTime) / 1000000000.0 )))s
+    sleep $((( $refresh_interval - ($(date +%s%N) - $startTime) / 1000000000.0 )))s
 done
