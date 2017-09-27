@@ -1,7 +1,7 @@
 #!/usr/bin/zsh
 
 sep='|'
-refresh_interval=5
+refresh_interval=1
 
 while true; do
     #--------------------------------------------------------TOGGLE SCREEN WHEN CONNECTED----------------------------------------
