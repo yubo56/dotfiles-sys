@@ -97,13 +97,13 @@ function cd() {
         export _CURR_VENV=$root
 
         # python venv
-        venvroot=$(find $root -maxdepth 1 -type d -iname venv | head -n 1)
+        venvroot=$(find $root -maxdepth 1 -iname venv | head -n 1)
         if [[ -f $venvroot/bin/activate && ! $(command -v deactivate) ]]; then
             source $venvroot/bin/activate
         fi
 
         # shvenv
-        shvenvroot=$(find $root -maxdepth 1 -type f -iname .shvenv | head -n 1)
+        shvenvroot=$(find $root -maxdepth 1 -iname .shvenv | head -n 1)
         if [[ -f $shvenvroot && ! $(command -v shdeactivate) ]]; then
             source $shvenvroot
         fi
