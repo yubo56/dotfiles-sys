@@ -6,7 +6,7 @@ refresh_interval=1
 while true; do
     startTime=$(date +%s%N) # sleep (1s - execution time)
     #--------------------------------------------------------TOGGLE SCREEN WHEN CONNECTED----------------------------------------
-    xrandr --output HDMI1 --auto --left-of eDP1
+    xrandr --output $XRANDR_HDMI --auto --left-of $XRANDR_MAIN
 
     #--------------------------------------------------------CALCULATE CPU USAGE----------------------------------------
     cpustat=`cat /proc/stat | head -n 1`

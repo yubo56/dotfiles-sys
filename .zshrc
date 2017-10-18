@@ -11,10 +11,14 @@ if [[ "$(hostname)" =~ ArchTest ]]; then
     export WIFI=wlp7s0
     export brightfile='/sys/class/backlight/intel_backlight/brightness'
     export brightmax='/sys/class/backlight/intel_backlight/max_brightness'
+    export XRANDR_HDMI=HDMI1
+    export XRANDR_MAIN=eDP1
 else
     export WIFI=wlp4s0
     export brightfile='/sys/class/backlight/gmux_backlight/brightness'
     export brightmax='/sys/class/backlight/gmux_backlight/max_brightness'
+    export XRANDR_HDMI=HDMI-1
+    export XRANDR_MAIN=eDP-1
 fi
 
 export _JAVA_AWT_WM_NONREPARENTING=1 # java swing hates dwm
