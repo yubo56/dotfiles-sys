@@ -4,15 +4,9 @@ sep='|'
 refresh_interval=1
 
 while true; do
-    #--------------------------------------------------------TOGGLE SCREEN WHEN CONNECTED----------------------------------------
     startTime=$(date +%s%N) # sleep (1s - execution time)
-
-    if [[ "$(hostname)" =~ ArchTest ]]; then
-        xrandr --output HDMI1 --auto --left-of eDP1
-    else
-        xrandr --output DP-1 --auto --right-of eDP-1 && \
-            xrandr --output DP-2 --auto --right-of DP-1 --rotate left
-    fi
+    #--------------------------------------------------------TOGGLE SCREEN WHEN CONNECTED----------------------------------------
+    xrandr --output HDMI1 --auto --left-of eDP1
 
     #--------------------------------------------------------CALCULATE CPU USAGE----------------------------------------
     cpustat=`cat /proc/stat | head -n 1`
