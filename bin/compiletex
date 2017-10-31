@@ -7,7 +7,7 @@
 
 compile () {
     ${2:=pdflatex} -interaction=nonstopmode -file-line-error $1.tex | \
-        sed -E "s/(.*Warning:.*)on input line ([0-9]+)/.\/$1.tex:\2: \1/g" | \
+        LANG=C sed -E "s/(.*Warning:.*)on input line ([0-9]+)/.\/$1.tex:\2: \1/g" | \
         grep "^./$1.tex"
 }
 
