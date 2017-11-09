@@ -8,6 +8,7 @@
 .*.swp
 
 *.o
+*.bin
 
 *.aux
 *.bbl
