@@ -29,5 +29,6 @@
 *.snm
 
 *.pyc
+*.pkl
 
 *.hi
