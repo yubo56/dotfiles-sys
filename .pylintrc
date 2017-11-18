@@ -65,7 +65,7 @@ confidence=
 # --enable=similarities". If you want to run only the classes checker, but have
 # no Warning level messages displayed, use"--disable=all --enable=classes
 # --disable=W"
-disable=import-star-module-level,raising-string,old-raise-syntax,next-method-called,unpacking-in-except,suppressed-message,old-ne-operator,map-builtin-not-iterating,setslice-method,indexing-exception,useless-suppression,round-builtin,reload-builtin,print-statement,unichr-builtin,raw_input-builtin,metaclass-assignment,execfile-builtin,hex-method,old-division,reduce-builtin,coerce-method,cmp-builtin,cmp-method,intern-builtin,zip-builtin-not-iterating,apply-builtin,old-octal-literal,long-builtin,using-cmp-argument,input-builtin,basestring-builtin,coerce-builtin,oct-method,file-builtin,no-absolute-import,range-builtin-not-iterating,delslice-method,dict-view-method,buffer-builtin,dict-iter-method,xrange-builtin,long-suffix,getslice-method,parameter-unpacking,standarderror-builtin,nonzero-method,unicode-builtin,backtick,filter-builtin-not-iterating
+disable=invalid-name,missing-docstring,consider-using-enumerate
 
 
 [REPORTS]
