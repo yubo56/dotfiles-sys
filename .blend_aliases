@@ -3,6 +3,7 @@
 ### Put all blend-related stuff here so can source on OSTYPE
 if [[ $OSTYPE =~ "darwin" ]]; then
     export NVM_DIR="/Users/yssu/.nvm"
+    [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
 
     # OS X settings
     defaults write com.apple.Dock autohide-delay -float 1; killall Dock
