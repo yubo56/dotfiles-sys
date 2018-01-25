@@ -13,7 +13,7 @@ ibus-daemon -drx
 dconf load / < .dconf
 xset r rate 150 60 && xset -dpms && xset s off
 xrdb ~/.Xresources
-redshift -m randr:screen=0&
+redshift&
 if [[ "$(hostname)" =~ ArchTest ]]; then
     synclient TouchpadOff=1
     synclient TapButton1=1
