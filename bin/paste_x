@@ -2,11 +2,11 @@
 
 case "$1" in
     -c)
-        sleep 0.1 && xdotool type --delay 2 --clearmodifiers "$(xclip -selection c -o)" &&
+        sleep 0.1 && xdotool type --delay 2 --clearmodifiers "$(xclip -selection c -o | cut -c1-100)" &&
             xdotool keyup Super_L+shift
         ;;
     *)
-        sleep 0.1 && xdotool type --delay 2 --clearmodifiers "$(xclip -o)" &&
+        sleep 0.1 && xdotool type --delay 2 --clearmodifiers "$(xclip -o | cut -c1-100)" &&
             xdotool keyup Super_L+shift
         ;;
 esac
