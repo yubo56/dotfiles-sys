@@ -12,7 +12,8 @@ URxvt.perl-ext-common:
 ! neutralize highlight blue a bit
 ! command to print all colors out
 ! x=`tput op` y=`printf %76s`;for i in {0..256};do o=00$i;echo -e ${o:${#o}-3:3} `tput setaf $i;tput setab $i`${y// /=}$x;done
-URxvt.color12: #1f57ff
+URxvt.color4: cyan
+URxvt.color12: cyan
 
 ! disable "keycap picture insert mode"
 URxvt.iso14755: false
