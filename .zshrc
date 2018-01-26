@@ -116,8 +116,8 @@ export QT_IM_MODULE="ibus"
 
 # prompt
 setopt PROMPT_SUBST
-PS1='[%{$fg[cyan]%}$(date +%T)%{$reset_color%}]'
-PS1+='$(git_status)%~\$ '
+PROMPT='$(git_status)%~\$ '
+RPROMPT='[%{$fg[cyan]%}$(date +%T)%{$reset_color%}]'
 
 # start shared ssh-agent
 if [ ! -S /tmp/ssh_auth_sock ]; then
