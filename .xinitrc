@@ -32,6 +32,6 @@ rebg
 
 
 xscreensaver -nosplash &
-chromium --no-startup-window &
+# chromium --no-startup-window &
 goldendict &
 exec dwmalt
