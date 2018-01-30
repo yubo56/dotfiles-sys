@@ -143,6 +143,12 @@ alias blend_ssh='ssh-add ~/.ssh/blend_prod'
 alias blend_rm_tmp='(cd /tmp && rm -rf tmpfile-* *117* npm-*)'
 alias blend_enospc='echo fs.inotify.max_user_watches=524288 | sudo tee /etc/sysctl.conf && sudo sysctl -p'
 alias bls='blend_do g bn'
+function ts_convert() {
+    _CD=$(pwd)
+    cd ~/ts-transform
+    sh convert_to_typescript.sh $_CD/$1
+    cd $_CD
+}
 
 export MONGO_DB='centrio'
 export NODE_ENV=dev
