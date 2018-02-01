@@ -144,12 +144,13 @@ alias blend_rm_tmp='(cd /tmp && rm -rf tmpfile-* *117* npm-*)'
 alias blend_enospc='echo fs.inotify.max_user_watches=524288 | sudo tee /etc/sysctl.conf && sudo sysctl -p'
 alias bls='blend_do g bn'
 function ts_convert() {
+    git rh
     _CD=$(pwd)
     cd ~/ts-transform
     sh convert_to_typescript.sh $_CD/$1
     ~/blend/node_modules/eslint/bin/eslint.js --fix $_CD/$1
-    vim $_CD/$1
     cd $_CD
+    vim $1
 }
 
 export MONGO_DB='centrio'
