@@ -146,7 +146,7 @@ alias bls='blend_do g bn'
 function ts_convert() {
     _CD=$(pwd)
     cd ~/ts-transform
-    sh convert_to_typescript.sh $_CD/$1
+    RENAME=RENAME sh convert_to_typescript.sh $_CD/$1
     ~/blend/node_modules/eslint/bin/eslint.js --fix $_CD/$1
     cd $_CD
     vim $1
