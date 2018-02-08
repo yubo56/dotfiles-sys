@@ -1,2 +1,3 @@
 #! /bin/sh
-feh --bg-fill --no-fehbg -z ~/walls
+# feh --bg-fill --no-fehbg -z ~/walls
+feh --bg-fill --no-fehbg -z ~/single_walls/pokemon_wall.jpg
