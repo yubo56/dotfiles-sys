@@ -14,8 +14,8 @@ else
     export NVM_DIR="/home/yssu/.nvm"
     alias blend_mongo='ulimit -n 4096 -u 32768 &&\
         rm -f ~/mongodb/data/db/mongod.lock &&\
-        LD_LIBRARY_PATH=/opt/lib mongod --dbpath ~/mongodb/data/db > /dev/null&!'
-    alias mongo="LD_LIBRARY_PATH=/opt/lib mongo --eval \"var DOCUSIGN_PW=\\\"$(cat ~/.docusign_pw)\\\"\" --shell"
+        mongod --dbpath ~/mongodb/data/db > /dev/null&!'
+    alias mongo="mongo --eval \"var DOCUSIGN_PW=\\\"$(cat ~/.docusign_pw)\\\"\" --shell"
 
     echo 255 | sudo tee /sys/class/leds/smc::kbd_backlight/brightness > /dev/null
 fi

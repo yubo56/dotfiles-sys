@@ -9,7 +9,7 @@ statusBar&
 
 ##various system settings
 setxkbmap us -variant dvorak
-ibus-daemon -drx
+LD_LIBRARY_PATH=/opt/lib ibus-daemon -drx
 dconf load / < .dconf
 xset r rate 150 60 && xset -dpms && xset s off
 xrdb ~/.Xresources
