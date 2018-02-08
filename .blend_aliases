@@ -137,7 +137,7 @@ EOF
 # alias blend_vpn='touch /tmp/devlog && sudo openvpn --log /tmp/devlog --config ~/.openvpn/dev_autologin.ovpn --daemon'
 # alias blend_vpn_prod='touch /tmp/prodlog && sudo openvpn --log /tmp/prodlog --config ~/.openvpn/prod.ovpn --daemon'
 # alias blend_vpn='blend_vpn_dev; blend_vpn_prod'
-alias blend_vpn='pritunl-client start 26e3518edca144d6b3b5693fa5f5e6fb'
+alias blend_vpn='pritunl-client start 26e3518edca144d6b3b5693fa5f5e6fb --password'
 alias blend_ssh='ssh-add ~/.ssh/blend_prod'
 alias blend_rm_tmp='(cd /tmp && rm -rf tmpfile-* *117* npm-*)'
 alias blend_enospc='echo fs.inotify.max_user_watches=524288 | sudo tee /etc/sysctl.conf && sudo sysctl -p'
