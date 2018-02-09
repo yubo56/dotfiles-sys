@@ -1,4 +1,5 @@
 #! /bin/zsh
+TYPE_DELAY=35
 
 pasteEmail() {
     xclip -selection CILPBOARD <<< $1
@@ -59,7 +60,7 @@ case $1 in
     shrug)
         # type shrug
         sleep 0.1 &&
-            xdotool key --delay 30 --clearmodifiers \
+            xdotool key --delay $TYPE_DELAY --clearmodifiers \
                 Super_L+f \
                 Control_L+Shift_L+e 0 0 a f Return \
                 backslash underscore parenleft \
@@ -72,7 +73,7 @@ case $1 in
     table)
         # type table flip
         sleep 0.1 &&
-            xdotool key --delay 30 --clearmodifiers \
+            xdotool key --delay $TYPE_DELAY --clearmodifiers \
                 Super_L+f \
                 parenleft \
                 Control_L+Shift_L+e 2 5 6 f Return \
