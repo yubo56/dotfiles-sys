@@ -59,29 +59,29 @@ case $1 in
     shrug)
         # type shrug
         sleep 0.1 &&
-            xdotool key --delay 2 --clearmodifiers \
-                Control_L+Shift_L+u 0 0 a f space \
+            xdotool key --delay 30 --clearmodifiers \
+                Control_L+Shift_L+e 0 0 a f Return \
                 backslash underscore parenleft \
-                Control_L+Shift_L+u 3 0 c 4 space \
+                Control_L+Shift_L+e 3 0 c 4 Return \
                 parenright underscore slash \
-                Control_L+Shift_L+u 0 0 a f space
+                Control_L+Shift_L+e 0 0 a f Return
             xdotool keyup Super_L+shift
         ;;
     table)
         # type table flip
         sleep 0.1 &&
-            xdotool key --delay 2 --clearmodifiers \
+            xdotool key --delay 30 --clearmodifiers \
                 parenleft \
-                Control_L+Shift_L+u 2 5 6 f space \
-                Control_L+Shift_L+u 0 0 b 0 space \
-                Control_L+Shift_L+u 2 5 a 1 space \
-                Control_L+Shift_L+u 0 0 b 0 space \
+                Control_L+Shift_L+e 2 5 6 f Return \
+                Control_L+Shift_L+e 0 0 b 0 Return \
+                Control_L+Shift_L+e 2 5 a 1 Return \
+                Control_L+Shift_L+e 0 0 b 0 Return \
                 parenright \
-                Control_L+Shift_L+u 2 5 6 f space \
-                Control_L+Shift_L+u f e 3 5 space \
-                Control_L+Shift_L+u 2 5 3 b space \
-                Control_L+Shift_L+u 2 5 0 1 space \
-                Control_L+Shift_L+u 2 5 3 b space
+                Control_L+Shift_L+e 2 5 6 f Return \
+                Control_L+Shift_L+e f e 3 5 Return \
+                Control_L+Shift_L+e 2 5 3 b Return \
+                Control_L+Shift_L+e 2 5 0 1 Return \
+                Control_L+Shift_L+e 2 5 3 b Return
             xdotool keyup Super_L+shift
         ;;
     eyes)
