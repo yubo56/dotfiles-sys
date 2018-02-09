@@ -32,7 +32,7 @@ alias monoff='xset dpms force off'
 alias ts='ts "$fg[cyan]%b %d %H:%M:%.S${reset_color}"'
 # alias python='ipython'
 # alias python2='ipython2'
-alias ghc='ghc -dynamic'
+alias ghc='ghc -dynamic -i$HOME/hs_libs'
 alias cabal='cabal --ghc-option=-dynamic'
 
 # Utilities
