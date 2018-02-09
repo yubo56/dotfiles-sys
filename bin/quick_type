@@ -60,17 +60,20 @@ case $1 in
         # type shrug
         sleep 0.1 &&
             xdotool key --delay 30 --clearmodifiers \
+                Super_L+f \
                 Control_L+Shift_L+e 0 0 a f Return \
                 backslash underscore parenleft \
                 Control_L+Shift_L+e 3 0 c 4 Return \
                 parenright underscore slash \
-                Control_L+Shift_L+e 0 0 a f Return
+                Control_L+Shift_L+e 0 0 a f Return \
+                Super_L+Space
             xdotool keyup Super_L+shift
         ;;
     table)
         # type table flip
         sleep 0.1 &&
             xdotool key --delay 30 --clearmodifiers \
+                Super_L+f \
                 parenleft \
                 Control_L+Shift_L+e 2 5 6 f Return \
                 Control_L+Shift_L+e 0 0 b 0 Return \
@@ -81,7 +84,8 @@ case $1 in
                 Control_L+Shift_L+e f e 3 5 Return \
                 Control_L+Shift_L+e 2 5 3 b Return \
                 Control_L+Shift_L+e 2 5 0 1 Return \
-                Control_L+Shift_L+e 2 5 3 b Return
+                Control_L+Shift_L+e 2 5 3 b Return \
+                Super_L+Space
             xdotool keyup Super_L+shift
         ;;
     eyes)
