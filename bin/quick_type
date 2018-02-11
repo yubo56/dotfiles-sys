@@ -1,5 +1,5 @@
 #! /bin/zsh
-TYPE_DELAY=25
+TYPE_DELAY=35
 
 pasteEmail() {
     xclip -selection CILPBOARD <<< $1
@@ -67,7 +67,7 @@ case $1 in
                 Control_L+Shift_L+e 3 0 c 4 Return \
                 parenright underscore slash \
                 Control_L+Shift_L+e 0 0 a f Return \
-                Super_L+Space
+                Super_L+space
             xdotool keyup Super_L+shift
         ;;
     table)
@@ -86,7 +86,7 @@ case $1 in
                 Control_L+Shift_L+e 2 5 3 b Return \
                 Control_L+Shift_L+e 2 5 0 1 Return \
                 Control_L+Shift_L+e 2 5 3 b Return \
-                Super_L+Space
+                Super_L+space
             xdotool keyup Super_L+shift
         ;;
     eyes)
