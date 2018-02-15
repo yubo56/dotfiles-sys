@@ -33,6 +33,7 @@ alias ts='ts "$fg[cyan]%b %d %H:%M:%.S${reset_color}"'
 # alias python='ipython'
 # alias python2='ipython2'
 alias ghc='ghc -dynamic -i$HOME/hs_libs'
+function ghcc { ghc -dynamic -i$HOME/hs_libs $1.hs -o $1.bin; rm -f $i.hi $i.o }
 alias cabal='cabal --ghc-option=-dynamic'
 
 # Utilities
@@ -45,7 +46,6 @@ alias mountsdc='sudo mount /dev/sdc1 /mnt -o rw,uid=yssu'
 alias umnt='sudo umount /mnt'
 alias screencast='mkdir -p ~/screencasts && ffmpeg -f x11grab -s 1920x1080 -r 25 -i $DISPLAY -f alsa -i default -c:v libx264 -s 1920x1080 ~/screencasts/$(date +'%m-%d-%y_%H_%M_%S').mp4; cd ~/screencasts'
 
-function cl() { head -c "${1:=100}" /dev/zero | tr '\0' '\n'; clear }
 function vimgg { [[ -n $1 ]] && vim $(git grep --name-only $1) || echo 'Error: vimgg expected argument' }
 
 # WIFI
