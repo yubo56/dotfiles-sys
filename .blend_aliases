@@ -29,7 +29,7 @@ alias bfind="find . -not \( -path '*/vendor' -prune \) -not \( -path '*/node_mod
 
 alias npt='npm test'
 alias nps='BLEND_LOGGER_LEVEL=debug npm start'
-alias npts='BLEND_LOGGER_LEVEL=error npm test -- --skip-style'
+alias npts='BLEND_LOGGER_LEVEL=error POOL_LIMIT=4 npm run testParallel -- --skip-style'
 alias nptr='BLEND_LOGGER_LEVEL=error npm run testFast'
 alias blend_init_dev='mongo centrio <<< db.dropDatabase\(\) && fab init_dev'
 alias shutdown='for i in node wpa_supplicant docker mongo openvpn chrome goldendict xscreensaver dhcpcd redshift yssu weatherLoop statusBar; do sudo pkill $i; done; sudo shutdown -P 0'
