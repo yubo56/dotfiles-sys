@@ -33,7 +33,7 @@ alias ts='ts "$fg[cyan]%b %d %H:%M:%.S${reset_color}"'
 # alias python='ipython'
 # alias python2='ipython2'
 alias ghc='ghc -dynamic -i$HOME/hs_libs'
-function ghcc { ghc -dynamic -i$HOME/hs_libs $1.hs -o $1.bin; rm -f $i.hi $i.o }
+function ghcc { ghc -dynamic -i$HOME/hs_libs $1.hs -o $1.bin && rm -f $i.hi $i.o }
 alias cabal='cabal --ghc-option=-dynamic'
 
 # Utilities
