@@ -68,3 +68,8 @@
     ; reset-file = "!f() { [[ -n $1 ]] && \
     ;     [[ \"$(git diff --name-only ${2:-HEAD})\" =~ $1 ]] && \
     ;     git apply -R <<< \"$(git diff ${2:-HEAD} -- $GIT_PREFIX$1)\"; }; f"
+[filter "lfs"]
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+	clean = git-lfs clean -- %f

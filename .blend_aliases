@@ -29,7 +29,7 @@ alias bfind="find . -not \( -path '*/vendor' -prune \) -not \( -path '*/node_mod
 
 alias npt='npm test'
 alias nps='BLEND_LOGGER_LEVEL=debug npm start'
-alias npts='BLEND_LOGGER_LEVEL=error npm test -- --skip-style'
+alias npts='BLEND_LOGGER_LEVEL=error POOL_LIMIT=4 npm run testParallel -- --skip-style'
 alias nptr='BLEND_LOGGER_LEVEL=error npm run testFast'
 alias blend_init_dev='mongo centrio <<< db.dropDatabase\(\) && fab init_dev'
 alias shutdown='for i in node wpa_supplicant docker mongo openvpn chrome goldendict xscreensaver dhcpcd redshift yssu weatherLoop statusBar; do sudo pkill $i; done; sudo shutdown -P 0'
@@ -40,6 +40,7 @@ alias docker_rmi='docker rmi `docker images --format "{{.ID}}"`'
 alias docker_sizes='docker ps -a -s --format "table {{.ID}}\t{{.Size}}" &&
     docker images --format "{{.Repository}}\t{{.Tag}}\t{{.Size}}"'
 alias docker_build_b='fab build_and_push_docker_images:backend'
+alias blend_locks='git checkout origin/master -- $(git ls-files | '\''grep'\'' package-lock.json)'
 
 function blend_do() {
     _dir=$(pwd)
