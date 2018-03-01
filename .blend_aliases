@@ -152,13 +152,8 @@ function ts_convert() {
     vim $1
 }
 
-export MONGO_DB='centrio'
-export NODE_ENV=dev
-export DEPLOYMENT=blend-borrower
-export TENANT_LIST=blend-borrower
 export BLEND_LOGGER_LEVEL='warn'
-export SLACK_CHANNEL='build-statistics'
-export VAULT_ADDR=https://vault.sandbox.centrio.com:8200
+export POOL_LIMIT=8
 
 [[ -f /usr/share/nvm/init-nvm.sh ]] && source /usr/share/nvm/init-nvm.sh
 [[ -f ~/blend/venv/bin/aws_zsh_completer.sh ]] && source ~/blend/venv/bin/aws_zsh_completer.sh
