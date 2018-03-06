@@ -55,7 +55,7 @@ bindkey "${terminfo[kcbt]}" reverse-menu-complete
 if [ "$TERM" =~ "xterm" ] || [ "$TERM" =~ "rxvt" ]
     then [[ -n $(command -v tmux) ]] && {
         [[ $OSTYPE =~ "linux-gnu" ]] && exec tmux -2 ||
-        tmux -2 new-session -s 'main/'
+        exec tmux -2 new-session -s 'main/'
     }
 fi
 
