@@ -151,6 +151,11 @@ function yubo_simpleApp() {
         requirementConfigs : [
           {
             ruleConfig : { },
+            requestId : "Getting Started",
+            milestoneId : "Full Application"
+          },
+          {
+            ruleConfig : { },
             requestId : "Getting To Know You",
             milestoneId : "Full Application"
           },
@@ -206,6 +211,11 @@ function yubo_cheatingApp() {
       $set: {
         name : "cheating",
         requirementConfigs : [
+          {
+            ruleConfig : { },
+            requestId : "Getting Started",
+            milestoneId : "Full Application"
+          },
           {
             ruleConfig : { },
             requestId : "Getting To Know You",
