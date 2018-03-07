@@ -126,6 +126,7 @@ function yubo_dropAll() {
 
 function yubo_clear() {
   db.user.remove({ appRole: "borrower" });
+  db.user.remove({ fullName: { $regex: /E2E/ } });
 
   dbsToClear = ["tasks", 'topics', "applications", "parties", "userEvents", "partyPermissions", "loanProcesses", "activities", "files", "documents", "loanRequests", "followUps", "loanApplicationTemplates", "entityHistory", "errors", "incomes", "employers", "properties"];
   dbsToClear.forEach(function(name) {
@@ -198,8 +199,9 @@ function yubo_simpleApp() {
         archived : false,
         lastUpdated : Date.now(),
         hidden: false
-      }
-    }
+      },
+    },
+    { multi: true }
   );
   print("Simple app put in");
 }
@@ -246,7 +248,8 @@ function yubo_cheatingApp() {
         lastUpdated : Date.now(),
         hidden: false
       }
-    }
+    },
+    { multi: true }
   );
   print("Ridiculously simple app put in");
 }

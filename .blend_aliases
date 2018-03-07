@@ -152,9 +152,12 @@ function ts_convert() {
     vim $1
 }
 
-export BLEND_LOGGER_LEVEL='warn'
+export BLEND_LOGGER_LEVEL='debug'
 export POOL_LIMIT=8
 export NODE_ENV=dev DEPLOYMENT=blend-borrower TENANT_LIST=blend-borrower
+function run_api() {
+    mongo centrio <<< "yubo_clear()"; while npt -- --grep=$1 && sleep 30s; do mongo centrio <<< "yubo_clear()"; done
+}
 
 [[ -f /usr/share/nvm/init-nvm.sh ]] && source /usr/share/nvm/init-nvm.sh
 [[ -f ~/blend/venv/bin/aws_zsh_completer.sh ]] && source ~/blend/venv/bin/aws_zsh_completer.sh
