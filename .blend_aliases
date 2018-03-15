@@ -41,6 +41,7 @@ alias docker_sizes='docker ps -a -s --format "table {{.ID}}\t{{.Size}}" &&
     docker images --format "{{.Repository}}\t{{.Tag}}\t{{.Size}}"'
 alias docker_build_b='fab build_and_push_docker_images:backend'
 alias blend_locks='git checkout origin/master -- $(git ls-files | '\''grep'\'' package-lock.json)'
+alias blend_clrun='mongo centrio <<< "yubo_clear()" && npm test'
 
 function blend_do() {
     _dir=$(pwd)
