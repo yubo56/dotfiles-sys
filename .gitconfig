@@ -3,6 +3,10 @@
     name = Yubo Su
 [push]
     default = simple
+[color]
+    diff = always
+    status = always
+    branch = always
 [merge]
     conflictstyle = diff3
 [core]
