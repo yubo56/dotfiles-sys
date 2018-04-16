@@ -53,7 +53,7 @@ bindkey "${terminfo[kcbt]}" reverse-menu-complete
 #   - try to start main (and fail if already existing) in OS X
 #   - start tmux without name in otherwise
 if [ "$TERM" =~ "xterm" ] || [ "$TERM" =~ "rxvt" ]
-    then [[ -n $(command -v tmux) ]] && {
+    then [[ -n $(hash tmux 2> /dev/null) ]] && {
         [[ $OSTYPE =~ "linux-gnu" ]] && exec tmux -2 ||
         exec tmux -2 new-session -s 'main/'
     }
@@ -96,6 +96,7 @@ if [[ "$(hostname)" != "ArchTest" ]]; then
     . ~/.blend_aliases
 fi
 
+
 # pimp out tab completion a bit
 eval "$($DIRCOLORS -b)"
 zstyle ':completion:*' list-colors '${(s.:.)LS_COLORS}'
@@ -117,7 +118,7 @@ export QT_IM_MODULE="ibus"
 # prompt
 setopt PROMPT_SUBST
 PROMPT='$(git_status)%~\$ '
-RPROMPT='[%{$fg[cyan]%}$(date +%T)%{$reset_color%}]'
+RPROMPT='[%{$fg[cyan]%}$(date +%T)%{$reset_color%}]$(sty_fmt)'
 
 # start shared ssh-agent
 if [ ! -S /tmp/ssh_auth_sock ]; then

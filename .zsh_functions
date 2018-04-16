@@ -60,6 +60,11 @@ git_files () {
     }
 }
 
+# prints $STY with brackets if exists
+sty_fmt() {
+    if [[ -n $STY ]] echo " {$STY}"
+}
+
 # autocompletion for tmux sessions
 function __tmux-sessions() {
     local expl
@@ -109,3 +114,4 @@ function cd() {
         fi
     fi
 }
+
