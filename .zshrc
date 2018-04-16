@@ -53,7 +53,7 @@ bindkey "${terminfo[kcbt]}" reverse-menu-complete
 #   - try to start main (and fail if already existing) in OS X
 #   - start tmux without name in otherwise
 if [ "$TERM" =~ "xterm" ] || [ "$TERM" =~ "rxvt" ]
-    then [[ -n $(hash tmux 2> /dev/null) ]] && {
+    then hash tmux 2> /dev/null && {
         [[ $OSTYPE =~ "linux-gnu" ]] && exec tmux -2 ||
         exec tmux -2 new-session -s 'main/'
     }

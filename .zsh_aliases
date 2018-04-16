@@ -12,10 +12,6 @@ alias rm='rm -i' # the mark of a man who has seen things
 
 # options for common programs
 alias feh='feh -B white -.'
-alias tmux='tmux -2'
-alias ta='tmux a' # attaches to most recently used session
-alias tcd='cd ~/$(tmux display-message -p "#S" | sed -n -E "s/.*\|(.*)/\1/p")'
-alias tre='tmux rename-session'
 alias mplayer='mplayer -fs'
 alias g++='g++ -Wall --std=c++0x'
 alias gcc='gcc -Wall -Wstrict-prototypes -ansi -pedantic -D_GNU_SOURCE'
