@@ -7,6 +7,9 @@ while true; do
     startTime=$(date +%s%N) # sleep (1s - execution time)
     #--------------------------------------------------------TOGGLE SCREEN WHEN CONNECTED----------------------------------------
     xrandr --output $XRANDR_HDMI --auto --left-of $XRANDR_MAIN
+    if [[ "$(hostname)" != "ArchTest" ]]; then
+        xrandr --output DP-1 --auto --left-of $XRANDR_MAIN # DP1 is displayport
+    fi
 
     #--------------------------------------------------------CALCULATE CPU USAGE----------------------------------------
     cpustat=`cat /proc/stat | head -n 1`
@@ -77,7 +80,7 @@ while true; do
 
     #---------------------------------------------------------- PACUPDATE -----------------------------------------
     # is pacman updating/status?
-    pu=$([[ -n "$(systemctl status pacupdate.service | grep failed)" ]] && echo '(!!) ' || echo '')
+    # pu=$([[ -n "$(systemctl status pacupdate.service | grep failed)" ]] && echo '(!!) ' || echo '')
 
     #---------------------------------------------------VPN----------------------------------------
     vpn=''

@@ -1,5 +1,5 @@
 URxvt*transparent: true
-URxvt*shading: 20
+URxvt*shading: 30
 URxvt*scrollBar: false
 URxvt*font: xft:xos4 Terminus-15
 URxvt*foreground: rgb:b9/80/00
