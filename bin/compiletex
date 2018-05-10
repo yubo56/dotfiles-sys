@@ -12,11 +12,11 @@ compile () {
 }
 
 OUTPUT=$(compile $1 $2)
-while grep 'Rerun to get ' $1.log; do OUTPUT=$(compile $1 $2); done
 BIBFILE=$(grep '^[^%]*\\bibliography{' $1.tex | sed 's/.*bibliography{\([^}]*\)}.*/\1/g')
 if [[ -n $BIBFILE ]]; then
     bibtex $BIBFILE | grep '^Warning' | \
         LANG=C sed -E "s/Warning--/.\/$BIBFILE.bib:1: /g"
-    while grep 'Rerun to get ' $1.log; do OUTPUT=$(compile $1 $2); done
+    OUTPUT=$(compile $1 $2)
 fi
+while grep 'Rerun to get ' $1.log; do OUTPUT=$(compile $1 $2); done
 printf "$OUTPUT"
