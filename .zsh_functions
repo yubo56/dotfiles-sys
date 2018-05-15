@@ -60,9 +60,9 @@ git_files () {
     }
 }
 
-# prints $STY with brackets if exists
-sty_fmt() {
-    if [[ -n $STY ]] echo " {$STY}"
+# prints var with brackets if exists
+brack_fmt () {
+    if [[ -n $1 ]] echo " {%{$fg[green]%}$1%{$reset_color%}}"
 }
 
 # autocompletion for tmux sessions
