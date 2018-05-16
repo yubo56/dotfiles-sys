@@ -29,6 +29,7 @@ alias bfind="find . -not \( -path '*/vendor' -prune \) -not \( -path '*/node_mod
 
 alias npt='npm test'
 alias nps='BLEND_LOGGER_LEVEL=debug npm start'
+alias enps='E2E_TEST=true BLEND_LOGGER_LEVEL=debug npm start'
 alias npts='BLEND_LOGGER_LEVEL=error POOL_LIMIT=4 npm run testParallel -- --skip-style'
 alias nptr='BLEND_LOGGER_LEVEL=error npm run testFast'
 alias blend_init_dev='mongo centrio <<< db.dropDatabase\(\) && fab init_dev'
@@ -145,6 +146,8 @@ alias blend_ssh='ssh-add ~/.ssh/blend_prod'
 alias blend_rm_tmp='(cd /tmp && rm -rf tmpfile-* *117* npm-*)'
 alias blend_enospc='echo fs.inotify.max_user_watches=524288 | sudo tee /etc/sysctl.conf && sudo sysctl -p && touch /tmp/enospc_done'
 alias bls='blend_do g bn'
+alias blend_iam='aws-vault exec iam --session-ttl=12h'
+alias blend_dev='aws-vault exec sandbox-dev --session-ttl=12h'
 alias blendq='for i in $(aws sqs list-queues --queue-name-prefix dev-yubo | jq -r ".QueueUrls | .[]"); do echo $i; aws sqs purge-queue --queue-url $i; done'
 function ts_convert() {
     _CD=$(pwd)
