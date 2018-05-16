@@ -157,6 +157,7 @@ function ts_convert() {
 
 export BLEND_LOGGER_LEVEL='debug'
 export POOL_LIMIT=8
+export UV_THREADPOOL_SIZE=128
 export NODE_ENV=dev DEPLOYMENT=blend-borrower TENANT_LIST=blend-borrower
 function run_api() {
     mongo centrio <<< "yubo_clear()"; while npt -- --grep=$1 && sleep 30s; do mongo centrio <<< "yubo_clear()"; done
