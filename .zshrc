@@ -25,7 +25,7 @@ export _JAVA_AWT_WM_NONREPARENTING=1 # java swing hates dwm
 
 # config options
 unsetopt beep nomatch notify
-setopt completealiases correct # completes aliases too, spellcheck
+unsetopt completealiases # completes aliases too, spellcheck
 setopt print_exit_value # prints nonzero exit value
 
 # keybindings
