@@ -62,7 +62,7 @@ git_files () {
 
 # prints var with brackets if exists
 brack_fmt () {
-    if [[ -n $1 ]] echo " {%{$fg_bold[green]%}$1%{$reset_color%}}"
+    if [[ -n $1 ]] echo " {%{$fg_bold[white]%}$1%{$reset_color%}}"
 }
 
 # autocompletion for tmux sessions
