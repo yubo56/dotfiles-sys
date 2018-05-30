@@ -118,7 +118,7 @@ export QT_IM_MODULE="ibus"
 # prompt
 setopt PROMPT_SUBST
 PROMPT='$(git_status)%~\$ '
-RPROMPT='[%{$fg[cyan]%}$(date +%T)%{$reset_color%}]$(brack_fmt $STY)$(brack_fmt $AWS_VAULT)'
+RPROMPT='[%{$fg_bold[cyan]%}$(date +%T)%{$fg_bold[white]%} %n@%m%{$reset_color%}]$(brack_fmt $STY)$(brack_fmt $AWS_VAULT)'
 
 # start shared ssh-agent
 if [ ! -S /tmp/ssh_auth_sock ]; then
