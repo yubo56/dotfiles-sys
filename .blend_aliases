@@ -18,6 +18,8 @@ else
     alias mongo="mongo --eval \"var DOCUSIGN_PW=\\\"$(cat ~/.docusign_pw)\\\"\" --shell"
 
     echo 255 | sudo tee /sys/class/leds/smc::kbd_backlight/brightness > /dev/null
+    alias blend_enospc='echo fs.inotify.max_user_watches=524288 | sudo tee /etc/sysctl.conf && sudo sysctl -p && touch /tmp/enospc_done'
+    [[ -a /tmp/enospc_done ]] || { blend_enospc }
 fi
 # existence of /tmp/mongodb-27017.sock implies mongo started
 if [ ! -f /tmp/mongodb-27017.sock ]; then
@@ -144,7 +146,6 @@ EOF
 alias blend_vpn='pritunl-client start 26e3518edca144d6b3b5693fa5f5e6fb --password'
 alias blend_ssh='ssh-add ~/.ssh/blend_prod'
 alias blend_rm_tmp='(cd /tmp && rm -rf tmpfile-* *118* npm-*)'
-alias blend_enospc='echo fs.inotify.max_user_watches=524288 | sudo tee /etc/sysctl.conf && sudo sysctl -p && touch /tmp/enospc_done'
 alias bls='blend_do g bn'
 alias blend_iam='aws-vault exec iam --session-ttl=12h'
 alias blend_dev='aws-vault exec sandbox-dev --session-ttl=12h'
@@ -168,7 +169,6 @@ function run_api() {
 
 [[ -f /usr/share/nvm/init-nvm.sh ]] && source /usr/share/nvm/init-nvm.sh
 [[ -f ~/blend/venv/bin/aws_zsh_completer.sh ]] && source ~/blend/venv/bin/aws_zsh_completer.sh
-[[ -a /tmp/enospc_done ]] || { blend_enospc }
 
 # tabtab source for serverless package
 # uninstall by removing these lines or running `tabtab uninstall serverless`
