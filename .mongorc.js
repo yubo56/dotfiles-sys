@@ -128,7 +128,7 @@ function yubo_clear() {
   db.user.remove({ appRole: "borrower" });
   db.user.remove({ fullName: { $regex: /E2E/ } });
 
-  dbsToClear = ["tasks", 'topics', "applications", "parties", "userEvents", "partyPermissions", "loanProcesses", "activities", "files", "documents", "loanRequests", "followUps", "loanApplicationTemplates", "entityHistory", "errors", "incomes", "employers", "properties"];
+  dbsToClear = ["tasks", 'topics', "applications", "parties", "userEvents", "partyPermissions", "loanProcesses", "activities", "files", "documents", "loanRequests", "followUps", "loanApplicationTemplates", "entityHistory", "errors", "incomes", "employers", "properties", "mortgageApplications"];
   dbsToClear.forEach(function(name) {
     print(`clearing collection ${name}`);
     db.getCollection(name).remove({});

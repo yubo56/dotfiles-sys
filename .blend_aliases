@@ -145,7 +145,7 @@ EOF
 # alias blend_vpn='blend_vpn_dev; blend_vpn_prod'
 alias blend_vpn='pritunl-client start 26e3518edca144d6b3b5693fa5f5e6fb --password'
 alias blend_ssh='ssh-add ~/.ssh/blend_prod'
-alias blend_rm_tmp='(cd /tmp && rm -rf tmpfile-* *117* npm-*)'
+alias blend_rm_tmp='(cd /tmp && rm -rf tmpfile-* *118* npm-*)'
 alias bls='blend_do g bn'
 alias blend_iam='aws-vault exec iam --session-ttl=12h'
 alias blend_dev='aws-vault exec sandbox-dev --session-ttl=12h'
