@@ -8,7 +8,7 @@ if [[ $OSTYPE =~ "darwin" ]]; then
     [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
 
     # OS X settings
-    defaults write com.apple.Dock autohide-delay -float 1; killall Dock
+    defaults write com.apple.Dock autohide-delay -float 1000; killall Dock
     defaults write .GlobalPreferences com.apple.mouse.scaling -1
 else
     export NVM_DIR="/home/yssu/.nvm"
