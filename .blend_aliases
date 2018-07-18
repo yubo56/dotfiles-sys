@@ -140,7 +140,7 @@ EOF
 # alias blend_vpn='touch /tmp/devlog && sudo openvpn --log /tmp/devlog --config ~/.openvpn/dev_autologin.ovpn --daemon'
 # alias blend_vpn_prod='touch /tmp/prodlog && sudo openvpn --log /tmp/prodlog --config ~/.openvpn/prod.ovpn --daemon'
 # alias blend_vpn='blend_vpn_dev; blend_vpn_prod'
-alias blend_vpn='pritunl-client start 26e3518edca144d6b3b5693fa5f5e6fb --password'
+alias blend_vpn='pritunl-client stop 26e3518edca144d6b3b5693fa5f5e6fb; pritunl-client start 26e3518edca144d6b3b5693fa5f5e6fb --password'
 alias blend_ssh='ssh-add ~/.ssh/blend_prod'
 alias blend_rm_tmp='(cd /tmp && rm -rf tmpfile-* *118* npm-*)'
 alias bls='blend_do g bn'
