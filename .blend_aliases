@@ -27,8 +27,8 @@ alias venv='source ~/blend/venv/bin/activate'
 alias bfind="find . -not \( -path '*/vendor' -prune \) -not \( -path '*/node_modules' -prune \) -not \( -path '*/.git' -prune \) -not \( -path '*/venv' -prune \) -iname"
 
 alias npt='npm test'
-alias nps='grunt run:compileDist && BLEND_LOGGER_LEVEL=debug npm run startNoRecompile'
-alias enps='grunt run:compileDist && E2E_TEST=true BLEND_LOGGER_LEVEL=debug npm run startNoRecompile'
+alias nps='BLEND_LOGGER_LEVEL=debug npm run startNoRecompile'
+alias enps='E2E_TEST=true BLEND_LOGGER_LEVEL=debug npm run startNoRecompile'
 alias npts='BLEND_LOGGER_LEVEL=error POOL_LIMIT=4 npm run testParallel -- --skip-style'
 alias nptr='BLEND_LOGGER_LEVEL=error npm run testFast'
 alias blend_init_dev='mongo centrio <<< db.dropDatabase\(\) && fab init_dev'
