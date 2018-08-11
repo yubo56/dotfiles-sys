@@ -92,7 +92,7 @@ fi
 if [ -e ~/.zsh_functions ]; then
     . ~/.zsh_functions
 fi
-if [[ "$(hostname)" != "ArchTest" ]]; then
+if [[ "$(hostname)" =~ "Blend" ]]; then
     . ~/.blend_aliases
 fi
 
