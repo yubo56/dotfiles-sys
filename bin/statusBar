@@ -6,9 +6,13 @@ refresh_interval=1
 while true; do
     startTime=$(date +%s%N) # sleep (1s - execution time)
     #--------------------------------------------------------TOGGLE SCREEN WHEN CONNECTED----------------------------------------
-    xrandr --output $XRANDR_HDMI --auto --left-of $XRANDR_MAIN
-    if [[ "$(hostname)" != "ArchTest" ]]; then
-        xrandr --output DP-1 --auto --left-of $XRANDR_MAIN # DP1 is displayport
+    if ! [[ -z $(sed -nE 's/.*('${XRANDR_MAIN}').*/\1/p' <<< $(xrandr)) ]]; then
+        echo 'hi'
+        xrandr --output $XRANDR_HDMI --auto --left-of $XRANDR_MAIN
+        if ! [[ -z $(sed -nE 's/.*(DP-1).*/\1/p' <<< $(xrandr)) ]]; then
+            # DP1 is displayport
+            xrandr --output DP-1 --auto --left-of $XRANDR_MAIN
+        fi
     fi
 
     #--------------------------------------------------------CALCULATE CPU USAGE----------------------------------------
@@ -46,7 +50,9 @@ while true; do
     vol=$(amixer get Master | grep 'Mono:' | perl -e "my \$string = <>;print \"Mu\" if \$string =~ /off/;\$string =~ s/\[(\d+)%\]// if \$string =~ /\[on\]/;print \$1;")
 
     #------------------------------------------------------BRIGHTNESS------------------------------------------
-    bright=$(echo "scale=0;$(cat $brightfile) * 100 / $(cat $brightmax)" | bc)
+    if [[ -f $brightfile ]]; then
+        bright=$(echo "scale=0;$(cat $brightfile) * 100 / $(cat $brightmax)" | bc)
+    fi
 
 
     #-------------------------------------------------------SET INTERNET RELATED STUFF--------------------------------------------
@@ -76,7 +82,9 @@ while true; do
 
     #---------------------------------------------------------- SIGNAL STRENGTH QUALITY/LEVEL -----------------------------------------
     # net=$(cat /proc/net/wireless | grep ':' | sed 's/\.//g' | awk '{print $3"/"$4}')
-    net=$(iw dev $WIFI link | grep signal | awk '{print $2}' | sed 's/\ //g')
+    if ! [[ -z $(iw list) ]]; then
+        net=$(iw dev $WIFI link | grep signal | awk '{print $2}' | sed 's/\ //g')
+    fi
 
     #---------------------------------------------------------- PACUPDATE -----------------------------------------
     # is pacman updating/status?
