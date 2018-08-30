@@ -19,8 +19,8 @@ else
 
     echo 255 | sudo tee /sys/class/leds/smc::kbd_backlight/brightness > /dev/null
     alias blend_enospc='echo fs.inotify.max_user_watches=524288 | sudo tee /etc/sysctl.conf && sudo sysctl -p && touch /tmp/enospc_done'
+    if [[ ! -a /tmp/enospc_done ]]; then blend_enospc; fi
 fi
-if [[ ! -a /tmp/enospc_done ]]; then blend_enospc; fi
 if [ ! -f /tmp/mongodb-27017.sock ]; then blend_mongo; fi
 
 alias venv='source ~/blend/venv/bin/activate'
