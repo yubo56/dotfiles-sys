@@ -1,5 +1,5 @@
 #! /bin/zsh
-TYPE_DELAY=35
+TYPE_DELAY=50
 
 pasteEmail() {
     xclip -selection CILPBOARD <<< $1

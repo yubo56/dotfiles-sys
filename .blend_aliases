@@ -19,19 +19,16 @@ else
 
     echo 255 | sudo tee /sys/class/leds/smc::kbd_backlight/brightness > /dev/null
     alias blend_enospc='echo fs.inotify.max_user_watches=524288 | sudo tee /etc/sysctl.conf && sudo sysctl -p && touch /tmp/enospc_done'
-    [[ -a /tmp/enospc_done ]] || { blend_enospc }
 fi
-# existence of /tmp/mongodb-27017.sock implies mongo started
-if [ ! -f /tmp/mongodb-27017.sock ]; then
-    blend_mongo
-fi
+if [[ ! -a /tmp/enospc_done ]]; then blend_enospc; fi
+if [ ! -f /tmp/mongodb-27017.sock ]; then blend_mongo; fi
 
 alias venv='source ~/blend/venv/bin/activate'
 alias bfind="find . -not \( -path '*/vendor' -prune \) -not \( -path '*/node_modules' -prune \) -not \( -path '*/.git' -prune \) -not \( -path '*/venv' -prune \) -iname"
 
 alias npt='npm test'
-alias nps='BLEND_LOGGER_LEVEL=debug npm start'
-alias enps='E2E_TEST=true BLEND_LOGGER_LEVEL=debug npm start'
+alias nps='BLEND_LOGGER_LEVEL=debug npm run startNoRecompile'
+alias enps='E2E_TEST=true BLEND_LOGGER_LEVEL=debug npm run startNoRecompile'
 alias npts='BLEND_LOGGER_LEVEL=error POOL_LIMIT=4 npm run testParallel -- --skip-style'
 alias nptr='BLEND_LOGGER_LEVEL=error npm run testFast'
 alias blend_init_dev='mongo centrio <<< db.dropDatabase\(\) && fab init_dev'
@@ -143,12 +140,12 @@ EOF
 # alias blend_vpn='touch /tmp/devlog && sudo openvpn --log /tmp/devlog --config ~/.openvpn/dev_autologin.ovpn --daemon'
 # alias blend_vpn_prod='touch /tmp/prodlog && sudo openvpn --log /tmp/prodlog --config ~/.openvpn/prod.ovpn --daemon'
 # alias blend_vpn='blend_vpn_dev; blend_vpn_prod'
-alias blend_vpn='pritunl-client start 26e3518edca144d6b3b5693fa5f5e6fb --password'
+alias blend_vpn='pritunl-client stop 26e3518edca144d6b3b5693fa5f5e6fb; pritunl-client start 26e3518edca144d6b3b5693fa5f5e6fb --password'
 alias blend_ssh='ssh-add ~/.ssh/blend_prod'
 alias blend_rm_tmp='(cd /tmp && rm -rf tmpfile-* *118* npm-*)'
 alias bls='blend_do g bn'
-alias blend_iam='aws-vault exec iam --session-ttl=12h'
-alias blend_dev='aws-vault exec sandbox-dev --session-ttl=12h'
+alias blend_iam='aws-vault exec iam --session-ttl=12h --backend=file'
+alias blend_dev='aws-vault exec sandbox-dev --session-ttl=12h --backend=file'
 alias blendq='for i in $(aws sqs list-queues --queue-name-prefix dev-yubo | jq -r ".QueueUrls | .[]"); do echo $i; aws sqs purge-queue --queue-url $i; done'
 function ts_convert() {
     _CD=$(pwd)
