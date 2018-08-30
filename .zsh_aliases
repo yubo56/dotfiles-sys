@@ -41,6 +41,7 @@ alias mountwin='sudo mount /dev/sda3 /mnt'
 alias mountsdc='sudo mount /dev/sdc1 /mnt -o rw,uid=yssu'
 alias umnt='sudo umount /mnt'
 alias screencast='mkdir -p ~/screencasts && ffmpeg -f x11grab -s 1920x1080 -r 25 -i $DISPLAY -f alsa -i default -c:v libx264 -s 1920x1080 ~/screencasts/$(date +'%m-%d-%y_%H_%M_%S').mp4; cd ~/screencasts'
+alias emailnotify='mail -s "$? $(date) $(pwd)" yubo56@gmail.com'
 
 function vimgg { [[ -n $1 ]] && vim $(git grep --name-only $1) || echo 'Error: vimgg expected argument' }
 
@@ -49,6 +50,7 @@ alias reconn='sudo pkill wpa_supplicant; sleep 0.2s; sudo wpa_supplicant -i$WIFI
 alias unwlo1='sudo ip link set $WIFI down'
 alias rewlo1='sudo ip link set $WIFI down && sudo ip link set $WIFI up'
 alias reeno1='sudo modprobe -r r8169; sleep .1s; sudo modprobe r8169'
+
 
 #alias pacrank='sudo rankmirrors /etc/pacman.d/mirrorlist.backup | sudo tee /etc/pacman.d/mirrorlist'
 #alias xmerge='xrdb -merge ~/.Xresources'
