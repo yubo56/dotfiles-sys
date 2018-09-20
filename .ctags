@@ -16,12 +16,4 @@
 --exclude=**walkme/*
 --exclude=**ext-lib/*
 
-
---langdef=latex
---langmap=latex:.tex
---regex-latex=/\\chapter\**\{([^}]+)\}/c: \1/c,chapter/
---regex-latex=/\\section\**\{([^}]+)\}/s: \1/s,section/
---regex-latex=/\\subsection\**\{([^}]+)\}/ss: \1/ss,subsection/
---regex-latex=/\\label\{([^}]*)\}/l: \1/l,label/
-
 --regex-make=/^([a-z]*):/\1/t,targets/
