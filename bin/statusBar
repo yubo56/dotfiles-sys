@@ -3,16 +3,34 @@
 sep='|'
 refresh_interval=1
 
+DP1_val='disconnected'
+HDMI1_val='disconnected'
+
 while true; do
     startTime=$(date +%s%N) # sleep (1s - execution time)
     #--------------------------------------------------------TOGGLE SCREEN WHEN CONNECTED----------------------------------------
-    if ! [[ -z $(sed -nE 's/.*('${XRANDR_MAIN}').*/\1/p' <<< $(xrandr)) ]]; then
-        echo 'hi'
-        xrandr --output $XRANDR_HDMI --auto --left-of $XRANDR_MAIN
-        if ! [[ -z $(sed -nE 's/.*(DP-1).*/\1/p' <<< $(xrandr)) ]]; then
-            # DP1 is displayport
-            xrandr --output DP-1 --auto --left-of $XRANDR_MAIN
+
+    # different machines have different names
+
+    if [[ "$(hostname)" =~ BlendArch ]]; then
+        # if exists
+        if [[ -a /sys/class/drm/card0-DP-1 ]]; then
+            # if status changed
+            if [[ $(cat /sys/class/drm/card0-DP-1/status) != $DP1_val ]]; then
+                # update status, xrandr auto
+                DP1_val=$(cat /sys/class/drm/card0-DP-1/status)
+                xrandr --output DP-1 --auto --left-of $XRANDR_MAIN
+            fi
         fi
+
+        if [[ -a /sys/class/drm/card0-HDMI-A-1 ]]; then
+            if [[ $(cat /sys/class/drm/card0-HDMI-A-1/status) != $HDMI1_val ]]; then
+                HDMI1_val=$(cat /sys/class/drm/card0-HDMI-A-1/status)
+                xrandr --output HDMI-1 --auto --left-of $XRANDR_MAIN
+            fi
+        fi
+    else
+        # TODO
     fi
 
     #--------------------------------------------------------CALCULATE CPU USAGE----------------------------------------
