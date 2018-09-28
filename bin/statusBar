@@ -14,19 +14,19 @@ while true; do
 
     if [[ "$(hostname)" =~ BlendArch ]]; then
         # if exists
-        if [[ -a /sys/class/drm/card0-DP-1 ]]; then
+        if [[ -a /sys/class/drm/card0-DP-3 ]]; then
             # if status changed
-            if [[ $(cat /sys/class/drm/card0-DP-1/status) != $DP1_val ]]; then
+            if [[ $(cat /sys/class/drm/card0-DP-3/status) != $DP1_val ]]; then
                 # update status, xrandr auto
-                DP1_val=$(cat /sys/class/drm/card0-DP-1/status)
-                xrandr --output DP-1 --auto --left-of $XRANDR_MAIN
+                DP1_val=$(cat /sys/class/drm/card0-DP-3/status)
+                xrandr --output DP-3 --auto --left-of eDP-1
             fi
         fi
 
         if [[ -a /sys/class/drm/card0-HDMI-A-1 ]]; then
             if [[ $(cat /sys/class/drm/card0-HDMI-A-1/status) != $HDMI1_val ]]; then
                 HDMI1_val=$(cat /sys/class/drm/card0-HDMI-A-1/status)
-                xrandr --output HDMI-1 --auto --left-of $XRANDR_MAIN
+                xrandr --output HDMI-1 --auto --left-of eDP-1
             fi
         fi
     else
