@@ -41,8 +41,6 @@ alias umnt='sudo umount /mnt'
 alias screencast='mkdir -p ~/screencasts && ffmpeg -f x11grab -s 1920x1080 -r 25 -i $DISPLAY -f alsa -i default -c:v libx264 -s 1920x1080 ~/screencasts/$(date +'%m-%d-%y_%H_%M_%S').mp4; cd ~/screencasts'
 alias emailnotify='mail -s "$? $(date) $(pwd)" yubo56@gmail.com'
 alias gpu_off='echo OFF | sudo tee /sys/kernel/debug/vgaswitcheroo/switch'
-alias gpu_IGD='echo IGD | sudo tee /sys/kernel/debug/vgaswitcheroo/switch'
-alias gpu_DIS='echo DIS | sudo tee /sys/kernel/debug/vgaswitcheroo/switch'
 alias gpu_cat='sudo cat /sys/kernel/debug/vgaswitcheroo/switch'
 
 function vimgg { [[ -n $1 ]] && vim $(git grep --name-only $1) || echo 'Error: vimgg expected argument' }
