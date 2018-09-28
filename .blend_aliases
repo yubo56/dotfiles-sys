@@ -1,7 +1,12 @@
 #! /bin/zsh
 ### BLEND
 ### Put all blend-related stuff here so can source on OSTYPE
+
+# use inside the if/else, but aliases can't be defined in the same block
 alias blend_enospc='echo fs.inotify.max_user_watches=524288 | sudo tee /etc/sysctl.conf && sudo sysctl -p && touch /tmp/enospc_done'
+# HACK: sudo on the echo so the second sudo, forked, doesn't require stdio
+alias run_fand='sudo echo "Running fand"; sudo fand > /tmp/fand &!'
+
 if [[ $OSTYPE =~ "darwin" ]]; then
     export NVM_DIR="/Users/yssu/.nvm"
     alias blend_mongo='rm -f ~/mongodb/data/db/mongod.lock &&\
@@ -21,6 +26,7 @@ else
 
     echo 255 | sudo tee /sys/class/leds/smc::kbd_backlight/brightness > /dev/null
     if [[ ! -a /tmp/enospc_done ]]; then blend_enospc; fi
+    if [[ ! -a /tmp/fand ]]; then run_fand; fi
 fi
 if [ ! -f /tmp/mongodb-27017.sock ]; then blend_mongo; fi
 

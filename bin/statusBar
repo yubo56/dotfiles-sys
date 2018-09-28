@@ -130,7 +130,7 @@ while true; do
     fi
 
     if [[ "$(hostname)" =~ BlendArch ]]; then
-        fan_in=$(cat /sys/devices/platform/applesmc.768/fan1_input)
+        fan_in=$(cat /sys/devices/platform/applesmc.768/fan1_output)
         fan_min=$(cat /sys/devices/platform/applesmc.768/fan1_min)
         fan_max=$(cat /sys/devices/platform/applesmc.768/fan1_max)
         FAN=$(echo "scale=0;($fan_in - $fan_min)*100/($fan_max - $fan_min)" | 'bc')
