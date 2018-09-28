@@ -4,8 +4,19 @@ PTH=/sys/devices/platform/applesmc.768
 LAST_FAN=2
 SLEEP=3s
 
-MIN=40
-MAX=90
+MIN=${1:-40}
+MAX=${2:-90}
+echo "Running with min, max = $MIN, $MAX"
+
+# disable manual control on exit (TODO seems like leaves fans at 100)
+# trap '
+# for i in {1..${LAST_FAN}}; do
+#     echo "Disabling manual control for fan $i"
+#     cat ${PTH}/fan${i}_min > ${PTH}/fan${i}_output
+#     echo 0 > ${PTH}/fan${i}_manual
+# done
+# exit
+# ' INT
 
 # enable manual control
 for i in {1..${LAST_FAN}}; do
@@ -17,15 +28,23 @@ while true; do
     sensors coretemp-isa-0000 -u | 'grep' temp1_input | tr -d ' ' | sed -nE 's/.*:(.*)\..*/\1/p' | read temp
     printf "$(date) Setting fans:"
     for i in {1..${LAST_FAN}}; do
+        read fan_name < ${PTH}/fan${i}_label
+        read fan_curr < ${PTH}/fan${i}_output
         read fan_min < ${PTH}/fan${i}_min
         read fan_max < ${PTH}/fan${i}_max
-        if (( $temp > $MAX )); then
-            printf " (${i}, $fan_max (max))"
+        # inertia, only move 1/3 of the gap
+        bc <<< "scale=0; ((($temp - $MIN) * ($fan_max - $fan_min) / ($MAX - $MIN) + $fan_min) + 2 * $fan_curr) / 3" | read fan
+        if (( $fan > $fan_max )); then
+            printf " ($fan_name, $temp, $fan_max (max))"
             echo $fan_max > ${PTH}/fan${i}_output
         else
-            bc <<< "scale=0; ($temp - $MIN) * ($fan_max - $fan_min) / ($MAX - $MIN) + $fan_min" | read fan
-            printf " (${i}, $fan)"
-            echo $fan > ${PTH}/fan${i}_output
+            if (( $fan < $fan_min )); then
+                printf " ($fan_name, $temp, $fan_min (min))"
+                echo $fan_min > ${PTH}/fan${i}_output
+            else
+                printf " ($fan_name, $temp, $fan)"
+                echo $fan > ${PTH}/fan${i}_output
+            fi
         fi
     done
     printf "\n"
