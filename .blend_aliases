@@ -12,6 +12,7 @@ if [[ $OSTYPE =~ "darwin" ]]; then
     defaults write com.apple.Dock autohide-delay -float 1000; killall Dock
     defaults write .GlobalPreferences com.apple.mouse.scaling -1
 else
+    alias gpu_res='xrandr --output eDP1 --mode 1920x1200'
     export NVM_DIR="/home/yssu/.nvm"
     alias blend_mongo='ulimit -n 4096 -u 32768 &&\
         rm -f ~/mongodb/data/db/mongod.lock &&\
