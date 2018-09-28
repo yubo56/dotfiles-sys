@@ -129,6 +129,14 @@ while true; do
         REPLY="${pu}B:$battperc$battstat$temp${sep}W:$net${sep}${vpn}V:$vol${sep}C:$usage${sep}M:$mem${sep}$weather`date +%a|~/bin/dateWeek``date +'%m/%d/%y %H:%M:%S'`$layout"
     fi
 
+    if [[ "$(hostname)" =~ BlendArch ]]; then
+        fan_in=$(cat /sys/devices/platform/applesmc.768/fan1_input)
+        fan_min=$(cat /sys/devices/platform/applesmc.768/fan1_min)
+        fan_max=$(cat /sys/devices/platform/applesmc.768/fan1_max)
+        FAN=$(echo "scale=0;($fan_in - $fan_min)*100/($fan_max - $fan_min)" | 'bc')
+        REPLY="F:${FAN}|${REPLY}"
+    fi
+
 
     xsetroot -name "$REPLY"
     # if [[ $battperc -ne "" ]]; then
