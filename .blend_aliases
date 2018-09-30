@@ -5,7 +5,7 @@
 # use inside the if/else, but aliases can't be defined in the same block
 alias blend_enospc='echo fs.inotify.max_user_watches=524288 | sudo tee /etc/sysctl.conf && sudo sysctl -p && touch /tmp/enospc_done'
 # HACK: sudo on the echo so the second sudo, forked, doesn't require stdio
-alias run_fand='sudo echo "Running fand"; sudo fand > /tmp/fand &!'
+alias run_fand='sudo echo "Running fand"; sudo ~yssu/bin/fand > /tmp/fand &!'
 
 if [[ $OSTYPE =~ "darwin" ]]; then
     export NVM_DIR="/Users/yssu/.nvm"
@@ -23,6 +23,7 @@ else
         rm -f ~/mongodb/data/db/mongod.lock &&\
         mongod --dbpath ~/mongodb/data/db > /dev/null&!'
     alias mongo="mongo --eval \"var DOCUSIGN_PW=\\\"$(cat ~/.docusign_pw)\\\"\" --shell"
+    alias fan_off='for i in {1..2}; do cat /sys/devices/platform/applesmc.768/fan${i}_min | sudo tee /sys/devices/platform/applesmc.768/fan${i}_output; done'
 
     echo 255 | sudo tee /sys/class/leds/smc::kbd_backlight/brightness > /dev/null
     if [[ ! -a /tmp/enospc_done ]]; then blend_enospc; fi
@@ -51,97 +52,9 @@ alias blend_locks='git checkout origin/master -- $(git ls-files | '\''grep'\'' p
 alias blend_clrun='mongo centrio <<< "yubo_clear()" && npm test'
 alias blend_cl='mongo centrio <<< "yubo_clear()"'
 
-function blend_do() {
-    _dir=$(pwd)
-    for i in blend blendTest; do
-        echo "\n\t@@@ $i @@@"
-        cd ~/$i &&
-            eval "$@" &&
-            cd ~
-        done
-    cd $_dir
-}
 function blend_ansible() {
     sed "s/'/\"/g;s/u\"/\"/g;s/None/null/g;s/True/true/g;s/False/false/g" | \
     jq -C . | less
-}
-function blend_own() {
-    # counts number owners, number files, number lines, number chars owned by
-    # reviewers. Counts only Dockerfile, js, py, yml, json for now
-    #
-    # Interesting usages are to pipe this into sort -nr -k<num>
-    cd ${1:=~/blend}
-    rm -rf frontend/client{dev,dist}
-    find . -type d \( -name node_modules -o -name bower_components -o -name vendor -o -name apidoc -o -name venv -o -name coverage* \) -exec rm -rf {} \+
-
-    # ${(f)} rejoins its argument, semantic joining
-    # http://zsh.sourceforge.net/Doc/Release/Expansion.html#Command-Substitution
-    # then double quotes + parens to coerce to array
-    # LANG=C sort -r puts all OWNERS files after subdirs
-    OWNERS=("${(f)$(bfind OWNERS | LANG=C sort -r)}")
-    LEN=$(wc -l <<< $OWNERS)
-    # DATA = list of OWNERS_FILE FILES LINES WORDS CHARS
-    # tr -s "squeezes" so collapses repeated instances
-    DATA=$(for i in $OWNERS; do
-        PARENT=${i:gs/\/OWNERS//}
-        WC_RESULTS=$(wc $PARENT/**/{Dockerfile*,*.{js,py,yml}} 2> /dev/null)
-        (( FILE_COUNT = $(wc -l <<< $WC_RESULTS) - 1 ))
-        WC_STATS=$(tail -n 1 <<< $WC_RESULTS | tr -s ' ' | cut -f2,3,4 -d' ')
-        echo $PARENT $FILE_COUNT $WC_STATS
-    done)
-
-    # python script to subtract subdir contributions from superdirs
-    #   sorting above guarantees dirs only look after them for parents
-    # -d'' means won't delimit on new lines
-    # 'EOF' means don't interpret anything in HEREDOC
-    read -r -d '' SUBDIR_DEDUPE_PY <<'EOF'
-import sys
-stats = [line.split() for line in sys.stdin.read().split('\n') if line != '']
-for (i, [paths, files, lines, words, chars]) in enumerate(stats):
-    for otherLines in stats[i + 1: ]:
-        if otherLines[0] in paths:
-            otherLines[1] = str(int(otherLines[1]) - int(files))
-            otherLines[2] = str(int(otherLines[2]) - int(lines))
-            otherLines[3] = str(int(otherLines[3]) - int(words))
-            try:
-                otherLines[4] = str(int(otherLines[4]) - int(chars))
-            except ValueError:
-                otherLines[4] = '0';
-for line in stats:
-    print(' '.join(line))
-EOF
-    DEDUPED=$(python -c "$SUBDIR_DEDUPE_PY" <<< $DATA)
-
-    # compute list of PERSON FILES LINES WORDS CHARS without summing yet
-    ARR=("${(f)$(<<< $DEDUPED)}")
-    PERSON_STATS=$(sort <<< $(for i in $ARR; do
-        FILE=$(cut -f1 -d' ' <<< $i)
-        PEOPLE_ARR=("${(f)$(< $FILE/OWNERS)}")
-        for person in $PEOPLE_ARR; do
-            echo $person $(cut -f2,3,4,5 -d' ' <<< $i)
-        done
-    done))
-
-    # python script to sub screw it
-    # NUM_OWNERS_FILES, FILES, LINES, WORDS, CHARS
-    read -r -d '' SUM_PERSON <<'EOF'
-import sys
-from collections import defaultdict
-stats = [line.split() for line in sys.stdin.read().split('\n') if line != '']
-ret = defaultdict(lambda: [0, 0, 0, 0, 0])
-for [reviewer, files, lines, words, chars] in stats:
-    ret[reviewer][0] += 1
-    ret[reviewer][1] += int(files)
-    ret[reviewer][2] += int(lines)
-    ret[reviewer][3] += int(words)
-    try:
-        ret[reviewer][4] += int(chars)
-    except ValueError:
-        continue
-for reviewer, stats in ret.items():
-    print(' '.join(map(str, [reviewer] + stats)))
-EOF
-    python -c "$SUM_PERSON" <<< $PERSON_STATS | column -t
 }
 
 # alias blend_vpn='touch /tmp/devlog && sudo openvpn --log /tmp/devlog --config ~/.openvpn/dev_autologin.ovpn --daemon'
@@ -164,19 +77,10 @@ function ts_convert() {
 }
 
 export BLEND_LOGGER_LEVEL='debug'
-export POOL_LIMIT=8
-export UV_THREADPOOL_SIZE=128
 export NODE_ENV=dev DEPLOYMENT=blend-borrower TENANT_LIST=blend-borrower
 function run_api() {
     mongo centrio <<< "yubo_clear()"; while npt -- --grep=$1 && sleep 30s; do mongo centrio <<< "yubo_clear()"; done
 }
 
-[[ -f /usr/share/nvm/init-nvm.sh ]] && source /usr/share/nvm/init-nvm.sh
-[[ -f ~/blend/venv/bin/aws_zsh_completer.sh ]] && source ~/blend/venv/bin/aws_zsh_completer.sh
-
-# tabtab source for serverless package
-# uninstall by removing these lines or running `tabtab uninstall serverless`
-[[ -f /Users/yssu/.nvm/versions/node/v8.9.3/lib/node_modules/serverless/node_modules/tabtab/.completions/serverless.zsh ]] && . /Users/yssu/.nvm/versions/node/v8.9.3/lib/node_modules/serverless/node_modules/tabtab/.completions/serverless.zsh
-# tabtab source for sls package
-# uninstall by removing these lines or running `tabtab uninstall sls`
-[[ -f /Users/yssu/.nvm/versions/node/v8.9.3/lib/node_modules/serverless/node_modules/tabtab/.completions/sls.zsh ]] && . /Users/yssu/.nvm/versions/node/v8.9.3/lib/node_modules/serverless/node_modules/tabtab/.completions/sls.zsh
+# [[ -f /usr/share/nvm/init-nvm.sh ]] && source /usr/share/nvm/init-nvm.sh
+# [[ -f ~/blend/venv/bin/aws_zsh_completer.sh ]] && source ~/blend/venv/bin/aws_zsh_completer.sh
