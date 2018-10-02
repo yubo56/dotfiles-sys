@@ -24,14 +24,7 @@ fi
 xmodmap ~/.xmodmap
 rebg
 
-
-
 #-----------------------------------------------------------AUTOSTART-----------------------------------------------
-
-
-
-
 xscreensaver -nosplash &
-# chromium --no-startup-window &
 goldendict &
 exec dwmalt

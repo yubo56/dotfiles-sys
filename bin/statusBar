@@ -12,20 +12,23 @@ while true; do
 
     # different machines have different names
 
+    echo $DP1_val, $HDMI1_val
     if [[ "$(hostname)" =~ BlendArch ]]; then
         # if exists
         if [[ -a /sys/class/drm/card0-DP-1 ]]; then
             # if status changed
             if [[ $(cat /sys/class/drm/card0-DP-1/status) != $DP1_val ]]; then
                 # update status, xrandr auto
-                DP1_val=$(cat /sys/class/drm/card0-DP-1/status)
+                read DP1_val < /sys/class/drm/card0-DP-1/status
+                echo "Changing because new $DP1_val"
                 xrandr --output DP-1 --auto --left-of eDP-1
             fi
         fi
 
         if [[ -a /sys/class/drm/card0-HDMI-A-1 ]]; then
             if [[ $(cat /sys/class/drm/card0-HDMI-A-1/status) != $HDMI1_val ]]; then
-                HDMI1_val=$(cat /sys/class/drm/card0-HDMI-A-1/status)
+                read HDMI1_val < /sys/class/drm/card0-HDMI-A-1/status
+                echo "Changing because new $HDMI1_val"
                 xrandr --output HDMI-1 --auto --left-of eDP-1
             fi
         fi
@@ -61,7 +64,7 @@ while true; do
     battstat="N/A"
     [[ -e /sys/class/power_supply/BAT0/status ]] &&
         battstat=$(cat /sys/class/power_supply/BAT0/status | awk '{print substr($0,0,1)}') &&
-        battperc=$(cat /sys/class/power_supply/BAT0/capacity)
+        read battperc < /sys/class/power_supply/BAT0/capacity
 
 
     #-------------------------------------------------------VOLUME--------------------------------------------
@@ -94,8 +97,8 @@ while true; do
     #     temp=$(acpi -t | grep "Thermal 0:" | grep -v "trip point" | awk '{print($4)}' | sed 's/\.0//g')
     #     temp="$temp/$(acpi -t | grep "Thermal 1:" | grep -v "trip point" | awk '{print($4)}' | sed 's/\.0//g')"
     # fi
-    temp=$(sensors coretemp-isa-0000 -u | 'grep' temp1_input | tr -d ' ' | sed -nE 's/.*:(.*)\..*/\1/p')
-    temp="${sep}T:$temp"
+    read temp < /sys/devices/platform/coretemp.0/hwmon/hwmon*/temp1_input
+    temp="${sep}T:${temp:0:-3}"
     # temp="·온도:$temp"
 
     #---------------------------------------------------------- SIGNAL STRENGTH QUALITY/LEVEL -----------------------------------------
@@ -104,43 +107,26 @@ while true; do
         net=$(iw dev $WIFI link | grep signal | awk '{print $2}' | sed 's/\ //g')
     fi
 
-    #---------------------------------------------------------- PACUPDATE -----------------------------------------
-    # is pacman updating/status?
-    # pu=$([[ -n "$(systemctl status pacupdate.service | grep failed)" ]] && echo '(!!) ' || echo '')
-
-    #---------------------------------------------------VPN----------------------------------------
-    vpn=''
-    devlog='/tmp/devlog'
-    prodlog='/tmp/prodlog'
-    completed='Initialization Sequence Completed'
-
-    if [[ -f $prodlog && $(tail -n 1 $prodlog) =~ $completed ]]; then vpn="${vpn}P"; fi
-    if [[ -f $devlog && $(tail -n 1 $devlog) =~ $completed ]]; then vpn="${vpn}D"; fi
-    if [[ $vpn != '' ]]; then vpn="P:$vpn$sep"; fi
-
     #-------------------------------------------------------SET REPLY--------------------------------------------
-    # REPLY="${pu}电:$battperc$battstat$temp${sep}亮:$bright${sep}网:$net${sep}声:$vol${sep}脑:$usage${sep}内:$mem${sep}$weather`date +%a|~/bin/dateWeek``date +'%d/%m/%y %H:%M:%S'`$layout"
-    # REPLY="${pu}B:$battperc$battstat$temp${sep}B:$bright${sep}W:$net${sep}V:$vol${sep}C:$usage${sep}M:$mem${sep}$weather`date +%a|~/bin/dateWeek``date +'%m/%d/%y %H:%M:%S'`$layout"
-    # REPLY="${pu}전기:$battperc$battstat$temp·명도:$bright·랜:$net·체적:$vol·심장:$usage·기억:$mem·$weather`date +%a|~/bin/dateWeek``date +'%m/%d/%y %H:%M:%S'`$layout"
+    # REPLY="电:$battperc$battstat$temp${sep}亮:$bright${sep}网:$net${sep}声:$vol${sep}脑:$usage${sep}内:$mem${sep}$weather`date +%a|~/bin/dateWeek``date +'%d/%m/%y %H:%M:%S'`$layout"
+    # REPLY="B:$battperc$battstat$temp${sep}B:$bright${sep}W:$net${sep}V:$vol${sep}C:$usage${sep}M:$mem${sep}$weather`date +%a|~/bin/dateWeek``date +'%m/%d/%y %H:%M:%S'`$layout"
+    # REPLY="전기:$battperc$battstat$temp·명도:$bright·랜:$net·체적:$vol·심장:$usage·기억:$mem·$weather`date +%a|~/bin/dateWeek``date +'%m/%d/%y %H:%M:%S'`$layout"
     if [[ $net  == '' ]]
     then
-        REPLY="${pu}B:$battperc$battstat$temp${sep}V:$vol${sep}C:$usage${sep}M:$mem${sep}$weather`date +%a|~/bin/dateWeek``date +'%m/%d/%y %H:%M:%S'`$layout"
+        REPLY="B:$battperc$battstat$temp${sep}V:$vol${sep}C:$usage${sep}M:$mem${sep}$weather`date +%a|~/bin/dateWeek``date +'%m/%d/%y %H:%M:%S'`$layout"
     else
-        REPLY="${pu}B:$battperc$battstat$temp${sep}W:$net${sep}${vpn}V:$vol${sep}C:$usage${sep}M:$mem${sep}$weather`date +%a|~/bin/dateWeek``date +'%m/%d/%y %H:%M:%S'`$layout"
+        REPLY="B:$battperc$battstat$temp${sep}W:$net${sep}V:$vol${sep}C:$usage${sep}M:$mem${sep}$weather`date +%a|~/bin/dateWeek``date +'%m/%d/%y %H:%M:%S'`$layout"
     fi
 
     if [[ "$(hostname)" =~ BlendArch ]]; then
-        fan_in=$(cat /sys/devices/platform/applesmc.768/fan1_output)
-        fan_min=$(cat /sys/devices/platform/applesmc.768/fan1_min)
-        fan_max=$(cat /sys/devices/platform/applesmc.768/fan1_max)
+        read fan_in < /sys/devices/platform/applesmc.768/fan1_output
+        read fan_min < /sys/devices/platform/applesmc.768/fan1_min
+        read fan_max < /sys/devices/platform/applesmc.768/fan1_max
         FAN=$(echo "scale=0;($fan_in - $fan_min)*100/($fan_max - $fan_min)" | 'bc')
         REPLY="F:${FAN}|${REPLY}"
     fi
 
 
     xsetroot -name "$REPLY"
-    # if [[ $battperc -ne "" ]]; then
-    #     [[ $(echo "$battperc < 5" | bc) -eq "1" ]] && [[ $battstat == "D" ]] && sudo pm-suspend
-    # fi
     sleep $((( $refresh_interval - ($(date +%s%N) - $startTime) / 1000000000.0 )))s
 done

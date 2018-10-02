@@ -124,6 +124,8 @@ if [ ! -S /tmp/ssh_auth_sock ]; then
 fi
 export SSH_AUTH_SOCK=/tmp/ssh_auth_sock
 ssh-add -l > /dev/null || ssh-add ~/.ssh/id_rsa
+[[ $(sysctl kernel/unprivileged_userns_clone | grep 1) ]] ||\
+    sudo sysctl kernel/unprivileged_userns_clone=1 # for brave
 
 # trigger any venv stuff
 cd .

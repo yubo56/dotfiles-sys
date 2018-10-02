@@ -17,7 +17,6 @@ if [[ $OSTYPE =~ "darwin" ]]; then
     defaults write com.apple.Dock autohide-delay -float 1000; killall Dock
     defaults write .GlobalPreferences com.apple.mouse.scaling -1
 else
-    alias gpu_res='xrandr --output eDP1 --mode 1920x1200'
     export NVM_DIR="/home/yssu/.nvm"
     alias blend_mongo='ulimit -n 4096 -u 32768 &&\
         rm -f ~/mongodb/data/db/mongod.lock &&\
@@ -63,7 +62,6 @@ function blend_ansible() {
 alias blend_vpn='pritunl-client stop 26e3518edca144d6b3b5693fa5f5e6fb; pritunl-client start 26e3518edca144d6b3b5693fa5f5e6fb --password'
 alias blend_ssh='ssh-add ~/.ssh/blend_prod'
 alias blend_rm_tmp='(cd /tmp && rm -rf tmpfile-* *118* npm-*)'
-alias bls='blend_do g bn'
 alias blend_iam='aws-vault exec iam --session-ttl=12h --backend=file'
 alias blend_dev='aws-vault exec sandbox-dev --session-ttl=12h --backend=file'
 alias blendq='for i in $(aws sqs list-queues --queue-name-prefix dev-yubo | jq -r ".QueueUrls | .[]"); do echo $i; aws sqs purge-queue --queue-url $i; done'
@@ -81,6 +79,3 @@ export NODE_ENV=dev DEPLOYMENT=blend-borrower TENANT_LIST=blend-borrower
 function run_api() {
     mongo centrio <<< "yubo_clear()"; while npt -- --grep=$1 && sleep 30s; do mongo centrio <<< "yubo_clear()"; done
 }
-
-# [[ -f /usr/share/nvm/init-nvm.sh ]] && source /usr/share/nvm/init-nvm.sh
-# [[ -f ~/blend/venv/bin/aws_zsh_completer.sh ]] && source ~/blend/venv/bin/aws_zsh_completer.sh
