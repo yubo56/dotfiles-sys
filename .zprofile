@@ -8,6 +8,4 @@ if [ -f ~/.zsh_aliases ]; then
     . ~/.zsh_aliases
 fi
 
-echo 'running'
 [[ -f /usr/share/nvm/init-nvm.sh ]] && source /usr/share/nvm/init-nvm.sh
-[[ -f ~/blend/venv/bin/aws_zsh_completer.sh ]] && source ~/blend/venv/bin/aws_zsh_completer.sh
