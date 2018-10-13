@@ -12,7 +12,6 @@ while true; do
 
     # different machines have different names
 
-    echo $DP1_val, $HDMI1_val
     if [[ "$(hostname)" =~ BlendArch ]]; then
         # if exists
         if [[ -a /sys/class/drm/card0-DP-1 ]]; then
@@ -68,7 +67,7 @@ while true; do
 
 
     #-------------------------------------------------------VOLUME--------------------------------------------
-    vol=$(amixer get Master | grep 'Mono:' | perl -e "my \$string = <>;print \"Mu\" if \$string =~ /off/;\$string =~ s/\[(\d+)%\]// if \$string =~ /\[on\]/;print \$1;")
+    vol=$(amixer get Master | grep 'Front Left:' | perl -e "my \$string = <>;print \"Mu\" if \$string =~ /off/;\$string =~ s/\[(\d+)%\]// if \$string =~ /\[on\]/;print \$1;")
 
     #------------------------------------------------------BRIGHTNESS------------------------------------------
     if [[ -f $brightfile ]]; then
