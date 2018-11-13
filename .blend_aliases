@@ -9,7 +9,7 @@ alias run_fand='sudo echo "Running fand"; sudo ~yssu/bin/fand > /tmp/fand &!'
 
 if [[ $OSTYPE =~ "darwin" ]]; then
     export NVM_DIR="/Users/yssu/.nvm"
-    alias blend_mongo='rm -f ~/mongodb/data/db/mongod.lock &&\
+    alias blend_mongo='ulimit -n 10000 && rm -f ~/mongodb/data/db/mongod.lock &&\
         mongod --dbpath ~/mongodb/data/db > /dev/null&!'
     [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
 
