@@ -26,7 +26,7 @@ else
 
     echo 255 | sudo tee /sys/class/leds/smc::kbd_backlight/brightness > /dev/null
     if [[ ! -a /tmp/enospc_done ]]; then blend_enospc; fi
-    if [[ ! -a /tmp/fand ]]; then run_fand; fi
+    # if [[ ! -a /tmp/fand ]]; then run_fand; fi
 fi
 if [ ! -f /tmp/mongodb-27017.sock ]; then blend_mongo; fi
 
