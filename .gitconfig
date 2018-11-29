@@ -60,15 +60,3 @@
 
     rebasestaging = !export _CURR_GIT=$(git bn) && git rebase --onto origin/staging origin/master HEAD && git branch -D $_CURR_GIT && git checkout -b $_CURR_GIT
     deletehistory = !git checkout --orphan _master && git add -A && git commit -am "initial" && git branch -D master && git branch -m master && git push --set-upstream origin $(git bn) --force
-
-    ; use git checkout <commit> -- <file>
-    ;
-    ; resets a file to $2 or HEAD. fails if no argument provided. 4 lines are:
-    ;   - fail if no arguments
-    ;   - check that diff is not empty
-    ;   - apply the diff with $GIT_PREFIX relative to working directory
-    ;       - ${2:-HEAD} vs ${2:=HEAD} boils down to "substitute" vs "assign"
-    ; http://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.html#tag_18_06_02
-    ; reset-file = "!f() { [[ -n $1 ]] && \
-    ;     [[ \"$(git diff --name-only ${2:-HEAD})\" =~ $1 ]] && \
-    ;     git apply -R <<< \"$(git diff ${2:-HEAD} -- $GIT_PREFIX$1)\"; }; f"
