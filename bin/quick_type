@@ -1,52 +1,7 @@
 #! /bin/zsh
 TYPE_DELAY=50
 
-pasteEmail() {
-    xclip -selection CILPBOARD <<< $1
-    sleep 0.05 && xdotool key --delay 2 --clearmodifiers \
-        Control_L+v
-}
-
-pastePassword() {
-    sleep 0.05 && xdotool type --delay 2 `cat ~/testPw.txt`
-}
-
 case $1 in
-    emt)
-        # random test@blendlabs.com email
-        pasteEmail "test+$RANDOM$RANDOM@blendlabs.com"
-        ;;
-    emy)
-        # random yubo@blendlabs.com email
-        pasteEmail "yubo+$RANDOM$RANDOM@blendlabs.com"
-        ;;
-    st)
-        # signup with random test@blendlabs email
-        EMAIL="test+$RANDOM$RANDOM@blendlabs.com"
-        pasteEmail $EMAIL
-        xdotool key Tab
-        pasteEmail $EMAIL
-        xdotool key Tab
-        pastePassword
-        ;;
-    sy)
-        # signup with random yubo@blendlabs email
-        EMAIL="yubo+$RANDOM$RANDOM@blendlabs.com"
-        pasteEmail $EMAIL
-        xdotool key Tab
-        pasteEmail $EMAIL
-        xdotool key Tab
-        pastePassword
-        ;;
-    ls)
-        # signin with e2esuper
-        pasteEmail "e2esuper@blendlabs.com"
-        xdotool key Tab
-        pastePassword
-        ;;
-    int)
-        pastePassword
-        ;;
     sshot)
         # take a screenshot w/ current date
         FILENAME=\'"screenshots/$(date +'%m-%d-%y_%H_%M_%S').png"\'
@@ -57,56 +12,8 @@ case $1 in
             xdotool type "import $FILENAME" &&
             xdotool key Return
         ;;
-    shrug)
-        # type shrug
-        sleep 0.1 &&
-            xdotool key --delay $TYPE_DELAY --clearmodifiers \
-                Super_L+f \
-                Control_L+Shift_L+e 0 0 a f Return \
-                backslash underscore parenleft \
-                Control_L+Shift_L+e 3 0 c 4 Return \
-                parenright underscore slash \
-                Control_L+Shift_L+e 0 0 a f Return \
-                Super_L+space
-            xdotool keyup Super_L+shift
-        ;;
-    table)
-        # type table flip
-        sleep 0.1 &&
-            xdotool key --delay $TYPE_DELAY --clearmodifiers \
-                Super_L+f \
-                parenleft \
-                Control_L+Shift_L+e 2 5 6 f Return \
-                Control_L+Shift_L+e 0 0 b 0 Return \
-                Control_L+Shift_L+e 2 5 a 1 Return \
-                Control_L+Shift_L+e 0 0 b 0 Return \
-                parenright \
-                Control_L+Shift_L+e 2 5 6 f Return \
-                Control_L+Shift_L+e f e 3 5 Return \
-                Control_L+Shift_L+e 2 5 3 b Return \
-                Control_L+Shift_L+e 2 5 0 1 Return \
-                Control_L+Shift_L+e 2 5 3 b Return \
-                Super_L+space
-            xdotool keyup Super_L+shift
-        ;;
-    eyes)
-        # type shifty eyes
-        sleep 0.1 &7
-            xdotool key --delay 2 --clearmodifiers \
-                parenleft space \
-                Control_L+Shift_L+u 0 3 6 1 space \
-                Control_L+Shift_L+u 0 0 b 0 space \
-                space \
-                Control_L+Shift_L+u 0 3 5 c space \
-                Control_L+Shift_L+u 0 2 9 6 space \
-                space \
-                Control_L+Shift_L+u 0 3 6 1 space \
-                Control_L+Shift_L+u 0 0 b 0 space \
-                parenright
-            xdotool keyup Super_L+shift
-        ;;
     _run)
-        CHOICES='emt\\nemy\\nst\\nsy\\nls\\nint\\nsshot\\nshrug\\ntable\\neyes'
+        CHOICES='sshot'
 
         nb="-nb \#000000"
         nf="-nf \#49e20e"
