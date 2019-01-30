@@ -26,6 +26,7 @@ else
 
     echo 255 | sudo tee /sys/class/leds/smc::kbd_backlight/brightness > /dev/null
     if [[ ! -a /tmp/enospc_done ]]; then blend_enospc; fi
+    [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
     # if [[ ! -a /tmp/fand ]]; then run_fand; fi
 fi
 if [ ! -f /tmp/mongodb-27017.sock ]; then blend_mongo; fi
@@ -36,8 +37,8 @@ alias bfind="find . -not \( -path '*/vendor' -prune \) -not \( -path '*/node_mod
 alias npt='npm test'
 alias nps='npm run startNoRecompile'
 alias enps='E2E_TEST=true BLEND_LOGGER_LEVEL=debug npm run startNoRecompile'
-alias npts='POOL_LIMIT=4 npm run testParallel -- --skip-style'
-alias nptr='npm run baseGrunt mochaTest:test'
+alias npts='clear; POOL_LIMIT=4 npm run testParallel -- --skip-style'
+alias nptr='clear; npm run baseGrunt mochaTest:test'
 alias gcw='grunt compileWatch'
 alias blend_init_dev='mongo centrio <<< db.dropDatabase\(\) && fab init_dev'
 alias shutdown='for i in node wpa_supplicant docker mongo openvpn chrome goldendict xscreensaver dhcpcd redshift yssu weatherLoop statusBar; do sudo pkill $i; done; sudo shutdown -P 0'
