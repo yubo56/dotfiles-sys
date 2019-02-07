@@ -50,8 +50,14 @@ bindkey "${terminfo[kcbt]}" reverse-menu-complete
 #   - start tmux without name in otherwise
 if [ "$TERM" =~ "xterm" ] || [ "$TERM" =~ "rxvt" ]
     then hash tmux 2> /dev/null && {
-        [[ $OSTYPE =~ "linux-gnu" ]] && exec tmux -2 ||
-        exec tmux -2 new-session -s 'main/'
+        if [[ $OSTYPE =~ "linux-gnu" ]]; then
+            FIRST_SESSION=$(tmux ls -F '#{session_attached}#{session_id}' | grep '0\$' | cut -c 2-)
+            if [[ -z $FIRST_SESSION ]]; then exec tmux -2;
+            else exec tmux attach-session -t $FIRST_SESSION;
+            fi
+        else
+            exec tmux -2 new-session -s 'main/'
+        fi
     }
 fi
 
