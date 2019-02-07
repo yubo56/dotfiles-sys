@@ -29,6 +29,7 @@ alias venv='source venv/bin/activate'
 alias ghc='ghc -dynamic -i$HOME/hs_libs'
 function ghcc { ghc -dynamic -i$HOME/hs_libs $1.hs -o $1.bin && rm -f $i.hi $i.o }
 alias ci='cabal install --ghc-option=-dynamic'
+alias ip='ipython3 --no-banner --pylab'
 
 # Utilities
 alias g='git'
