@@ -18,7 +18,7 @@ if [[ $OSTYPE =~ "darwin" ]]; then
     defaults write .GlobalPreferences com.apple.mouse.scaling -1
 else
     export NVM_DIR="/home/yssu/.nvm"
-    alias blend_mongo='ulimit -n 4096 -u 32768 &&\
+    alias blend_mongo='ulimit -n 10000 -u 32768 &&\
         rm -f ~/mongodb/data/db/mongod.lock &&\
         mongod --dbpath ~/mongodb/data/db > /dev/null&!'
     alias mongo="mongo --eval \"var DOCUSIGN_PW=\\\"$(cat ~/.docusign_pw)\\\"\" --shell"
