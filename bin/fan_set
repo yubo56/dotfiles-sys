@@ -1,0 +1,30 @@
+#!/usr/bin/zsh
+
+PTH=/sys/devices/platform/applesmc.768
+LAST_FAN=2
+
+PERC=${1:-40}
+echo "Setting to $PERC"
+
+# enable manual control
+for i in {1..${LAST_FAN}}; do
+    echo "Enabling manual control for fan $i"
+    echo 1 > ${PTH}/fan${i}_manual
+done
+
+for i in {1..${LAST_FAN}}; do
+    read fan_min < ${PTH}/fan${i}_min
+    read fan_max < ${PTH}/fan${i}_max
+
+    STR="scale=0; $PERC * ($fan_max - $fan_min) / 100 + $fan_min"
+    bc <<< $STR | read fan
+    if (( $fan > $fan_max )); then
+        echo $fan_max > ${PTH}/fan${i}_output
+    else
+        if (( $fan < $fan_min )); then
+            echo $fan_min > ${PTH}/fan${i}_output
+        else
+            echo $fan > ${PTH}/fan${i}_output
+        fi
+    fi
+done
