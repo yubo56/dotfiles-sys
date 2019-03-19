@@ -25,7 +25,7 @@ unsetopt completealiases # completes aliases too, spellcheck
 setopt print_exit_value # prints nonzero exit value
 
 # keybindings
-stty erase '^?' # fix backspace
+stty sane # fix backspace
 bindkey -e # emacsmode :( (-v is vim mode)
 bindkey -r '^J' # unbind ^J to be able to use tmux
 
