@@ -54,3 +54,10 @@ alias reeno1='sudo modprobe -r r8169; sleep .1s; sudo modprobe r8169'
 
 #alias pacrank='sudo rankmirrors /etc/pacman.d/mirrorlist.backup | sudo tee /etc/pacman.d/mirrorlist'
 #alias xmerge='xrdb -merge ~/.Xresources'
+
+alias rsync_to_3='rsync -aLP . exo3:$(dirs) --exclude=*.h5'
+alias rsync_from_3='rsync -aLP exo3:$(dirs) .. --exclude=*.h5'
+alias rsync_to_4='rsync -aLP . exo4:$(dirs) --exclude=*.h5'
+alias rsync_from_4='rsync -aLP exo4:$(dirs) .. --exclude=*.h5'
+alias rsync_to_15='rsync -aLP . exo15c:$(dirs) --exclude=*.h5'
+alias rsync_from_15='rsync -aLP exo15c:$(dirs) .. --exclude=*.h5'
