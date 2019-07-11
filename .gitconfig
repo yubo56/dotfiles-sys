@@ -45,6 +45,7 @@
     b = branch
     bd = branch -D
     bdr = !git branch -D $(git branch --no-color --no-column | grep -v '^\\*')
+    bda = !git cm && git bdr
     ch = checkout
     cm = checkout master
     cb = checkout -b
