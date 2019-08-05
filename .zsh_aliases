@@ -47,7 +47,7 @@ alias gpu_cat='sudo cat /sys/kernel/debug/vgaswitcheroo/switch'
 function vimgg { [[ -n $1 ]] && vim $(git grep --name-only $1) || echo 'Error: vimgg expected argument' }
 
 # WIFI
-alias reconn='sudo pkill wpa_supplicant; sleep 0.2s; sudo wpa_supplicant -i$WIFI -c/etc/wpa_supplicant/wpa_supplicant.conf -B'
+alias reconn='sudo pkill wpa_supplicant; sleep 0.2s; sudo wpa_supplicant -i$WIFI -c/etc/wpa_supplicant/wpa_supplicant.conf -Dwext -B'
 alias unwlo1='sudo ip link set $WIFI down'
 alias rewlo1='sudo ip link set $WIFI down && sudo ip link set $WIFI up'
 alias reeno1='sudo modprobe -r r8169; sleep .1s; sudo modprobe r8169'
