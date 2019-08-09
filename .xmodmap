@@ -20,3 +20,7 @@ keycode 39 = o O F11
 
 ! On chrome, F6 gets you out of address bar focus (moves to next focusable area)
 keycode 55 = k K F6
+
+! Page up/Page down
+keycode 18 = 9 parenleft Prior
+keycode 19 = 0 parenright Next
