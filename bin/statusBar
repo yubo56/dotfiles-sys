@@ -63,7 +63,8 @@ while true; do
     battstat="N/A"
     _battdir=/sys/class/power_supply/BAT0
     if [[ -e $_battdir/status ]]; then
-        battstat=$(cat $_battdir/status | awk '{print substr($0,0,1)}')
+        read _battstat < $_battdir/status
+        battstat=${_battstat:0:1}
         battperc=$(bc <<< "scale=1;100*$(cat $_battdir/charge_now)/$(cat $_battdir/charge_full)")
         batthealth=$(bc <<< "scale=1;100*$(cat $_battdir/charge_full)/$(cat $_battdir/charge_full_design)")
         batttime=''
@@ -112,9 +113,9 @@ while true; do
 
     #-------------------------------------------------------SET REPLY--------------------------------------------
     if [[ $net  == '' ]]; then
-        REPLY="B:$battperc$battstat($batthealth)$temp${sep}V:$vol${sep}C:$usage${sep}M:$mem${sep}$weather`date +%a|~/bin/dateWeek``date +'%m/%d/%y %H:%M:%S'`$layout$batttime"
+        REPLY="D:$bright${sep}B:$battperc$battstat($batthealth)$temp${sep}V:$vol${sep}C:$usage${sep}M:$mem${sep}$weather`date +%a|~/bin/dateWeek``date +'%m/%d/%y %H:%M:%S'`$layout$batttime"
     else
-        REPLY="B:$battperc$battstat($batthealth)$temp${sep}W:$net${sep}V:$vol${sep}C:$usage${sep}M:$mem${sep}$weather`date +%a|~/bin/dateWeek``date +'%m/%d/%y %H:%M:%S'`$layout$batttime"
+        REPLY="D:$bright${sep}B:$battperc$battstat($batthealth)$temp${sep}W:$net${sep}V:$vol${sep}C:$usage${sep}M:$mem${sep}$weather`date +%a|~/bin/dateWeek``date +'%m/%d/%y %H:%M:%S'`$layout$batttime"
     fi
 
     if [[ "$(hostname)" =~ BlendArch ]]; then
