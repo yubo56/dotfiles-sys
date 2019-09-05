@@ -36,7 +36,7 @@ alias bfind="find . -not \( -path '*/vendor' -prune \) -not \( -path '*/node_mod
 
 alias npt='npm test'
 alias nps='npm run startNoRecompile'
-alias enps='E2E_TEST=true BLEND_LOGGER_LEVEL=debug npm run startNoRecompile'
+alias enps='E2E_TEST=true BLEND_LOGGER_LEVEL=debug npm start'
 alias npts='POOL_LIMIT=4 npm run testParallel -- --skip-style'
 alias nptr='npm run testFast'
 alias gwc='grunt watchChokidar:lib'
@@ -81,3 +81,5 @@ export NODE_ENV=dev DEPLOYMENT=blend-borrower TENANT_LIST=blend-borrower
 function run_api() {
     mongo centrio <<< "yubo_clear()"; while npt -- --grep=$1 && sleep 30s; do mongo centrio <<< "yubo_clear()"; done
 }
+export GOPATH=$HOME/code/go
+export PATH=$PATH:$GOPATH/bin

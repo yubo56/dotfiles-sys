@@ -68,7 +68,9 @@ while true; do
         battperc=$(bc <<< "scale=1;100*$(cat $_battdir/charge_now)/$(cat $_battdir/charge_full)")
         batthealth=$(bc <<< "scale=1;100*$(cat $_battdir/charge_full)/$(cat $_battdir/charge_full_design)")
         batttime=''
-        if [[ $battstat = 'D' ]]; then
+        # assume actually on battery power if discharging & battperc < 95
+        # (sensor sometimes declares discharging when nearly full)
+        if [[ $battstat = 'D' ]] && (( $battperc < 95 )); then
             refresh_interval=5
             batttime=" ($(acpi -b | awk '{print $5}'))"
         else
