@@ -18,6 +18,7 @@ else
 fi
 
 export _JAVA_AWT_WM_NONREPARENTING=1 # java swing hates dwm
+export PYTHONUNBUFFERED=1
 
 # config options
 unsetopt beep nomatch notify

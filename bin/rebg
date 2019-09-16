@@ -1,4 +1,5 @@
 #! /bin/sh
 # feh --bg-fill --no-fehbg -z ~/walls
 # feh --bg-max --no-fehbg -z ~/single_walls/pokemon_wall.jpg
-feh --bg-max --no-fehbg -z ~/single_walls/gaia_allsky.jpg
+# feh --bg-max --no-fehbg -z ~/single_walls/gaia_allsky.jpg
+feh --bg-max --no-fehbg -z ~/single_walls/kipchoge_berlin.jpg
