@@ -1,13 +1,13 @@
 ##!/usr/bin/dash
 
-##font stuff
+## font stuff
 xset +fp /usr/share/fonts/TTF && xset fp rehash
 
-##statusbar stuff
+## statusbar stuff
 weatherLoop&
 statusBar&
 
-##various system settings
+## various system settings
 setxkbmap us -variant dvorak
 ibus-daemon -drx
 dconf load / < .dconf
@@ -23,6 +23,9 @@ else
 fi
 xmodmap ~/.xmodmap
 rebg
+
+## transparency
+~/bin/toggle-xcompmgr
 
 #-----------------------------------------------------------AUTOSTART-----------------------------------------------
 xscreensaver -nosplash &
