@@ -22,7 +22,7 @@ else
     xrandr --output eDP-1 --mode 1920x1200
 fi
 xmodmap ~/.xmodmap
-rebg
+dwm_rebg
 
 ## transparency
 ~/bin/toggle-xcompmgr
