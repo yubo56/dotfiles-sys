@@ -22,6 +22,6 @@ case $1 in
         # COLOR="$nb $nf $sb $sf"
         FONT='-fn '\''-*-terminus-medium-*-*-*-*-180-*-*-*-*-*-*'\'
 
-        /bin/zsh -c "echo -e \"$CHOICES\" | dmenu $COLOR $FONT"' "$@" | xargs quick_type'
+        /bin/zsh -c "echo -e \"$CHOICES\" | dmenu $COLOR $FONT"' "$@" | xargs dwm_quick_type'
         ;;
 esac
