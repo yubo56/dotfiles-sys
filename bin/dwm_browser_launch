@@ -1,2 +1,3 @@
-brave-beta &
-sleep 1s && dwm_set_transp
+#!/usr/bin/zsh
+brave-beta # &
+# sleep 1s && dwm_set_transp
