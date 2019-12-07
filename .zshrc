@@ -11,11 +11,21 @@ if [[ "$(hostname)" =~ ArchTest ]]; then
     export WIFI=wlp7s0
     export brightfile='/sys/class/backlight/intel_backlight/brightness'
     export brightmax='/sys/class/backlight/intel_backlight/max_brightness'
+    export MOUSE_X_IDX=10
+    export AMIXER_NAME='Mono:'
+else if [[ "$(hostname)" =~ YuboDesktop ]]; then
+    export WIFI=wlp8s0
+    export brightfile=''
+    export brightmax=''
+    export MOUSE_X_IDX=11
+    export AMIXER_NAME='Mono:'
 else
     export WIFI=wlp4s0
     export brightfile='/sys/class/backlight/gmux_backlight/brightness'
     export brightmax='/sys/class/backlight/gmux_backlight/max_brightness'
-fi
+    export MOUSE_X_IDX=10
+    export AMIXER_NAME='Front Left:'
+fi; fi
 
 export _JAVA_AWT_WM_NONREPARENTING=1 # java swing hates dwm
 export PYTHONUNBUFFERED=1

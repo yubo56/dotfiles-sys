@@ -80,7 +80,7 @@ while true; do
 
 
     #-------------------------------------------------------VOLUME--------------------------------------------
-    vol=$(amixer get Master | grep 'Front Left:' | perl -e "my \$string = <>;print \"Mu\" if \$string =~ /off/;\$string =~ s/\[(\d+)%\]// if \$string =~ /\[on\]/;print \$1;")
+    vol=$(amixer get Master | grep $AMIXER_NAME | perl -e "my \$string = <>;print \"Mu\" if \$string =~ /off/;\$string =~ s/\[(\d+)%\]// if \$string =~ /\[on\]/;print \$1;")
 
     #------------------------------------------------------BRIGHTNESS------------------------------------------
     if [[ -f $brightfile ]]; then
@@ -105,8 +105,11 @@ while true; do
     else  layout="U";fi;fi;fi
 
     #---------------------------------------------------------- TEMPERATURE ----------------------------------------------------------
-    read temp < /sys/devices/platform/coretemp.0/hwmon/hwmon*/temp1_input
-    temp="${sep}T:${temp:0:-3}"
+    if [[ -a /sys/devices/platform/coretemp.0 ]]; then
+        read temp < /sys/devices/platform/coretemp.0/hwmon/hwmon*/temp1_input
+        temp="${sep}T:${temp:0:-3}"
+    else temp=""
+    fi
 
     #---------------------------------------------------------- SIGNAL STRENGTH QUALITY/LEVEL -----------------------------------------
     if ! [[ -z $(iw list) ]]; then
