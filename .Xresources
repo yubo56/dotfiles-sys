@@ -1,7 +1,8 @@
 URxvt*transparent: true
 URxvt*shading: 30
 URxvt*scrollBar: false
-URxvt*font: xft:xos4 Terminus-17
+! URxvt*font: xft:xos4 Terminus-17
+URxvt*font: xft:Source Code Pro Medium:size=13
 URxvt*foreground: rgb:b9/80/00
 URxvt*background: black
 

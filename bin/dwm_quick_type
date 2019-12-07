@@ -7,7 +7,7 @@ case $1 in
         FILENAME=\'"screenshots/$(date +'%m-%d-%y_%H_%M_%S').png"\'
         mkdir -p screenshots &&
             sleep 0.1 &&
-            xdotool key --delay 2 --clearmodifiers Alt_L+apostrophe &&
+            xdotool key --delay 2 --clearmodifiers Super_L+apostrophe &&
             sleep 0.1 &&
             xdotool type "import $FILENAME" &&
             xdotool key Return
