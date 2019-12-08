@@ -13,7 +13,6 @@ dwm_rebg
 
 ## transparency
 ~/bin/toggle-xcompmgr
-xinput --set-prop $MOUSE_X_IDX 'libinput Accel Profile Enabled' 0, 1
 
 #-----------------------------------------------------------AUTOSTART-----------------------------------------------
 xscreensaver -nosplash &
@@ -29,7 +28,7 @@ if [[ "$(hostname)" =~ ArchTest ]]; then
     synclient TouchpadOff=1
     synclient TapButton1=1
     xrandr --output HDMI1 --left-of eDP1
-else
+else if [[ "$(hostname)" =~ BlendArch ]]; then
     xrandr --output eDP-1 --mode 1920x1200
-fi
+fi; fi
 exec dwmalt

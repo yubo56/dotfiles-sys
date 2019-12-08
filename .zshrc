@@ -11,14 +11,14 @@ if [[ "$(hostname)" =~ ArchTest ]]; then
     export WIFI=wlp7s0
     export brightfile='/sys/class/backlight/intel_backlight/brightness'
     export brightmax='/sys/class/backlight/intel_backlight/max_brightness'
-    export MOUSE_X_IDX=10
     export AMIXER_NAME='Mono:'
+    alias rewin='sudo efibootmgr -n 1 && sudo reboot'
 else if [[ "$(hostname)" =~ YuboDesktop ]]; then
     export WIFI=wlp8s0
     export brightfile=''
     export brightmax=''
-    export MOUSE_X_IDX=11
     export AMIXER_NAME='Mono:'
+    alias rewin='sudo efibootmgr -n 0 && sudo reboot'
 else
     export WIFI=wlp4s0
     export brightfile='/sys/class/backlight/gmux_backlight/brightness'
