@@ -18,7 +18,7 @@ dwm_rebg
 xscreensaver -nosplash &
 goldendict &
 redshift&
-ibus-daemon -drx
+ibus-daemon -rxv > tmp/ibus.log &
 
 ## statusbar stuff
 weatherLoop&
