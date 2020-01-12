@@ -30,5 +30,7 @@ if [[ "$(hostname)" =~ ArchTest ]]; then
     xrandr --output HDMI1 --left-of eDP1
 else if [[ "$(hostname)" =~ BlendArch ]]; then
     xrandr --output eDP-1 --mode 1920x1200
-fi; fi
+else if [[ "$(hostname)" =~ YuboDesktop ]]; then
+    xrandr --output HDMI-1 --rotate left --right-of DP-1
+fi; fi; fi
 exec dwmalt
