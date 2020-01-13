@@ -81,3 +81,5 @@ function run_api() {
 }
 export GOPATH=$HOME/code/go
 export PATH=$PATH:$GOPATH/bin
+export VAULT_ADDR=https://vault.sandbox.centrio.com:8200
+alias vaultauth='vault login -method=github token=$(cat ~/.ssh/github-vault-token)'
