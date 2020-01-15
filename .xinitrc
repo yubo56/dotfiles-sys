@@ -29,7 +29,10 @@ if [[ "$(hostname)" =~ ArchTest ]]; then
     synclient TapButton1=1
     xrandr --output HDMI1 --left-of eDP1
 else if [[ "$(hostname)" =~ BlendArch ]]; then
-    xrandr --output eDP-1 --mode 1920x1200
+    xrandr\
+        --output HDMI-1 --auto\
+        --output DP-1 --auto --rotate left --right-of HDMI-1\
+        --output eDP-1 --auto --right-of DP-1 --mode 1920x1200
 else if [[ "$(hostname)" =~ YuboDesktop ]]; then
     xrandr --output HDMI-1 --rotate left --right-of DP-1
 fi; fi; fi

@@ -1,5 +1,11 @@
 #! /bin/sh
 # feh --bg-fill --no-fehbg -Z ~/walls
-feh --no-fehbg --bg-max ~/single_walls/pokemon_wall.jpg ~/tmp/gaia_vert.jpg
 # feh --bg-max --no-fehbg -Z ~/single_walls/gaia_allsky.jpg
 # feh --bg-fill --no-fehbg -Z ~/single_walls/kipchoge_berlin.jpg
+
+# if has three screens
+if [[ $(xrandr | 'grep' -w connected | wc -l) == '3' ]]; then
+    feh --no-fehbg --bg-max ~/single_walls/pokemon_wall.jpg ~/single_walls/pokemon_wall.jpg ~/tmp/gaia_vert.jpg
+else
+    feh --no-fehbg --bg-max ~/single_walls/pokemon_wall.jpg ~/tmp/gaia_vert.jpg
+fi

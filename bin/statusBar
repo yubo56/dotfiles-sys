@@ -5,6 +5,7 @@ refresh_interval=1
 
 DP1_val='disconnected'
 HDMI1_val='disconnected'
+DOUBLE_val='disconnected'
 
 while true; do
     startTime=$(date +%s%N) # sleep (1s - execution time)
@@ -12,24 +13,42 @@ while true; do
 
     # different machines have different names
 
-    if [[ "$(hostname)" =~ BlendArch ]]; then
-        # if exists
-        if [[ -a /sys/class/drm/card0-DP-1 ]]; then
+    # check for existence of various inputs to check whether macbook has
+    # discrete card / display ports are enabled
+    if [[ "$(hostname)" =~ BlendArch ]] && [[ -a /sys/class/drm/card0-HDMI-A-1 ]]; then
+        # special case, two monitors
+        if [[ $(cat /sys/class/drm/card0-DP-1/status) == 'connected' ]] && [[ $(cat /sys/class/drm/card0-HDMI-A-1/status) == 'connected' ]]; then
+            if [[ $DOUBLE_val =~ 'disconnected' ]]; then
+                DOUBLE_val='connected'
+                DP1_val='disconnected'
+                HDMI1_val='disconnected'
+                echo "Changing because new DOUBLE_val $DOUBLE_val"
+                xrandr\
+                    --output HDMI-1 --auto\
+                    --output DP-1 --auto --rotate left --right-of HDMI-1\
+                    --output eDP-1 --auto --right-of DP-1 --mode 1920x1200
+                dwm_rebg
+            fi
+        else
+            DOUBLE_val='disconnected'
             # if status changed
             if [[ $(cat /sys/class/drm/card0-DP-1/status) != $DP1_val ]]; then
                 # update status, xrandr auto
                 read DP1_val < /sys/class/drm/card0-DP-1/status
-                echo "Changing because new $DP1_val"
-                xrandr --output DP-1 --auto --left-of eDP-1
-            fi
-        fi
-
-        if [[ -a /sys/class/drm/card0-HDMI-A-1 ]]; then
-            if [[ $(cat /sys/class/drm/card0-HDMI-A-1/status) != $HDMI1_val ]]; then
+                echo "Changing because new DP1_val $DP1_val"
+                xrandr --output DP-1 --auto --rotate left --left-of eDP-1\
+                    --output HDMI-1 --off
+                dwm_rebg
+            else if [[ $(cat /sys/class/drm/card0-HDMI-A-1/status) != $HDMI1_val ]]; then
                 read HDMI1_val < /sys/class/drm/card0-HDMI-A-1/status
-                echo "Changing because new $HDMI1_val"
-                xrandr --output HDMI-1 --auto --left-of eDP-1
-            fi
+                echo "Changing because new HDMI1_val $HDMI1_val"
+                xrandr --output HDMI-1 --auto --left-of eDP-1\
+                    --output DP-1 --off
+                dwm_rebg
+            else if [[ $HDMI1_val == 'disconnected' ]] && [[ $DP1_val == 'disconnected' ]]; then
+                xrandr --output DP-1 --off --output HDMI-1 --off
+                dwm_rebg
+            fi; fi; fi
         fi
     else
         # TODO
