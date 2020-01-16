@@ -5,7 +5,7 @@
 
 # if has three screens
 if [[ $(xrandr | 'grep' -w connected | wc -l) == '3' ]]; then
-    feh --no-fehbg --bg-max ~/single_walls/pokemon_wall.jpg ~/single_walls/pokemon_wall.jpg ~/tmp/gaia_vert.jpg
+    feh --no-fehbg --bg-max ~/single_walls/pokemon_wall.jpg ~/tmp/gaia_vert.jpg ~/single_walls/pokemon_wall.jpg
 else if [[ $(xrandr | 'grep' x1920 | wc -l) == '1' ]]; then
     feh --no-fehbg --bg-max ~/single_walls/pokemon_wall.jpg ~/tmp/gaia_vert.jpg
 else
