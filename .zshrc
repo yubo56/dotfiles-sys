@@ -19,13 +19,15 @@ else if [[ "$(hostname)" =~ YuboDesktop ]]; then
     export brightmax=''
     export AMIXER_NAME='Mono:'
     alias rewin='sudo efibootmgr -n 0 && sudo reboot'
+else if [[ "$(hostname)" =~ exo15c ]]; then
+    export AMIXER_NAME='Mono:'
 else
     export WIFI=wlp4s0
     export brightfile='/sys/class/backlight/gmux_backlight/brightness'
     export brightmax='/sys/class/backlight/gmux_backlight/max_brightness'
     export MOUSE_X_IDX=10
     export AMIXER_NAME='Front Left:'
-fi; fi
+fi; fi; fi
 
 export _JAVA_AWT_WM_NONREPARENTING=1 # java swing hates dwm
 export PYTHONUNBUFFERED=1

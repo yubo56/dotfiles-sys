@@ -3,11 +3,13 @@
 # feh --bg-max --no-fehbg -Z ~/single_walls/gaia_allsky.jpg
 # feh --bg-fill --no-fehbg -Z ~/single_walls/kipchoge_berlin.jpg
 
+if [[ $(hostname) == exo15c ]]; then
+    feh --no-fehbg --bg-max ~/tmp/gaia_vert.jpg ~/single_walls/pokemon_wall.jpg
 # if has three screens
-if [[ $(xrandr | 'grep' -w connected | wc -l) == '3' ]]; then
+else if [[ $(xrandr | 'grep' -w connected | wc -l) == '3' ]]; then
     feh --no-fehbg --bg-max ~/single_walls/pokemon_wall.jpg ~/tmp/gaia_vert.jpg ~/single_walls/pokemon_wall.jpg
 else if [[ $(xrandr | 'grep' x1920 | wc -l) == '1' ]]; then
     feh --no-fehbg --bg-max ~/single_walls/pokemon_wall.jpg ~/tmp/gaia_vert.jpg
 else
     feh --no-fehbg --bg-max ~/single_walls/pokemon_wall.jpg
-fi; fi
+fi; fi; fi

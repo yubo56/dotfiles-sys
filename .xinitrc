@@ -9,7 +9,6 @@ dconf load / < .dconf
 xset r rate 150 60 && xset -dpms && xset s off
 xrdb ~/.Xresources
 xmodmap ~/.xmodmap
-dwm_rebg
 
 ## transparency
 ~/bin/toggle-xcompmgr
@@ -35,5 +34,8 @@ else if [[ "$(hostname)" =~ BlendArch ]]; then
         --output eDP-1 --auto --right-of DP-1 --mode 1920x1200
 else if [[ "$(hostname)" =~ YuboDesktop ]]; then
     xrandr --output HDMI-1 --rotate left --right-of DP-1
-fi; fi; fi
+else if [[ "$(hostname)" =~ exo15c ]]; then
+    xrandr --output HDMI-1 --left-of VGA-1 --output VGA-1 --rotate left
+fi; fi; fi; fi
+dwm_rebg
 exec dwmalt
