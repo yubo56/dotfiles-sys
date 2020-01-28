@@ -2,6 +2,9 @@
 
 import sys
 import re
+import os
+import shutil
+from datetime import date
 
 heading_re = re.compile(r'\w+:')
 def sanitize(line):
@@ -24,7 +27,7 @@ def sanitize(line):
 
 if __name__ == '__main__':
     in_filename = sys.argv[1]
-    out_filename = 'out.arxiv'
+    out_filename = '%s.arxiv' % date.today().strftime(r'%Y_%m_%d')
 
     with open(in_filename, 'r') as f:
         with open(out_filename, 'w') as out:
@@ -38,3 +41,5 @@ if __name__ == '__main__':
                 if sline != '':
                     out.write(sline + '\n')
                 line = f.readline()
+    os.remove(in_filename)
+    shutil.rmtree(in_filename.replace('.html', '_files'))
