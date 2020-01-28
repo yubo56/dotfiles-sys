@@ -124,7 +124,7 @@ if [ $OSTYPE =~ "linux-gnu" ]; then
     [[ $(sysctl kernel/unprivileged_userns_clone | grep 1) ]] ||\
         sudo sysctl kernel/unprivileged_userns_clone=1 # for brave
 else
-    export PATH=/Users/yssu/bin:$PATH
+    export PATH=/Users/yubo/bin:$PATH
 fi
 
 # ibus
