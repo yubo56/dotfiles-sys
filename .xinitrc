@@ -26,16 +26,16 @@ statusBar&
 if [[ "$(hostname)" =~ ArchTest ]]; then
     synclient TouchpadOff=1
     synclient TapButton1=1
-    xrandr --output HDMI1 --left-of eDP1
+    xrandr --output HDMI1 --auto --left-of eDP1
 else if [[ "$(hostname)" =~ BlendArch ]]; then
     xrandr\
         --output HDMI-1 --auto\
         --output DP-1 --auto --rotate left --right-of HDMI-1\
         --output eDP-1 --auto --right-of DP-1 --mode 1920x1200
 else if [[ "$(hostname)" =~ YuboDesktop ]]; then
-    xrandr --output HDMI-1 --rotate left --right-of DP-1
+    xrandr --output --auto HDMI-1 --rotate left --right-of DP-1
 else if [[ "$(hostname)" =~ exo15c ]]; then
-    xrandr --output HDMI-1 --left-of VGA-1 --output VGA-1 --rotate left
+    xrandr --output HDMI-1 -auto --left-of VGA-1 --output VGA-1 --auto --rotate left
 fi; fi; fi; fi
 dwm_rebg
 exec dwmalt
