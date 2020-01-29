@@ -24,6 +24,7 @@ weatherLoop&
 statusBar&
 
 if [[ "$(hostname)" =~ ArchTest ]]; then
+    echo "disable" | sudo tee /sys/firmware/acpi/interrupts/gpe61
     synclient TouchpadOff=1
     synclient TapButton1=1
     xrandr --output HDMI1 --auto --left-of eDP1
