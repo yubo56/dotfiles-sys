@@ -36,7 +36,7 @@ else if [[ "$(hostname)" =~ BlendArch ]]; then
 else if [[ "$(hostname)" =~ YuboDesktop ]]; then
     xrandr --output --auto HDMI-1 --rotate left --right-of DP-1
 else if [[ "$(hostname)" =~ exo15c ]]; then
-    xrandr --output HDMI-1 -auto --left-of VGA-1 --output VGA-1 --auto --rotate left
+    xrandr --output HDMI-1 --auto --left-of VGA-1 --output VGA-1 --auto --rotate left
 fi; fi; fi; fi
 dwm_rebg
 exec dwmalt
