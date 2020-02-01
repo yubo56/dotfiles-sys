@@ -1,5 +1,5 @@
 git_status () {
-    if [[ $(git rev-parse --is-inside-git-dir 2> /dev/null) ]]
+    if [[ $(git rev-parse --is-inside-work-tree 2> /dev/null) == 'true' ]]
         then
         GIT_BRANCH=$(git rev-parse --abbrev-ref HEAD 2> /dev/null)
         if [ "$GIT_BRANCH" = "HEAD" ]
@@ -115,3 +115,57 @@ function cd() {
     fi
 }
 
+# rsync commands in git folders, rsync everything *untracked* so that with git
+# push/pull synchronizes
+rsync_to_git() {
+    # to be able to rsync *from* things, need to let rsync do a dry run and
+    # parse it out
+    # _cd=$(pwd)
+    if [[ $(git rev-parse --is-inside-work-tree 2> /dev/null) == 'true' ]]; then
+        # cd $(git rev-parse --show-toplevel)
+        # dry run, list all files that aren't directories (end in /) and not
+        # .git
+        FILE_LIST=$(rsync -aLPn $1 $2:$(dirs) | 'grep' -v '^.git\|incremental file list')
+        GIT_FILES_LIST=$(git ls-files)
+
+        # too lazy to sort and iterate, just grep
+        RSYNC_LIST=' '
+        while IFS= read -r f ; do
+            if [[ -z $f ]]; then break; fi
+            ( 'grep' -w $f <<< $GIT_FILES_LIST > /dev/null ) || RSYNC_LIST="$RSYNC_LIST--include=$f "
+        done <<< $FILE_LIST
+        CMD_STR="rsync -aLP $1 $2:$(dirs)${RSYNC_LIST}--exclude=*"
+        echo $CMD_STR
+        eval $CMD_STR # no idea why this is needed vs just executing
+    fi
+    # cd $_cd
+}
+# mostly same thing, just change where the $(dirs) cmd is, and rsync prepends
+# the name of the current directory in remote so account for that in dropping
+# .git folder
+rsync_from_git() {
+    # _cd=$(pwd)
+    if [[ $(git rev-parse --is-inside-work-tree 2> /dev/null) == 'true' ]]; then
+        # cd $(git rev-parse --show-toplevel)
+        BASENAME=${PWD##*/} # current directory
+
+        FILE_LIST=$(rsync -aLPn $1:$(dirs)/* $2 | 'grep' -v "^$BASENAME/.git\\|incremental file list")
+        GIT_FILES_LIST=$(git ls-files)
+
+        RSYNC_LIST=' '
+        while IFS= read -r f ; do
+            if [[ -z $f ]]; then break; fi
+            ( 'grep' -w $f <<< $GIT_FILES_LIST > /dev/null ) || RSYNC_LIST="$RSYNC_LIST--include=$f "
+        done <<< $FILE_LIST
+        CMD_STR="rsync -aLP $1:$(dirs)/* $2${RSYNC_LIST}--exclude=*"
+        echo $CMD_STR
+        eval $CMD_STR
+    fi
+    # cd $_cd
+}
+alias rt15g='rsync_to_git . exo15c'
+alias rf15g='rsync_from_git exo15c .'
+alias rt3g='rsync_to_git . exo3'
+alias rf3g='rsync_from_git exo3 .'
+alias rt4g='rsync_to_git . exo4'
+alias rf4g='rsync_from_git exo4 .'
