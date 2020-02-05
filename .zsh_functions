@@ -125,7 +125,7 @@ rsync_to_git() {
         # cd $(git rev-parse --show-toplevel)
         # dry run, list all files that aren't directories (end in /) and not
         # .git
-        FILE_LIST=$(rsync -aLPn $1 $2:$(dirs) | 'grep' -v '^.git\|incremental file list')
+        FILE_LIST=$(rsync -aLPn $1 $2:$(dirs) $3 | 'grep' -v '^.git\|incremental file list')
         GIT_FILES_LIST=$(git ls-files)
 
         # too lazy to sort and iterate, just grep
@@ -134,7 +134,7 @@ rsync_to_git() {
             if [[ -z $f ]]; then break; fi
             ( 'grep' -w $f <<< $GIT_FILES_LIST > /dev/null ) || RSYNC_LIST="$RSYNC_LIST--include=$f "
         done <<< $FILE_LIST
-        CMD_STR="rsync -aLP $1 $2:$(dirs)${RSYNC_LIST}--exclude=*"
+        CMD_STR="rsync -aLP $1 $2:$(dirs) $3${RSYNC_LIST}--exclude=*"
         echo $CMD_STR
         eval $CMD_STR # no idea why this is needed vs just executing
     fi
@@ -149,7 +149,7 @@ rsync_from_git() {
         # cd $(git rev-parse --show-toplevel)
         BASENAME=${PWD##*/} # current directory
 
-        FILE_LIST=$(rsync -aLPn $1:$(dirs)/* $2 | 'grep' -v "^$BASENAME/.git\\|incremental file list")
+        FILE_LIST=$(rsync -aLPn $1:$(dirs)/* $2 $3 | 'grep' -v "^$BASENAME/.git\\|incremental file list")
         GIT_FILES_LIST=$(git ls-files)
 
         RSYNC_LIST=' '
@@ -157,7 +157,7 @@ rsync_from_git() {
             if [[ -z $f ]]; then break; fi
             ( 'grep' -w $f <<< $GIT_FILES_LIST > /dev/null ) || RSYNC_LIST="$RSYNC_LIST--include=$f "
         done <<< $FILE_LIST
-        CMD_STR="rsync -aLP $1:$(dirs)/* $2${RSYNC_LIST}--exclude=*"
+        CMD_STR="rsync -aLP $1:$(dirs)/* $2 $3${RSYNC_LIST}--exclude=*"
         echo $CMD_STR
         eval $CMD_STR
     fi
