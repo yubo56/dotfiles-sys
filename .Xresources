@@ -26,3 +26,12 @@ Xcursor.size: 80
 
 !locale
 XTerm*locale: true
+Xmessage*font: -misc-dejavu sans-medium-r-*-*-26-*-*-*-*-*-*-*
+
+XFontSel*menu*showUnselectable: false
+XFontSel*sampleText.background: TEXTBG
+XFontSel*MenuButton.shadowWidth: 0
+XFontsel*Toggle*ToggleStyle: check
+XFontsel*MenuButton*Justify: left
+XFontsel*MenuButton*MenuButtonStyle: select
+xfontsel*Font: xft:Inconsolata:size=12:antialias=true:hinting=true

@@ -1,0 +1,46 @@
+#! /usr/bin/zsh
+# watches Dong's website for the new group meeting papers, displays buttons to
+# either ignore or to go to webpage
+#
+# Runs only on Thursdays
+
+URL=http://hosting.astro.cornell.edu/~dong/gp.html
+# DATE_STR=$(date -d tomorrow +'%-m/%-d/%Y')
+DATE_STR=2/7/2019
+INTERVAL=5s
+PREFIX='"target="_blank">'
+
+html=$(curl -s $URL)
+while [[ $('grep' -c $DATE_STR <<< $html) == 0 ]]; do
+    sleep $INTERVAL;
+    html=$(curl -s $URL)
+done
+
+TITLES=""
+started=0
+index=1
+while IFS= read -r f ; do
+    if [[ $f =~ '==========' ]]; then
+        if [[ $started == 0 ]]; then
+            started=1
+            continue;
+        else
+            break
+        fi
+    fi
+    if [[ $started == 1 && $f =~ $PREFIX ]]; then
+        TITLES="$TITLES$index) $(sed "s/$PREFIX//g" <<< $f)\n"
+        index=$((index + 1))
+    fi
+done <<< $html
+
+echo -e "Dong papers are up!\n$TITLES" | xmessage -buttons Okay:0,Goto:1 -default Okay -file -
+
+case $? in
+    1)
+        brave-beta $URL
+;;
+    *)
+        : # do nothing
+;;
+esac
