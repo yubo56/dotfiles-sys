@@ -52,7 +52,11 @@ while true; do
         fi
     else if [[ "$(hostname)" == ArchTest ]]; then
         xrandr --output HDMI1 --auto --left-of eDP1
-    fi; fi
+    else if [[ "$(hostname)" =~ exo15c ]]; then
+        xrandr --output HDMI-1 --auto --left-of VGA-1 --output VGA-1 --auto --rotate left
+    else if [[ "$(hostname)" == YuboDesktop ]]; then
+        xrandr --output HDMI-1 --auto --left-of DP-1 --rotate left
+    fi; fi; fi; fi
 
     #--------------------------------------------------------CALCULATE CPU USAGE----------------------------------------
     cpustat=`cat /proc/stat | head -n 1`

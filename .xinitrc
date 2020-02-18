@@ -34,7 +34,7 @@ else if [[ "$(hostname)" =~ BlendArch ]]; then
         --output DP-1 --auto --rotate left --right-of HDMI-1\
         --output eDP-1 --auto --right-of DP-1 --mode 1920x1200
 else if [[ "$(hostname)" =~ YuboDesktop ]]; then
-    xrandr --output --auto HDMI-1 --rotate left --right-of DP-1
+    xrandr --output HDMI-1 --auto --rotate left --right-of DP-1
 else if [[ "$(hostname)" =~ exo15c ]]; then
     xrandr --output HDMI-1 --auto --left-of VGA-1 --output VGA-1 --auto --rotate left
 fi; fi; fi; fi
