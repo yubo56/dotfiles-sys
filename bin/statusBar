@@ -55,7 +55,7 @@ while true; do
     else if [[ "$(hostname)" =~ exo15c ]]; then
         xrandr --output HDMI-1 --auto --left-of VGA-1 --output VGA-1 --auto --rotate left
     else if [[ "$(hostname)" == YuboDesktop ]]; then
-        xrandr --output HDMI-1 --auto --left-of DP-1 --rotate left
+        xrandr --output HDMI-1 --auto --right-of DP-1 --rotate left
     fi; fi; fi; fi
 
     #--------------------------------------------------------CALCULATE CPU USAGE----------------------------------------
@@ -138,9 +138,9 @@ while true; do
 
     #-------------------------------------------------------SET REPLY--------------------------------------------
     if [[ $net  == '' ]]; then
-        REPLY="D:$bright${sep}B:$battperc$battstat($batthealth)$temp${sep}V:$vol${sep}C:$usage${sep}M:$mem${sep}$weather`date +%a|~/bin/dateWeek``date +'%m/%d/%y %H:%M:%S'`$layout$batttime"
+        REPLY="D:$bright${sep}B:$battperc$battstat($batthealth)$temp${sep}V:$vol${sep}C:$usage${sep}M:$mem${sep}${weather}I:$(hostname -i)`date +%a|~/bin/dateWeek``date +'%m/%d/%y %H:%M:%S'`$layout$batttime"
     else
-        REPLY="D:$bright${sep}B:$battperc$battstat($batthealth)$temp${sep}W:$net${sep}V:$vol${sep}C:$usage${sep}M:$mem${sep}$weather`date +%a|~/bin/dateWeek``date +'%m/%d/%y %H:%M:%S'`$layout$batttime"
+        REPLY="D:$bright${sep}B:$battperc$battstat($batthealth)$temp${sep}W:$net${sep}V:$vol${sep}C:$usage${sep}M:$mem${sep}${weather}I:$(hostname -i)`date +%a|~/bin/dateWeek``date +'%m/%d/%y %H:%M:%S'`$layout$batttime"
     fi
 
     if [[ "$(hostname)" =~ BlendArch ]]; then
