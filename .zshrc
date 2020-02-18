@@ -7,6 +7,7 @@
 #
 
 # global exports
+export LC_ALL=C
 if [[ "$(hostname)" =~ ArchTest ]]; then
     export WIFI=wlp7s0
     export brightfile='/sys/class/backlight/intel_backlight/brightness'

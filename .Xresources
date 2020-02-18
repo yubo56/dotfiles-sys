@@ -25,7 +25,6 @@ Xcursor.theme: whiteglass
 Xcursor.size: 80
 
 !locale
-XTerm*locale: true
 Xmessage*font: -misc-dejavu sans-medium-r-*-*-26-*-*-*-*-*-*-*
 
 XFontSel*menu*showUnselectable: false

@@ -50,9 +50,9 @@ while true; do
                 dwm_rebg
             fi; fi; fi
         fi
-    else
-        # TODO
-    fi
+    else if [[ "$(hostname)" == ArchTest ]]; then
+        xrandr --output HDMI1 --auto --left-of eDP1
+    fi; fi
 
     #--------------------------------------------------------CALCULATE CPU USAGE----------------------------------------
     cpustat=`cat /proc/stat | head -n 1`
@@ -90,10 +90,7 @@ while true; do
         # assume actually on battery power if discharging & battperc < 95
         # (sensor sometimes declares discharging when nearly full)
         if [[ $battstat = 'D' ]] && (( $battperc < 95 )); then
-            refresh_interval=5
             batttime=" ($(acpi -b | awk '{print $5}'))"
-        else
-            refresh_interval=1
         fi
     fi
 
