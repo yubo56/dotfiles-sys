@@ -125,7 +125,7 @@ rsync_to_git() {
         # cd $(git rev-parse --show-toplevel)
         # dry run, list all files that aren't directories (end in /) and not
         # .git
-        FILE_LIST=$(rsync -aLPn $1 $2:$(dirs) $3 | 'grep' -v '^.git\|incremental file list')
+        FILE_LIST=$(rsync -aLPn $1 $2:$(dirs) $3 | 'grep' -v '^.git\|venv\|incremental file list')
         GIT_FILES_LIST=$(git ls-files)
 
         # too lazy to sort and iterate, just grep
@@ -149,7 +149,7 @@ rsync_from_git() {
         # cd $(git rev-parse --show-toplevel)
         BASENAME=${PWD##*/} # current directory
 
-        FILE_LIST=$(rsync -aLPn $1:$(dirs)/* $2 $3 | 'grep' -v "^$BASENAME/.git\\|incremental file list")
+        FILE_LIST=$(rsync -aLPn $1:$(dirs)/* $2 $3 | 'grep' -v "^$BASENAME/.git\\|venv\\|incremental file list")
         GIT_FILES_LIST=$(git ls-files)
 
         RSYNC_LIST=' '
