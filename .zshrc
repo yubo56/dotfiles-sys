@@ -8,6 +8,7 @@
 
 # global exports
 export LC_ALL=C
+export HOMEBREW_NO_AUTO_UPDATE=1
 if [[ "$(hostname)" =~ ArchTest ]]; then
     export WIFI=wlp7s0
     export brightfile='/sys/class/backlight/intel_backlight/brightness'
@@ -131,7 +132,7 @@ if [ $OSTYPE =~ "linux-gnu" ]; then
     [[ $(sysctl kernel/unprivileged_userns_clone | grep 1) ]] ||\
         sudo sysctl kernel/unprivileged_userns_clone=1 # for brave
 else
-    export PATH=/Users/yubo/bin:$PATH
+    export PATH="/opt/local/bin:/opt/local/sbin:/Users/yubo/bin:$PATH"
 fi
 
 # ibus
