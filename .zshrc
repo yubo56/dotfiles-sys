@@ -19,6 +19,7 @@ else if [[ "$(hostname)" =~ YuboDesktop ]]; then
     export brightfile=''
     export brightmax=''
     export AMIXER_NAME='Mono:'
+    # export AMIXER_NAME='Front Left:'
     alias rewin='sudo efibootmgr -n 0 && sudo reboot'
 else if [[ "$(hostname)" =~ exo15c ]]; then
     export AMIXER_NAME='Mono:'
