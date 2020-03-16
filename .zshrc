@@ -143,7 +143,7 @@ export QT_IM_MODULE="ibus"
 
 # prompt
 NEWLINE=$'\n'
-PROMPT1='$(git_status)[%B%F{cyan}%* %F{green}%n@%m%f%b]$(brack_fmt $STY)$(brack_fmt $AWS_VAULT) %(?..(%F{red}%?%{$reset_color%}%) ) [%~]'
+PROMPT1='$(git_status)[%{$fg_bold[white]%}%~%{$reset_color%}] [%B%F{cyan}%* %F{green}%n@%m%f%b]$(brack_fmt $STY)$(brack_fmt $AWS_VAULT) %(?..(%F{red}%?%{$reset_color%}%) )'
 PROMPT2='> '
 PROMPT="${PROMPT1}${NEWLINE}${PROMPT2}"
 setopt PROMPT_SUBST
