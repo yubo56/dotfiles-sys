@@ -38,7 +38,7 @@ export PYTHONUNBUFFERED=1
 # config options
 unsetopt beep nomatch notify
 unsetopt completealiases # completes aliases too, spellcheck
-setopt print_exit_value # prints nonzero exit value
+# setopt print_exit_value # prints nonzero exit value
 
 # keybindings
 stty sane # fix backspace
@@ -142,10 +142,12 @@ export GTK_IM_MODULE="ibus"
 export QT_IM_MODULE="ibus"
 
 # prompt
+NEWLINE=$'\n'
+PROMPT1='$(git_status)[%B%F{cyan}%* %F{green}%n@%m%f%b]$(brack_fmt $STY)$(brack_fmt $AWS_VAULT) %(?..(%F{red}%?%{$reset_color%}%) )%~'
+PROMPT2='> '
+PROMPT="${PROMPT1}${NEWLINE}${PROMPT2}"
 setopt PROMPT_SUBST
-PROMPT='$(git_status)%~\$ '
 #
-RPROMPT='[%B%F{cyan}%* %F{green}%n@%m%f%b]$(brack_fmt $STY)$(brack_fmt $AWS_VAULT)'
 
 # start shared ssh-agent
 if [ ! -S /tmp/ssh_auth_sock ]; then
