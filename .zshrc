@@ -6,6 +6,10 @@
 # syntax)
 #
 
+if [[ "$(hostname)" =~ BL-yubo- ]]; then
+    sudo scutil --set HostName BlendNew
+fi
+
 # global exports
 export LC_ALL=C
 export HOMEBREW_NO_AUTO_UPDATE=1
