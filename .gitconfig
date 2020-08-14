@@ -3,6 +3,8 @@
     name = Yubo Su
 [push]
     default = simple
+[pull]
+    rebase = false
 [color]
     diff = always
     status = always
