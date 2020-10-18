@@ -100,7 +100,7 @@ while true; do
 
 
     #-------------------------------------------------------VOLUME--------------------------------------------
-    if [[ $(grep -c -E '^\s+type pulse' .asoundrc) ]]; then
+    if [[ $(grep -c -E '^\s+type pulse' .asoundrc 2>&1 ) ]]; then
         AMIXER_NAME='Front Left:'
     else
         AMIXER_NAME='Mono:'
