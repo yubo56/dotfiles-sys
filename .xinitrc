@@ -13,7 +13,7 @@ xmodmap ~/.xmodmap
 ## try to set mouse accel
 for i in $(xinput | 'grep' pointer | sed -rn 's/.*id=([0-9]+).*/\1/p'); do
     xinput --set-prop $i 'libinput Accel Profile Enabled' 0, 1 2> /dev/null
-end
+done
 
 ## transparency
 ~/bin/toggle-xcompmgr
