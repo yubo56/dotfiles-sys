@@ -10,6 +10,11 @@ xset r rate 150 60 && xset -dpms && xset s off
 xrdb ~/.Xresources
 xmodmap ~/.xmodmap
 
+## try to set mouse accel
+for i in $(xinput | 'grep' pointer | sed -rn 's/.*id=([0-9]+).*/\1/p'); do
+    xinput --set-prop $i 'libinput Accel Profile Enabled' 0, 1 2> /dev/null
+end
+
 ## transparency
 ~/bin/toggle-xcompmgr
 
