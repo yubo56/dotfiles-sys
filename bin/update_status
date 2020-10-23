@@ -1,0 +1,2 @@
+#!/bin/bash
+xsetroot -name "$(cat /tmp/status)$(dateWeek)$(date +'%m/%d/%y %H:%M:%S')"

@@ -34,7 +34,7 @@ done
 ## transparency
 # ~/bin/toggle-xcompmgr
 ## Alt: zoom share screen
-xcompmgr -o.00
+xcompmgr -o.00 &
 
 #-----------------------------------------------------------AUTOSTART-----------------------------------------------
 xscreensaver -nosplash &

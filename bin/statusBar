@@ -1,14 +1,13 @@
 #!/usr/bin/zsh
 
 sep='|'
-refresh_interval=1
+refresh_interval=5
 
 DP1_val='disconnected'
 HDMI1_val='disconnected'
 DOUBLE_val='disconnected'
 
 while true; do
-    startTime=$(date +%s%N) # sleep (1s - execution time)
     #--------------------------------------------------------TOGGLE SCREEN WHEN CONNECTED----------------------------------------
 
     # different machines have different names
@@ -85,16 +84,16 @@ while true; do
     #-------------------------------------------------------BATTSTATS--------------------------------------------
     battstat="N/A"
     _battdir=/sys/class/power_supply/BAT0
+    batttime=''
     if [[ -e $_battdir/status ]]; then
         read _battstat < $_battdir/status
         battstat=${_battstat:0:1}
         battperc=$(bc <<< "scale=1;100*$(cat $_battdir/charge_now)/$(cat $_battdir/charge_full)")
         batthealth=$(bc <<< "scale=1;100*$(cat $_battdir/charge_full)/$(cat $_battdir/charge_full_design)")
-        batttime=''
         # assume actually on battery power if discharging & battperc < 95
         # (sensor sometimes declares discharging when nearly full)
         if [[ $battstat = 'D' ]] && (( $battperc < 95 )); then
-            batttime=" ($(acpi -b | awk '{print $5}'))"
+            batttime="($(acpi -b | awk '{print $5}'))${sep}"
         fi
     fi
 
@@ -122,13 +121,6 @@ while true; do
         weather=""
     fi
 
-    #---------------------------------------------------FIND KBLAYOUT----------------------------------------
-    layout=$(setxkbmap -query | grep variant)
-    if [[ $layout =~ "dvorak-l" ]]; then layout="L"
-    else if [[ $layout =~ "dvorak-intl" ]]; then layout="DI"
-    else if [[ $layout =~ "dvorak" ]]; then layout="D"
-    else  layout="U";fi;fi;fi
-
     #---------------------------------------------------------- TEMPERATURE ----------------------------------------------------------
     if [[ -a /sys/devices/platform/coretemp.0 ]]; then
         read temp < /sys/devices/platform/coretemp.0/hwmon/hwmon*/temp1_input
@@ -143,9 +135,9 @@ while true; do
 
     #-------------------------------------------------------SET REPLY--------------------------------------------
     if [[ $net  == '' ]]; then
-        REPLY="D:$bright${sep}B:$battperc$battstat($batthealth)$temp${sep}V:$vol${sep}C:$usage${sep}M:$mem${sep}${weather}I:$(hostname -i)`date +%a|~/bin/dateWeek``date +'%m/%d/%y %H:%M:%S'`$layout$batttime"
+        REPLY="D:$bright${sep}B:$battperc$battstat($batthealth)$temp${sep}V:$vol${sep}C:$usage${sep}M:$mem${sep}${weather}${batttime}I:$(hostname -i)"
     else
-        REPLY="D:$bright${sep}B:$battperc$battstat($batthealth)$temp${sep}W:$net${sep}V:$vol${sep}C:$usage${sep}M:$mem${sep}${weather}I:$(hostname -i)`date +%a|~/bin/dateWeek``date +'%m/%d/%y %H:%M:%S'`$layout$batttime"
+        REPLY="D:$bright${sep}B:$battperc$battstat($batthealth)$temp${sep}W:$net${sep}V:$vol${sep}C:$usage${sep}M:$mem${sep}${weather}${batttime}I:$(hostname -i)"
     fi
 
     if [[ "$(hostname)" =~ BlendArch ]]; then
@@ -156,7 +148,6 @@ while true; do
         REPLY="F:${FAN}|${REPLY}"
     fi
 
-
-    xsetroot -name "$REPLY"
-    sleep $((( $refresh_interval - ($(date +%s%N) - $startTime) / 1000000000.0 )))s
+    echo "$REPLY" > /tmp/status
+    sleep $refresh_interval
 done
