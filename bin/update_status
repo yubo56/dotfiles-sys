@@ -1,2 +1,10 @@
 #!/bin/bash
-xsetroot -name "$(cat /tmp/status)$(dateWeek)$(date +'%m/%d/%y %H:%M:%S')"
+
+if [[ $(setxkbmap -query | grep 'variant') == "" ]]; then
+    suffix=U
+elif [[ $(setxkbmap -query | grep 'variant') =~ "dvorak-l" ]]; then
+    suffix=L
+else
+    suffix=D
+fi
+xsetroot -name "$(cat /tmp/status)$(/home/yssu/bin/dateWeek)$(date +'%m/%d/%y %H:%M:%S')$suffix"

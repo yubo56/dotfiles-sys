@@ -19,13 +19,6 @@ fi; fi; fi; fi
 ## font stuff
 xset +fp /usr/share/fonts/TTF && xset fp rehash
 
-## various system settings
-setxkbmap us -variant dvorak
-dconf load / < .dconf
-xset r rate 150 60 && xset -dpms && xset s off
-xrdb ~/.Xresources
-xmodmap ~/.xmodmap
-
 ## try to set mouse accel
 for i in $(xinput | 'grep' pointer | sed -rn 's/.*id=([0-9]+).*/\1/p'); do
     xinput --set-prop $i 'libinput Accel Profile Enabled' 0, 1 2> /dev/null
@@ -46,4 +39,12 @@ ibus-daemon -rxv > tmp/ibus.log &
 weatherLoop&
 statusBar&
 dwm_rebg
+
+## various system settings
+setxkbmap us -variant dvorak
+dconf load / < .dconf
+xset r rate 150 60 && xset -dpms && xset s off
+xrdb ~/.Xresources
+xmodmap ~/.xmodmap
+
 exec dwmalt
