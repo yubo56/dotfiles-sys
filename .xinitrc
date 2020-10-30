@@ -41,10 +41,9 @@ statusBar&
 dwm_rebg
 
 ## various system settings
-setxkbmap us -variant dvorak
+{ sleep 1s && setxkbmap us -variant dvorak && xmodmap ~/.xmodmap}&
 dconf load / < .dconf
 xset r rate 150 60 && xset -dpms && xset s off
 xrdb ~/.Xresources
-xmodmap ~/.xmodmap
 
 exec dwmalt

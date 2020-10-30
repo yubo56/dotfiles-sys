@@ -1,8 +1,37 @@
 #! /bin/sh
-[[ `date +%w` = '0' ]] && echo Su
-[[ `date +%w` = '1' ]] && echo M
-[[ `date +%w` = '2' ]] && echo Tu
-[[ `date +%w` = '3' ]] && echo W
-[[ `date +%w` = '4' ]] && echo Th
-[[ `date +%w` = '5' ]] && echo F
-[[ `date +%w` = '6' ]] && echo Sa
+
+## KR
+[[ `date +%w` = '0' ]] && echo 일 # 日
+[[ `date +%w` = '1' ]] && echo 월 # 月
+[[ `date +%w` = '2' ]] && echo 화 # 火
+[[ `date +%w` = '3' ]] && echo 수 # 水
+[[ `date +%w` = '4' ]] && echo 목 # 木
+[[ `date +%w` = '5' ]] && echo 금 # 金
+[[ `date +%w` = '6' ]] && echo 토 # 土
+
+# CN
+# [[ `date +%w` = '0' ]] && echo 日
+# [[ `date +%w` = '1' ]] && echo 一
+# [[ `date +%w` = '2' ]] && echo 二
+# [[ `date +%w` = '3' ]] && echo 三
+# [[ `date +%w` = '4' ]] && echo 四
+# [[ `date +%w` = '5' ]] && echo 五
+# [[ `date +%w` = '6' ]] && echo 六
+
+# FR
+# [[ `date +%w` = '0' ]] && echo Di
+# [[ `date +%w` = '1' ]] && echo Lu
+# [[ `date +%w` = '2' ]] && echo Ma
+# [[ `date +%w` = '3' ]] && echo Me
+# [[ `date +%w` = '4' ]] && echo Je
+# [[ `date +%w` = '5' ]] && echo Ve
+# [[ `date +%w` = '6' ]] && echo Sa
+# [[ `date +%w` = '0' ]] && echo Su
+
+# EN
+# [[ `date +%w` = '1' ]] && echo M
+# [[ `date +%w` = '2' ]] && echo Tu
+# [[ `date +%w` = '3' ]] && echo W
+# [[ `date +%w` = '4' ]] && echo Th
+# [[ `date +%w` = '5' ]] && echo F
+# [[ `date +%w` = '6' ]] && echo Sa

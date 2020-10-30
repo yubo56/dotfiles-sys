@@ -95,20 +95,17 @@ while true; do
         if [[ $battstat = 'D' ]] && (( $battperc < 95 )); then
             batttime="($(acpi -b | awk '{print $5}'))${sep}"
         fi
+        battAll="B:$battperc$battstat($batthealth)$temp${sep}"
     fi
 
 
     #-------------------------------------------------------VOLUME--------------------------------------------
-    if [[ $(grep -c -E '^\s+type pulse' .asoundrc 2>&1 ) ]]; then
-        AMIXER_NAME='Front Left:'
-    else
-        AMIXER_NAME='Mono:'
-    fi
-    vol=$(amixer get Master | grep $AMIXER_NAME | perl -e "my \$string = <>;print \"Mu\" if \$string =~ /off/;\$string =~ s/\[(\d+)%\]// if \$string =~ /\[on\]/;print \$1;")
+    vol=$(amixer get Master | grep 'Front Left:' | perl -e "my \$string = <>;print \"Mu\" if \$string =~ /off/;\$string =~ s/\[(\d+)%\]// if \$string =~ /\[on\]/;print \$1;")
+    vol2=$(amixer get Master | grep 'Mono:' | perl -e "my \$string = <>;print \"Mu\" if \$string =~ /off/;\$string =~ s/\[(\d+)%\]// if \$string =~ /\[on\]/;print \$1;")
 
     #------------------------------------------------------BRIGHTNESS------------------------------------------
     if [[ -f $brightfile ]]; then
-        bright=$(echo "scale=0;$(cat $brightfile) * 100 / $(cat $brightmax)" | bc)
+        bright="D:$(echo "scale=0;$(cat $brightfile) * 100 / $(cat $brightmax)" | bc)${sep}"
     fi
 
 
@@ -129,16 +126,12 @@ while true; do
     fi
 
     #---------------------------------------------------------- SIGNAL STRENGTH QUALITY/LEVEL -----------------------------------------
-    if ! [[ -z $(iw list) ]]; then
-        net=$(iw dev $WIFI link | grep signal | awk '{print $2}' | sed 's/\ //g')
+    if ! [[ $(iw dev $WIFI link) == 'Not connected.' ]]; then
+        net="W:$(iw dev $WIFI link | grep signal | awk '{print $2}' | sed 's/\ //g')${sep}"
     fi
 
     #-------------------------------------------------------SET REPLY--------------------------------------------
-    if [[ $net  == '' ]]; then
-        REPLY="D:$bright${sep}B:$battperc$battstat($batthealth)$temp${sep}V:$vol${sep}C:$usage${sep}M:$mem${sep}${weather}${batttime}I:$(hostname -i)"
-    else
-        REPLY="D:$bright${sep}B:$battperc$battstat($batthealth)$temp${sep}W:$net${sep}V:$vol${sep}C:$usage${sep}M:$mem${sep}${weather}${batttime}I:$(hostname -i)"
-    fi
+    REPLY="${bright}${battAll}${net}V:$vol$vol2${sep}C:$usage${sep}M:$mem${sep}${weather}${batttime}I:$(hostname -i)"
 
     if [[ "$(hostname)" =~ BlendArch ]]; then
         read fan_in < /sys/devices/platform/applesmc.768/fan1_output
