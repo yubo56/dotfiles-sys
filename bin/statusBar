@@ -1,7 +1,7 @@
 #!/usr/bin/zsh
 
 sep='|'
-refresh_interval=5
+refresh_interval=1
 
 DP1_val='disconnected'
 HDMI1_val='disconnected'
@@ -82,9 +82,7 @@ while true; do
     mem=$(echo "scale=0;($total - $free)*100/$total" | 'bc')
 
     #-------------------------------------------------------BATTSTATS--------------------------------------------
-    battstat="N/A"
     _battdir=/sys/class/power_supply/BAT0
-    batttime=''
     if [[ -e $_battdir/status ]]; then
         read _battstat < $_battdir/status
         battstat=${_battstat:0:1}
@@ -114,8 +112,6 @@ while true; do
     #format weather string
     if [[ -s /tmp/weather ]]; then
         weather="$(cat /tmp/weather)${sep}"
-    else
-        weather=""
     fi
 
     #---------------------------------------------------------- TEMPERATURE ----------------------------------------------------------

@@ -125,7 +125,7 @@ zstyle ':completion:*' menu select eval "$($DIRCOLORS -b)"
 # variables
 export EDITOR="vim"
 if [ $OSTYPE =~ "linux-gnu" ]; then
-    export PATH=/home/yssu/bin:$PATH
+    export PATH="/home/yssu/.local/bin:/home/yssu/bin:$PATH"
     [[ $(sysctl kernel/unprivileged_userns_clone | grep 1) ]] ||\
         sudo sysctl kernel/unprivileged_userns_clone=1 # for brave
 else

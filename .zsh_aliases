@@ -11,8 +11,7 @@ alias ll="ls -A"
 alias rm='rm -i' # the mark of a man who has seen things
 
 # options for common programs
-alias feh='feh -B white -.'
-alias mplayer='mplayer -fs'
+alias feh='feh -B white -. -d'
 alias g++='g++ -Wall --std=c++0x'
 alias gcc='gcc -Wall -Wstrict-prototypes -ansi -pedantic -D_GNU_SOURCE'
 alias acpi='acpi --everything'

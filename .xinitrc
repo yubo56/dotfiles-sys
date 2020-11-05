@@ -33,17 +33,17 @@ xcompmgr -o.00 &
 xscreensaver -nosplash &
 goldendict &
 redshift&
-ibus-daemon -rxv > tmp/ibus.log &
+ibus-daemon -rxv &
+
+## various system settings
+setxkbmap us -variant dvorak && xmodmap ~/.xmodmap
+dconf load / < .dconf
+xset r rate 150 60 && xset -dpms && xset s off
+xrdb ~/.Xresources
 
 ## statusbar stuff
 weatherLoop&
 statusBar&
 dwm_rebg
-
-## various system settings
-{ sleep 1s && setxkbmap us -variant dvorak && xmodmap ~/.xmodmap}&
-dconf load / < .dconf
-xset r rate 150 60 && xset -dpms && xset s off
-xrdb ~/.Xresources
 
 exec dwmalt
