@@ -1,7 +1,24 @@
-#!/usr/bin/zsh
+#! /bin/zsh
+while true; do
+    #------------------------------------------------------IF ONLINE----------------------------------------------------------------
+    if [[ "$(ip link | grep 'enp.s0' | grep ' UP ')" != "" || "$(iw dev $WIFI link 2> /dev/null | grep "Connected")" != "" ]]; then
+
+        #-----------------------------------------------------------WEATHER------------------------------------------------------------
+        curl "http://rss.accuweather.com/rss/liveweather_rss.asp?metric=1&locCode=14850" > /tmp/weatherGrep 2> /dev/null
+        perl /home/yssu/bin/sbscripts/weatherGrep.pl /tmp/weatherGrep > /tmp/weather
+
+    #-------------------------------------------------------------ELSE WE'RE DISCONNECTED-------------------------------------------------
+    else
+        # toggles weather setting already
+        rm -f /tmp/weather
+    fi
+
+    #5 minute delay
+    sleep 5m
+done &
 
 sep='|'
-refresh_interval=1
+refresh_interval=2
 
 DP1_val='disconnected'
 HDMI1_val='disconnected'
@@ -76,6 +93,18 @@ while true; do
     prevused=$used
     previdle=$idle
 
-    echo "C:${usage}" > /tmp/cpu_usage
+    #-------------------------------------------------------SET REPLY--------------------------------------------
+    REPLY="C:$usage"
+
+    if [[ "$(hostname)" =~ BlendArch ]]; then
+        read fan_in < /sys/devices/platform/applesmc.768/fan1_output
+        read fan_min < /sys/devices/platform/applesmc.768/fan1_min
+        read fan_max < /sys/devices/platform/applesmc.768/fan1_max
+        FAN=$(echo "scale=0;($fan_in - $fan_min)*100/($fan_max - $fan_min)" | 'bc')
+        REPLY="F:${FAN}${sep}${REPLY}"
+    fi
+
+    echo "$REPLY" > /tmp/status
     sleep $refresh_interval
-done
+done &
+

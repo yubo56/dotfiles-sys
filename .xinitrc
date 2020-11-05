@@ -42,8 +42,7 @@ xset r rate 150 60 && xset -dpms && xset s off
 xrdb ~/.Xresources
 
 ## statusbar stuff
-weatherLoop&
-statusBar&
+weatherLoop
 dwm_rebg
 
 exec dwmalt

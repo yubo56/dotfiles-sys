@@ -1,10 +1,10 @@
 #! /bin/zsh
 
-if [[ $(setxkbmap -query | grep 'variant') == "" ]]; then
+if [[ $(setxkbmap -query | grep 'variant') =~ "mac" ]]; then
     setxkbmap us -variant dvorak
     xmodmap ~/.xmodmap
 elif [[ $(setxkbmap -query | grep 'variant') =~ "dvorak-l" ]]; then
-    setxkbmap us
+    setxkbmap us -variant mac
 else
     setxkbmap us -variant dvorak-l
 fi
