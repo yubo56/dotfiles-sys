@@ -18,13 +18,14 @@ while true; do
 done &
 
 sep='|'
-refresh_interval=2
+refresh_interval=1 # cpu usage is averaged over 2 such intervals
 
 DP1_val='disconnected'
 HDMI1_val='disconnected'
 DOUBLE_val='disconnected'
 
 while true; do
+    startTime=$(date +%s%N) # sleep (1s - execution time)
     #--------------------------------------------------------TOGGLE SCREEN WHEN CONNECTED----------------------------------------
 
     # different machines have different names
@@ -78,6 +79,8 @@ while true; do
     cpustat=`cat /proc/stat | head -n 1`
     prevused=${prevused:-0}
     previdle=${previdle:-0}
+    prev2used=${prev2used:-0}
+    prev2idle=${previdle:-0}
     used=${used:-0}
     idle=${idle:-0}
     read _name user nice system incidle _y <<< $cpustat
@@ -85,26 +88,31 @@ while true; do
     (( used = $user + $nice + $system ))
     (( idle = $incidle ))
 
-    bccmd="scale=1;\
-        100 * \
-            ($used - $prevused) /\
-            (($used - $prevused) + ($idle - $previdle))"
-    usage=$(bc <<< $bccmd)
+    usage=$(printf '%.1f' $(( 100.0 * ($used - $prev2used) / (($used - $prev2used) + ($idle - $prev2idle)) )))
+    prev2used=$prevused
+    prev2idle=$previdle
     prevused=$used
     previdle=$idle
 
     #-------------------------------------------------------SET REPLY--------------------------------------------
     REPLY="C:$usage"
 
+    pingMS=$(ping 8.8.8.8 -c 1 -W 0.7 | sed -nE 's/.*time=([^ ]+) ms/\1/p')
+    if [[ -n ${pingMS} ]]; then
+        REPLY="P:$(printf '%.1f' ${pingMS})${sep}${REPLY}"
+    else
+        REPLY="P:(!!)${REPLY}"
+    fi
+
     if [[ "$(hostname)" =~ BlendArch ]]; then
         read fan_in < /sys/devices/platform/applesmc.768/fan1_output
         read fan_min < /sys/devices/platform/applesmc.768/fan1_min
         read fan_max < /sys/devices/platform/applesmc.768/fan1_max
-        FAN=$(echo "scale=0;($fan_in - $fan_min)*100/($fan_max - $fan_min)" | 'bc')
+        (( FAN = ($fan_in - $fan_min)*100/($fan_max - $fan_min) ))
         REPLY="F:${FAN}${sep}${REPLY}"
     fi
 
     echo "$REPLY" > /tmp/status
-    sleep $refresh_interval
+    sleep $((( $refresh_interval - ($(date +%s%N) - $startTime) / 1000000000.0 )))s
 done &
 

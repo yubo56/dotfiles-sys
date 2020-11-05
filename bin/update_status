@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/zsh
 
 sep='|'
 if [[ $(setxkbmap -query | grep 'variant') =~ "mac" ]]; then
@@ -10,17 +10,17 @@ else
 fi
 
 #-------------------------------------------------------MEMSTATS--------------------------------------------
-total=$(cat /proc/meminfo | grep MemTotal | sed -e 's/MemTotal://g' -e 's/kB//g' -e 's/ //g')
-free=$(cat /proc/meminfo | grep MemFree | sed -e 's/MemFree://g' -e's/kB//g' -e 's/ //g')
-mem=$(echo "scale=0;($total - $free)*100/$total" | 'bc')
+total=$(cat /proc/meminfo | sed -nE 's/MemTotal:\s+(.*) kB/\1/p')
+free=$(cat /proc/meminfo | sed -nE 's/MemFree:\s+(.*) kB/\1/p')
+(( mem = 100 * ($total - $free) / $total ))
 
 #-------------------------------------------------------BATTSTATS--------------------------------------------
 _battdir=/sys/class/power_supply/BAT0
 if [[ -e $_battdir/status ]]; then
     read _battstat < $_battdir/status
     battstat=${_battstat:0:1}
-    battperc=$(bc <<< "scale=1;100*$(cat $_battdir/charge_now)/$(cat $_battdir/charge_full)")
-    batthealth=$(bc <<< "scale=1;100*$(cat $_battdir/charge_full)/$(cat $_battdir/charge_full_design)")
+    battperc = printf '%.1f' $(( 100.0 * $(cat $_battdir/charge_now)/$(cat $_battdir/charge_full) ))
+    batthealth = printf '%.1f' $(( 100.0 * $(cat $_battdir/charge_full)/$(cat $_battdir/charge_full_design) ))
     # assume actually on battery power if discharging & battperc < 95
     # (sensor sometimes declares discharging when nearly full)
     if [[ $battstat = 'D' ]] && (( $battperc < 95 )); then
@@ -36,7 +36,7 @@ vol2=$(amixer get Master | grep 'Mono:' | perl -e "my \$string = <>;print \"Mu\"
 
 #------------------------------------------------------BRIGHTNESS------------------------------------------
 if [[ -f $brightfile ]]; then
-    bright="D:$(echo "scale=0;$(cat $brightfile) * 100 / $(cat $brightmax)" | bc)${sep}"
+    bright="D:$(( $(cat $brightfile) * 100 / $(cat $brightmax) )):${sep}"
 fi
 
 
@@ -62,4 +62,4 @@ fi
 #-------------------------------------------------------SET REPLY--------------------------------------------
 REPLY="${sep}V:$vol$vol2${sep}M:$mem${sep}I:$(hostname -i | tr -d ' ')${weather}${batttime}"
 
-xsetroot -name "$(cat /tmp/status)${REPLY} $(/home/yssu/bin/dateWeek)$(date +'%m/%d/%y %H:%M:%S')$suffix"
+xsetroot -name "$(cat /tmp/status)${REPLY} $(/home/yssu/bin/dateWeek)$(date +'%m/%d/%y %H:%M:%S.%1N')$suffix"
