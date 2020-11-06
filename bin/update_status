@@ -26,7 +26,7 @@ if [[ -e $_battdir/status ]]; then
     if [[ $battstat = 'D' ]] && (( $battperc < 95 )); then
         batttime="${sep}($(acpi -b | awk '{print $5}'))"
     fi
-    battAll="B:$battperc$battstat($batthealth)$temp${sep}"
+    battAll="B$battperc$battstat($batthealth)$temp${sep}"
 fi
 
 
@@ -36,7 +36,7 @@ vol2=$(amixer get Master | grep 'Mono:' | perl -e "my \$string = <>;print \"Mu\"
 
 #------------------------------------------------------BRIGHTNESS------------------------------------------
 if [[ -f $brightfile ]]; then
-    bright="D:$(( $(cat $brightfile) * 100 / $(cat $brightmax) )):${sep}"
+    bright="D$(( $(cat $brightfile) * 100 / $(cat $brightmax) ))${sep}"
 fi
 
 
@@ -50,16 +50,16 @@ fi
 #---------------------------------------------------------- TEMPERATURE ----------------------------------------------------------
 if [[ -a /sys/devices/platform/coretemp.0 ]]; then
     read temp < /sys/devices/platform/coretemp.0/hwmon/hwmon*/temp1_input
-    temp="${sep}T:${temp:0:-3}"
+    temp="${sep}T{temp:0:-3}"
 else temp=""
 fi
 
 #---------------------------------------------------------- SIGNAL STRENGTH QUALITY/LEVEL -----------------------------------------
 if ! [[ $(iw dev $WIFI link) == 'Not connected.' ]]; then
-    net="W:$(iw dev $WIFI link | grep signal | awk '{print $2}' | sed 's/\ //g')${sep}"
+    net="W$(iw dev $WIFI link | grep signal | awk '{print $2}' | sed 's/\ //g')${sep}"
 fi
 
 #-------------------------------------------------------SET REPLY--------------------------------------------
-REPLY="${sep}V:$vol$vol2${sep}M:$mem${sep}I:$(hostname -i | tr -d ' ')${weather}${batttime}"
+REPLY="${sep}V$vol$vol2${sep}M$mem${sep}I$(hostname -i | tr -d ' ')${weather}${batttime}"
 
 xsetroot -name "$(cat /tmp/status)${REPLY} $(/home/yssu/bin/dateWeek)$(date +'%m/%d/%y %H:%M:%S.%1N')$suffix"

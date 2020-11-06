@@ -88,20 +88,21 @@ while true; do
     (( used = $user + $nice + $system ))
     (( idle = $incidle ))
 
-    usage=$(printf '%.1f' $(( 100.0 * ($used - $prev2used) / (($used - $prev2used) + ($idle - $prev2idle)) )))
+    # -0.1 so that never 100%, doesn't shift digits lol
+    usage=$(printf '%.1f' $(( 100.0 * ($used - $prev2used) / (($used - $prev2used) + ($idle - $prev2idle)) - 0.1 )))
     prev2used=$prevused
     prev2idle=$previdle
     prevused=$used
     previdle=$idle
 
     #-------------------------------------------------------SET REPLY--------------------------------------------
-    REPLY="C:$usage"
+    REPLY="C$usage"
 
     pingMS=$(ping 8.8.8.8 -c 1 -W 0.7 | sed -nE 's/.*time=([^ ]+) ms/\1/p')
     if [[ -n ${pingMS} ]]; then
-        REPLY="P:$(printf '%.1f' ${pingMS})${sep}${REPLY}"
+        REPLY="P$(printf '%04.1f' ${pingMS})${sep}${REPLY}"
     else
-        REPLY="P:(!!)${REPLY}"
+        REPLY="P(!!)${REPLY}"
     fi
 
     if [[ "$(hostname)" =~ BlendArch ]]; then
@@ -109,7 +110,7 @@ while true; do
         read fan_min < /sys/devices/platform/applesmc.768/fan1_min
         read fan_max < /sys/devices/platform/applesmc.768/fan1_max
         (( FAN = ($fan_in - $fan_min)*100/($fan_max - $fan_min) ))
-        REPLY="F:${FAN}${sep}${REPLY}"
+        REPLY="F${FAN}${sep}${REPLY}"
     fi
 
     echo "$REPLY" > /tmp/status
