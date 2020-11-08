@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+
+LOGIN=$1
+HOSTS="exo2 exo2a exo3 exo4"
+
+if [[ $1 == '' || $1 == '-h' || $1 == '--help' ]]; then
+    echo '''Usage: bash a.sh [login] [-v]
+    * login is your astro cluster username, used to sign in [login]@host.astro.cornell.edu
+    * pass in "-v" to print all running processes, not just counts'''
+    exit 0
+fi
+
+CPU_THRESH=50 # threshold above which processes are counted as "running"
+ROW_SEP='----------------------------------------------------------------------'
+
+for host in $HOSTS; do
+    echo $ROW_SEP
+    echo ${host}.astro.cornell.edu
+    ssh ${LOGIN}@${host}.astro.cornell.edu 'echo '-' $(sed -nE "s/model name.*: (.*)/\1/p" < /proc/cpuinfo | head -n 1) \($(sed -nE "s/siblings.*: (.*)/\1/p" < /proc/cpuinfo | head -n 1) cores, $(sed -nE "s/cpu MHz.*: (.*)/\1/p" < /proc/cpuinfo | head -n 1)MHz\)'
+    ssh ${LOGIN}@${host}.astro.cornell.edu "free -h | sed -nE '2{s/Mem: *([^ ]*) *([^ ]*).*/- Mem: \2 used \/ \1 total/p;q}'"
+    echo $ROW_SEP
+    cpu_usage_dat=$(ssh ${LOGIN}@${host}.astro.cornell.edu 'top -b -n 1 | tail -n +8 | awk "{ if (\$9 > '$CPU_THRESH') print NR , \$0}"')
+    total_procs=$(wc -l <<< "$cpu_usage_dat")
+    total_words=$(wc -w <<< "$cpu_usage_dat")
+    proc_users=$(awk '{ print $3 }' <<< "$cpu_usage_dat" | sort | uniq -c | sed -nE 's/[ ]+([^ ]+) ([^ ]+)/\2\(\1\)/p')
+    if [[ $total_words == 0 ]]; then
+        echo 'No processes running'
+    else
+        echo $total_procs processes: $proc_users
+        if [[ $2 == '-v' ]]; then
+            ssh ${LOGIN}@${host}.astro.cornell.edu 'top -b -n 1 | sed -nE "7{s/(.*)/ N \1/p;q}";'
+            echo "$cpu_usage_dat"
+        fi
+    fi
+done

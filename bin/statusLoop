@@ -102,7 +102,7 @@ while true; do
     if [[ -n ${pingMS} ]]; then
         REPLY="P$(printf '%04.1f' ${pingMS})${sep}${REPLY}"
     else
-        REPLY="P(!!)${REPLY}"
+        REPLY="P(!!)${sep}${REPLY}"
     fi
 
     if [[ "$(hostname)" =~ BlendArch ]]; then

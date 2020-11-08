@@ -26,7 +26,7 @@ if [[ -e $_battdir/status ]]; then
     if [[ $battstat = 'D' ]] && (( $battperc < 95 )); then
         batttime="${sep}($(acpi -b | awk '{print $5}'))"
     fi
-    battAll="B$battperc$battstat($batthealth)$temp${sep}"
+    battAll="B$battperc$battstat($batthealth)${sep}"
 fi
 
 
@@ -48,11 +48,14 @@ if [[ -s /tmp/weather ]]; then
 fi
 
 #---------------------------------------------------------- TEMPERATURE ----------------------------------------------------------
+temp=""
 if [[ -a /sys/devices/platform/coretemp.0 ]]; then
     read temp < /sys/devices/platform/coretemp.0/hwmon/hwmon*/temp1_input
     temp="${sep}T{temp:0:-3}"
-else temp=""
-fi
+else if [[ -a /sys/devices/platform/nct6775.656 ]]; then
+    currtemp=$(printf "%.1f" $(( $(cat /sys/devices/platform/nct6775.656/hwmon/hwmon2/temp2_input) / 1000.0 )))
+    temp="${sep}T${currtemp}"
+fi; fi
 
 #---------------------------------------------------------- SIGNAL STRENGTH QUALITY/LEVEL -----------------------------------------
 if ! [[ $(iw dev $WIFI link) == 'Not connected.' ]]; then
@@ -60,6 +63,6 @@ if ! [[ $(iw dev $WIFI link) == 'Not connected.' ]]; then
 fi
 
 #-------------------------------------------------------SET REPLY--------------------------------------------
-REPLY="${sep}V$vol$vol2${sep}M$mem${sep}I$(hostname -i | tr -d ' ')${weather}${batttime}"
+REPLY="${sep}V$vol$vol2${sep}M${mem}${temp}${sep}I$(hostname -i | tr -d ' ')${weather}${batttime}"
 
 xsetroot -name "$(cat /tmp/status)${REPLY} $(/home/yssu/bin/dateWeek)$(date +'%m/%d/%y %H:%M:%S.%1N')$suffix"
