@@ -9,11 +9,6 @@ else
     suffix=D
 fi
 
-#-------------------------------------------------------MEMSTATS--------------------------------------------
-total=$(cat /proc/meminfo | sed -nE 's/MemTotal:\s+(.*) kB/\1/p')
-free=$(cat /proc/meminfo | sed -nE 's/MemFree:\s+(.*) kB/\1/p')
-(( mem = 100 * ($total - $free) / $total ))
-
 #-------------------------------------------------------BATTSTATS--------------------------------------------
 _battdir=/sys/class/power_supply/BAT0
 if [[ -e $_battdir/status ]]; then
@@ -26,9 +21,8 @@ if [[ -e $_battdir/status ]]; then
     if [[ $battstat = 'D' ]] && (( $battperc < 95 )); then
         batttime="${sep}($(acpi -b | awk '{print $5}'))"
     fi
-    battAll="B$battperc$battstat($batthealth)${sep}"
+    battAll="$battperc$battstat($batthealth)${sep}"
 fi
-
 
 #-------------------------------------------------------VOLUME--------------------------------------------
 vol=$(amixer get Master | grep 'Front Left:' | perl -e "my \$string = <>;print \"Mu\" if \$string =~ /off/;\$string =~ s/\[(\d+)%\]// if \$string =~ /\[on\]/;print \$1;")
@@ -36,9 +30,8 @@ vol2=$(amixer get Master | grep 'Mono:' | perl -e "my \$string = <>;print \"Mu\"
 
 #------------------------------------------------------BRIGHTNESS------------------------------------------
 if [[ -f $brightfile ]]; then
-    bright="D$(( $(cat $brightfile) * 100 / $(cat $brightmax) ))${sep}"
+    bright="$(( $(cat $brightfile) * 100 / $(cat $brightmax) ))${sep}"
 fi
-
 
 #-------------------------------------------------------SET INTERNET RELATED STUFF--------------------------------------------
 
@@ -47,22 +40,12 @@ if [[ -s /tmp/weather ]]; then
     weather="${sep}$(cat /tmp/weather)"
 fi
 
-#---------------------------------------------------------- TEMPERATURE ----------------------------------------------------------
-temp=""
-if [[ -a /sys/devices/platform/coretemp.0 ]]; then
-    read temp < /sys/devices/platform/coretemp.0/hwmon/hwmon*/temp1_input
-    temp="${sep}T{temp:0:-3}"
-else if [[ -a /sys/devices/platform/nct6775.656 ]]; then
-    currtemp=$(printf "%.1f" $(( $(cat /sys/devices/platform/nct6775.656/hwmon/hwmon2/temp2_input) / 1000.0 )))
-    temp="${sep}T${currtemp}"
-fi; fi
-
 #---------------------------------------------------------- SIGNAL STRENGTH QUALITY/LEVEL -----------------------------------------
 if ! [[ $(iw dev $WIFI link) == 'Not connected.' ]]; then
-    net="W$(iw dev $WIFI link | grep signal | awk '{print $2}' | sed 's/\ //g')${sep}"
+    net="$(iw dev $WIFI link | grep signal | awk '{print $2}' | sed 's/\ //g')${sep}"
 fi
 
 #-------------------------------------------------------SET REPLY--------------------------------------------
-REPLY="${sep}V$vol$vol2${sep}M${mem}${temp}${sep}I$(hostname -i | tr -d ' ')${weather}${batttime}"
+REPLY="${sep}$vol$vol2${weather}${batttime}"
 
 xsetroot -name "$(cat /tmp/status)${REPLY} $(/home/yssu/bin/dateWeek)$(date +'%m/%d/%y %H:%M:%S.%1N')$suffix"

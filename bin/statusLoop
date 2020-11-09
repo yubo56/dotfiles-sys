@@ -95,22 +95,38 @@ while true; do
     prevused=$used
     previdle=$idle
 
-    #-------------------------------------------------------SET REPLY--------------------------------------------
-    REPLY="C$usage"
+    #---------------------------------------------------------- TEMPERATURE ----------------------------------------------------------
+    temp=""
+    if [[ -a /sys/devices/platform/coretemp.0 ]]; then
+        read temp < /sys/devices/platform/coretemp.0/hwmon/hwmon*/temp1_input
+        temp="${sep}${temp:0:-3}"
+    else if [[ -a /sys/devices/platform/nct6775.656 ]]; then
+        currtemp=$(printf "%.1f" $(( $(cat /sys/devices/platform/nct6775.656/hwmon/hwmon2/temp2_input) / 1000.0 )))
+        temp="${sep}${currtemp}"
+    fi; fi
 
+    #-------------------------------------------------------MEMSTATS--------------------------------------------
+    total=$(cat /proc/meminfo | sed -nE 's/MemTotal:\s+(.*) kB/\1/p')
+    free=$(cat /proc/meminfo | sed -nE 's/MemFree:\s+(.*) kB/\1/p')
+    (( mem = 100 * ($total - $free) / $total ))
+
+    #------------------------------------ PING ----------------------------------------
     pingMS=$(ping 8.8.8.8 -c 1 -W 0.7 | sed -nE 's/.*time=([^ ]+) ms/\1/p')
     if [[ -n ${pingMS} ]]; then
-        REPLY="P$(printf '%04.1f' ${pingMS})${sep}${REPLY}"
+        pingstat="$(printf '%04.1f' ${pingMS})${sep}"
     else
-        REPLY="P(!!)${sep}${REPLY}"
+        pingstat="(!!)${sep}"
     fi
+
+    #-------------------------------------------------------SET REPLY--------------------------------------------
+    REPLY="${usage}${temp}${sep}${mem}${sep}${pingstat}$(hostname -i | tr -d ' ')"
 
     if [[ "$(hostname)" =~ BlendArch ]]; then
         read fan_in < /sys/devices/platform/applesmc.768/fan1_output
         read fan_min < /sys/devices/platform/applesmc.768/fan1_min
         read fan_max < /sys/devices/platform/applesmc.768/fan1_max
         (( FAN = ($fan_in - $fan_min)*100/($fan_max - $fan_min) ))
-        REPLY="F${FAN}${sep}${REPLY}"
+        REPLY="${FAN}${sep}${REPLY}"
     fi
 
     echo "$REPLY" > /tmp/status
