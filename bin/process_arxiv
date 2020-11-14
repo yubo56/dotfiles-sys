@@ -26,9 +26,7 @@ def sanitize(line):
         return '\n' + ret
     return ret
 
-if __name__ == '__main__':
-    in_filename = sys.argv[1]
-
+def process_file(in_filename):
     with open(in_filename, 'r') as f:
         line = f.readline()
         # message hasn't started yet
@@ -51,3 +49,7 @@ if __name__ == '__main__':
                 line = f.readline()
     os.remove(in_filename)
     shutil.rmtree(in_filename.replace('.html', '_files'))
+
+if __name__ == '__main__':
+    for fn in sys.argv[1: ]:
+        process_file(fn)

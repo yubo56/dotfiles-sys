@@ -99,10 +99,10 @@ while true; do
     temp=""
     if [[ -a /sys/devices/platform/coretemp.0 ]]; then
         read temp < /sys/devices/platform/coretemp.0/hwmon/hwmon*/temp1_input
-        temp="${sep}${temp:0:-3}"
+        temp="${temp:0:-3}"
     else if [[ -a /sys/devices/platform/nct6775.656 ]]; then
         currtemp=$(printf "%.1f" $(( $(cat /sys/devices/platform/nct6775.656/hwmon/hwmon2/temp2_input) / 1000.0 )))
-        temp="${sep}${currtemp}"
+        temp="${currtemp}"
     fi; fi
 
     #-------------------------------------------------------MEMSTATS--------------------------------------------
@@ -113,13 +113,13 @@ while true; do
     #------------------------------------ PING ----------------------------------------
     pingMS=$(ping 8.8.8.8 -c 1 -W 0.7 | sed -nE 's/.*time=([^ ]+) ms/\1/p')
     if [[ -n ${pingMS} ]]; then
-        pingstat="$(printf '%04.1f' ${pingMS})${sep}"
+        pingstat="$(printf '%04.1f' ${pingMS})"
     else
-        pingstat="(!!)${sep}"
+        pingstat="(!!)"
     fi
 
     #-------------------------------------------------------SET REPLY--------------------------------------------
-    REPLY="${usage}${temp}${sep}${mem}${sep}${pingstat}$(hostname -i | tr -d ' ')"
+    REPLY="${usage}(${temp})${sep}${mem}${sep}$(hostname -i | tr -d ' ')(${pingstat})"
 
     if [[ "$(hostname)" =~ BlendArch ]]; then
         read fan_in < /sys/devices/platform/applesmc.768/fan1_output
