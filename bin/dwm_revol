@@ -1,0 +1,20 @@
+#!/bin/sh
+
+# amixer sets return the current Master via stddout
+
+if [[ $1 == 'up' ]]; then
+    amixermaster=$(amixer set Master '1%+')
+fi
+
+if [[ $1 == 'dowm' ]]; then
+    amixermaster=$(amixer set Master '1%-')
+fi
+
+if [[ $1 == 'toggle' ]]; then
+    amixermaster=$(amixer set Master 'toggle')
+fi
+
+vol1=$(grep 'Front Left:' <<< "$amixermaster" | perl -e "my \$string = <>;print \"Mu\" if \$string =~ /off/;\$string =~ s/\[(\d+)%\]// if \$string =~ /\[on\]/;print \$1;")
+vol2=$(grep 'Mono:' <<< "$amixermaster" | perl -e "my \$string = <>;print \"Mu\" if \$string =~ /off/;\$string =~ s/\[(\d+)%\]// if \$string =~ /\[on\]/;print \$1;")
+
+echo $vol1$vol2 > /tmp/vol

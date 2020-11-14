@@ -98,8 +98,8 @@ while true; do
     #---------------------------------------------------------- TEMPERATURE ----------------------------------------------------------
     temp=""
     if [[ -a /sys/devices/platform/coretemp.0 ]]; then
-        read temp < /sys/devices/platform/coretemp.0/hwmon/hwmon*/temp1_input
-        temp="${temp:0:-3}"
+        currtemp=$(printf "%02d" $(( $(cat /sys/devices/platform/coretemp.0/hwmon/hwmon4/temp1_input) / 1000 )))
+        temp="${currtemp}"
     else if [[ -a /sys/devices/platform/nct6775.656 ]]; then
         currtemp=$(printf "%.1f" $(( $(cat /sys/devices/platform/nct6775.656/hwmon/hwmon2/temp2_input) / 1000.0 )))
         temp="${currtemp}"
@@ -118,8 +118,29 @@ while true; do
         pingstat="(!!)"
     fi
 
+    #-------------------------------------------------------BATTSTATS--------------------------------------------
+    _battdir=/sys/class/power_supply/BAT0
+    if [[ -e $_battdir/status ]]; then
+        read _battstat < $_battdir/status
+        battstat=${_battstat:0:1}
+        battperc=$(printf '%.1f' $(( 100.0 * $(cat $_battdir/charge_now)/$(cat $_battdir/charge_full) )))
+        batthealth=$(printf '%.1f' $(( 100.0 * $(cat $_battdir/charge_full)/$(cat $_battdir/charge_full_design) )))
+        # assume actually on battery power if discharging & battperc < 95
+        # (sensor sometimes declares discharging when nearly full)
+        if [[ $battstat = 'D' ]] && (( $battperc < 95 )); then
+            batttime="${sep}($(acpi -b | awk '{print $5}'))"
+        fi
+        battAll="${sep}$battperc$battstat($batthealth)"
+    fi
+
+    #---------------------------------------------------------- SIGNAL STRENGTH QUALITY/LEVEL -----------------------------------------
+    IWDEVLINK=$(iw dev $WIFI link)
+    if ! [[ $IWDEVLINK == 'Not connected.' ]]; then
+        net="${sep}$(grep signal <<< $IWDEVLINK | awk '{print $2}' | sed 's/\ //g')"
+    fi
+
     #-------------------------------------------------------SET REPLY--------------------------------------------
-    REPLY="${usage}(${temp})${sep}${mem}${sep}$(hostname -i | tr -d ' ')(${pingstat})"
+    REPLY="${usage}(${temp})${sep}${mem}${sep}$(hostname -i | tr -d ' ')(${pingstat}${net})${battAll}"
 
     if [[ "$(hostname)" =~ BlendArch ]]; then
         read fan_in < /sys/devices/platform/applesmc.768/fan1_output

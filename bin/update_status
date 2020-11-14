@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/bin/bash
 
 sep='|'
 if [[ $(setxkbmap -query | grep 'variant') =~ "mac" ]]; then
@@ -9,29 +9,23 @@ else
     suffix=D
 fi
 
-#-------------------------------------------------------BATTSTATS--------------------------------------------
-_battdir=/sys/class/power_supply/BAT0
-if [[ -e $_battdir/status ]]; then
-    read _battstat < $_battdir/status
-    battstat=${_battstat:0:1}
-    battperc = printf '%.1f' $(( 100.0 * $(cat $_battdir/charge_now)/$(cat $_battdir/charge_full) ))
-    batthealth = printf '%.1f' $(( 100.0 * $(cat $_battdir/charge_full)/$(cat $_battdir/charge_full_design) ))
-    # assume actually on battery power if discharging & battperc < 95
-    # (sensor sometimes declares discharging when nearly full)
-    if [[ $battstat = 'D' ]] && (( $battperc < 95 )); then
-        batttime="${sep}($(acpi -b | awk '{print $5}'))"
-    fi
-    battAll="$battperc$battstat($batthealth)${sep}"
-fi
-
 #-------------------------------------------------------VOLUME--------------------------------------------
-vol=$(amixer get Master | grep 'Front Left:' | perl -e "my \$string = <>;print \"Mu\" if \$string =~ /off/;\$string =~ s/\[(\d+)%\]// if \$string =~ /\[on\]/;print \$1;")
-vol2=$(amixer get Master | grep 'Mono:' | perl -e "my \$string = <>;print \"Mu\" if \$string =~ /off/;\$string =~ s/\[(\d+)%\]// if \$string =~ /\[on\]/;print \$1;")
+# if doesn't exist, create the file (will be updated by updaters)
+if ! [[ -f /tmp/vol ]]; then
+    amixermaster=$(amixer get Master)
+    vol1=$(grep 'Front Left:' <<< "$amixermaster" | perl -e "my \$string = <>;print \"Mu\" if \$string =~ /off/;\$string =~ s/\[(\d+)%\]// if \$string =~ /\[on\]/;print \$1;")
+    vol2=$(grep 'Mono:' <<< "$amixermaster" | perl -e "my \$string = <>;print \"Mu\" if \$string =~ /off/;\$string =~ s/\[(\d+)%\]// if \$string =~ /\[on\]/;print \$1;")
+
+    echo $vol1$vol2 > /tmp/vol
+fi
+vol=$(cat /tmp/vol)
 
 #------------------------------------------------------BRIGHTNESS------------------------------------------
-if [[ -f $brightfile ]]; then
-    bright="$(( $(cat $brightfile) * 100 / $(cat $brightmax) ))${sep}"
+# if doesn't exist, create the file (will be updated by updaters)
+if ! [[ -f /tmp/brightness ]]; then
+    echo $(( $(cat $brightfile) * 100 / $(cat $brightmax) )) > /tmp/brightness
 fi
+bright=$(cat /tmp/brightness)
 
 #-------------------------------------------------------SET INTERNET RELATED STUFF--------------------------------------------
 
@@ -40,12 +34,7 @@ if [[ -s /tmp/weather ]]; then
     weather="${sep}$(cat /tmp/weather)"
 fi
 
-#---------------------------------------------------------- SIGNAL STRENGTH QUALITY/LEVEL -----------------------------------------
-if ! [[ $(iw dev $WIFI link) == 'Not connected.' ]]; then
-    net="$(iw dev $WIFI link | grep signal | awk '{print $2}' | sed 's/\ //g')${sep}"
-fi
-
 #-------------------------------------------------------SET REPLY--------------------------------------------
-REPLY="${sep}$vol$vol2${weather}${batttime}"
+REPLY="$(cat /tmp/status)${sep}${vol}${sep}${bright}${weather}${batttime}"
 
-xsetroot -name "$(cat /tmp/status)${REPLY} $(/home/yssu/bin/dateWeek)$(date +'%m/%d/%y %H:%M:%S.%1N')$suffix"
+xsetroot -name "${REPLY} $(/home/yssu/bin/dateWeek)$(date +'%m/%d/%y %H:%M:%S.%1N')$suffix"
