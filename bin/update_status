@@ -1,4 +1,11 @@
-#!/bin/bash
+#!/usr/bin/env bash
+if [[ "$(hostname)" =~ ArchTest ]]; then
+    export brightfile='/sys/class/backlight/intel_backlight/brightness'
+    export brightmax='/sys/class/backlight/intel_backlight/max_brightness'
+else if [[ "$(hostname)" =~ YuboDesktop ]]; then
+    export brightfile=''
+    export brightmax=''
+fi; fi
 
 sep='|'
 if [[ $(setxkbmap -query | grep 'variant') =~ "mac" ]]; then

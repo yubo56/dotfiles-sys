@@ -15,13 +15,9 @@ export LC_ALL=C
 export HOMEBREW_NO_AUTO_UPDATE=1
 if [[ "$(hostname)" =~ ArchTest ]]; then
     export WIFI=wlp7s0
-    export brightfile='/sys/class/backlight/intel_backlight/brightness'
-    export brightmax='/sys/class/backlight/intel_backlight/max_brightness'
     alias rewin='sudo efibootmgr -n 1 && sudo reboot'
 else if [[ "$(hostname)" =~ YuboDesktop ]]; then
     export WIFI=wlp8s0
-    export brightfile=''
-    export brightmax=''
     alias rewin='sudo efibootmgr -n 0 && sudo reboot'
 fi; fi
 
