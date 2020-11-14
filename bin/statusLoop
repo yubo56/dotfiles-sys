@@ -107,7 +107,7 @@ while true; do
 
     #-------------------------------------------------------MEMSTATS--------------------------------------------
     total=$(cat /proc/meminfo | sed -nE 's/MemTotal:\s+(.*) kB/\1/p')
-    free=$(cat /proc/meminfo | sed -nE 's/MemFree:\s+(.*) kB/\1/p')
+    free=$(cat /proc/meminfo | sed -nE 's/MemAvailable:\s+(.*) kB/\1/p')
     (( mem = 100 * ($total - $free) / $total ))
 
     #------------------------------------ PING ----------------------------------------
