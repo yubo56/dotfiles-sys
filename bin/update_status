@@ -28,11 +28,14 @@ fi
 vol=$(cat /tmp/vol)
 
 #------------------------------------------------------BRIGHTNESS------------------------------------------
-# if doesn't exist, create the file (will be updated by updaters)
-if ! [[ -f /tmp/brightness ]]; then
+# if brightfile is not empty && file does not exist, write (updated by updaters)
+# = if not (brightfile is empty || file exists)
+if ! [[ $brightfile == '' || -f /tmp/brightness ]]; then
     echo $(( $(cat $brightfile) * 100 / $(cat $brightmax) )) > /tmp/brightness
 fi
-bright=$(cat /tmp/brightness)
+if [[ -f /tmp/brightness ]]; then
+    bright="${sep}$(cat /tmp/brightness)"
+fi
 
 #-------------------------------------------------------SET INTERNET RELATED STUFF--------------------------------------------
 
@@ -42,6 +45,6 @@ if [[ -s /tmp/weather ]]; then
 fi
 
 #-------------------------------------------------------SET REPLY--------------------------------------------
-REPLY="$(cat /tmp/status)${sep}${vol}${sep}${bright}${weather}${batttime}"
+REPLY="$(cat /tmp/status)${sep}${vol}${bright}${weather}${batttime}"
 
 xsetroot -name "${REPLY} $(/home/yssu/bin/dateWeek)$(date +'%m/%d/%y %H:%M:%S.%1N')$suffix"
