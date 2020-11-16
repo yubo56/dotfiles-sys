@@ -98,11 +98,11 @@ while true; do
     #---------------------------------------------------------- TEMPERATURE ----------------------------------------------------------
     temp=""
     if [[ -a /sys/devices/platform/coretemp.0 ]]; then
-        currtemp=$(printf "%02d" $(( $(cat /sys/devices/platform/coretemp.0/hwmon/hwmon4/temp1_input) / 1000 )))
-        temp="${currtemp}"
+        currtemp=$(printf "%02d" $(( $(cat /sys/devices/platform/coretemp.0/hwmon/hwmon*/temp1_input) / 1000 )))
+        temp="(${currtemp})"
     else if [[ -a /sys/devices/platform/nct6775.656 ]]; then
-        currtemp=$(printf "%.1f" $(( $(cat /sys/devices/platform/nct6775.656/hwmon/hwmon2/temp2_input) / 1000.0 )))
-        temp="${currtemp}"
+        currtemp=$(printf "%.1f" $(( $(cat /sys/devices/platform/nct6775.656/hwmon/hwmon*/temp2_input) / 1000.0 )))
+        temp="(${currtemp})"
     fi; fi
 
     #-------------------------------------------------------MEMSTATS--------------------------------------------
@@ -140,7 +140,7 @@ while true; do
     fi
 
     #-------------------------------------------------------SET REPLY--------------------------------------------
-    REPLY="${usage}(${temp})${sep}${mem}${sep}$(hostname -i | tr -d ' ')(${pingstat}${net})${battAll}"
+    REPLY="${usage}${temp}${sep}${mem}${sep}$(hostname -i | tr -d ' ')(${pingstat}${net})${battAll}"
 
     if [[ "$(hostname)" =~ BlendArch ]]; then
         read fan_in < /sys/devices/platform/applesmc.768/fan1_output
