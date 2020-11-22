@@ -1,0 +1,12 @@
+#!/bin/sh
+if [[ "$(hostname)" =~ ArchTest ]]; then
+    export WIFI=wlp7s0
+    alias rewin='sudo efibootmgr -n 1 && sudo reboot'
+    export brightfile='/sys/class/backlight/intel_backlight/brightness'
+    export brightmax='/sys/class/backlight/intel_backlight/max_brightness'
+else if [[ "$(hostname)" =~ YuboDesktop ]]; then
+    export WIFI=wlp8s0
+    alias rewin='sudo efibootmgr -n 0 && sudo reboot'
+    export brightfile=''
+    export brightmax=''
+fi; fi
