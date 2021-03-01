@@ -14,6 +14,7 @@ TODO:
 '''
 import sys
 import numpy as np
+import readline
 
 # map of supported units -> (val, (units))
 UNITS_DICT = {
@@ -29,6 +30,9 @@ UNITS_DICT = {
 
     'pi': (np.pi, [0, 0, 0]),
 }
+
+HIST_FN = '/home/yssu/.calchist'
+HIST_LEN = 10000
 
 UNIT_NAMES = ['kg', 'm', 's']
 class Quant(object):
@@ -233,14 +237,20 @@ def eval_expr(expr):
     return curr_res
 
 if __name__ == '__main__':
+    open(HIST_FN, 'a').close()
+    readline.read_history_file(HIST_FN)
+    readline.set_history_length(HIST_LEN)
     if len(sys.argv) > 1:
         for expr in sys.argv[1: ]:
+            readline.add_history(expr)
             print('>>>', expr)
             print(eval_expr(expr))
     else:
         while True:
             try:
-                in_str = input('> ')
+                in_str = input('>>> ')
                 print(eval_expr(in_str))
-            except EOFError:
+            except (EOFError, KeyboardInterrupt):
                 break
+        print('\nBye!')
+        readline.write_history_file(HIST_FN)
