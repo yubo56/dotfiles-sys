@@ -45,4 +45,7 @@ xrdb ~/.Xresources
 statusLoop
 dwm_rebg
 
+# try to enable bluetooth
+bluetoothctl power on || :
+
 exec dwmalt

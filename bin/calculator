@@ -27,6 +27,7 @@ UNITS_DICT = {
     'AU': (1.496e11, [0, 1, 0]),
     'c': (2.9979e8, [0, 1, -1]),
     'G': (6.674e-11, [-1, 3, -2]),
+    'yr': (86400 * 365.24, [0, 0, 1]),
 
     'pi': (np.pi, [0, 0, 0]),
 }
@@ -250,6 +251,9 @@ if __name__ == '__main__':
             try:
                 in_str = input('>>> ')
                 print(eval_expr(in_str))
+            except ValueError as e:
+                print(e)
+                continue
             except (EOFError, KeyboardInterrupt):
                 break
         print('\nBye!')
