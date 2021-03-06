@@ -8,8 +8,9 @@ Sometimes it fails to parse, and it requires being online, and is slow. I want
 to write a quick script to evaluate such expressions, maybe with some support
 for "!!" (previous result) and "!-N" (N results ago) syntaxes.
 
+NB: use "m\s" in input expressions for units of "meters per second", hack
+
 TODO:
-- write out to a log file (datetime, query, result)
 - mode to read previous results
 '''
 import sys
@@ -17,16 +18,42 @@ import numpy as np
 import readline
 
 # map of supported units -> (val, (units))
+ONE_AU = 1.496e11
 UNITS_DICT = {
     'kg': (1, [1, 0, 0]),
     'm': (1, [0, 1, 0]),
     's': (1, [0, 0, 1]),
 
     'Msun': (1.989e30, [1, 0, 0]),
+    'Rsun': (6.955e8, [0, 1, 0]),
+    'Mmercury': (3.3011e23, [1, 0, 0]),
+    'Rmercury': (2.439e6, [0, 1, 0]),
+    'amercury': (0.387 * ONE_AU, [0, 1, 0]),
+    'Mvenus': (4.867e24, [1, 0, 0]),
+    'Rvenus': (6.052e6, [0, 1, 0]),
+    'avenus': (0.723 * ONE_AU, [0, 1, 0]),
     'Mearth': (5.972e24, [1, 0, 0]),
-    'AU': (1.496e11, [0, 1, 0]),
+    'Rearth': (6.371e6, [0, 1, 0]),
+    'AU': (ONE_AU, [0, 1, 0]),
+    'Mmars': (6.41e23, [1, 0, 0]),
+    'Rmars': (3.389e6, [0, 1, 0]),
+    'amars': (1.524 * ONE_AU, [0, 1, 0]),
+    'Mjup': (1.898e27, [1, 0, 0]),
+    'Rjup': (6.991e7, [0, 1, 0]),
+    'ajup': (5.202 * ONE_AU, [0, 1, 0]),
+    'Msat': (5.683e26, [1, 0, 0]),
+    'Rsat': (5.823e7, [0, 1 ,0]),
+    'asat': (9.537 * ONE_AU, [0, 1, 0]),
+    'Muranus': (8.681e25, [1, 0, 0]),
+    'Ruranus': (2.537e7, [0, 1, 0]),
+    'auranus': (19.189 * ONE_AU, [0, 1, 0]),
+    'Mneptune': (1.02e26, [1, 0, 0]),
+    'Rneptune': (2.4622e7, [0, 1, 0]),
+    'aneptune': (30.07 * ONE_AU, [0, 1, 0]),
+
     'c': (2.9979e8, [0, 1, -1]),
     'G': (6.674e-11, [-1, 3, -2]),
+    'day': (86400, [0, 0, 1]),
     'yr': (86400 * 365.24, [0, 0, 1]),
 
     'pi': (np.pi, [0, 0, 0]),
@@ -52,13 +79,13 @@ class Quant(object):
             elif u > 1:
                 ret += '%s^%.3f.' % (name, u)
         ret = ret.strip('.')
-        ret += '/'
+        ret += '\\'
         for u, name in zip(self.units, UNIT_NAMES):
             if u == -1:
                 ret += '%s.' % name
             elif u < -1:
                 ret += '%s^%.3f.' % (name, -u)
-        return ret.strip('./')
+        return ret.strip('.\\')
 
     def __add__(self, q1):
         for u1, u2 in zip(self.units, q1.units):
@@ -82,10 +109,12 @@ class Quant(object):
         return Quant(self.val**n.val, [u1 * n.val for u1 in self.units])
 
 # generate a Quant from a str
-def from_str(expr):
+def from_str(expr, prev_res=None):
     expr_split = expr.split(' ')
     if len(expr_split) == 1:
-        if expr in UNITS_DICT:
+        if expr == '!!':
+            return prev_res
+        elif expr in UNITS_DICT:
             return Quant(*UNITS_DICT[expr])
         return Quant(float(expr), [0, 0, 0])
     elif len(expr_split) != 2:
@@ -98,7 +127,7 @@ def from_str(expr):
         for i, u in enumerate(new_units):
             quant_units[i] += mult * u
 
-    unit_split = units.split('/')
+    unit_split = units.split('\\')
     if len(unit_split) == 1:
         units_top = unit_split[0]
         units_bot = None
@@ -211,14 +240,14 @@ operator_tiers = [
     ['/', '*'],
     ['+', '-'],
 ]
-def eval_expr(expr):
+def eval_expr(expr, prev_res=None):
     pieces, ops = split_with_parens(expr, operators.keys())
     # base case
     if len(ops) == 0:
-        return from_str(expr)
+        return from_str(expr, prev_res=prev_res)
 
     # recursive case, use order of operations by doing 2 passes
-    pieces1 = [eval_expr(p) for p in pieces]
+    pieces1 = [eval_expr(p, prev_res=prev_res) for p in pieces]
 
     for curr_operators in operator_tiers:
         pieces2 = []
@@ -247,10 +276,13 @@ if __name__ == '__main__':
             print('>>>', expr)
             print(eval_expr(expr))
     else:
+        prev_res = None
         while True:
             try:
                 in_str = input('>>> ')
-                print(eval_expr(in_str))
+                res = eval_expr(in_str, prev_res=prev_res)
+                print(res)
+                prev_res = res
             except ValueError as e:
                 print(e)
                 continue
