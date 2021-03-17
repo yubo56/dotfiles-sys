@@ -56,6 +56,9 @@ UNITS_DICT = {
     'day': (86400, [0, 0, 1]),
     'yr': (86400 * 365.24, [0, 0, 1]),
 
+    'pc': (3.0856e16, [0, 1, 0]),
+    'ly': (9.461e15, [0, 1, 0]),
+
     'pi': (np.pi, [0, 0, 0]),
 }
 
@@ -72,7 +75,11 @@ class Quant(object):
         self.val = val
         self.units = units
     def __str__(self):
-        ret = '%s ' % self.val
+        ret = ''
+        if abs(np.log10(self.val)) < 4:
+            ret += '%f ' % self.val
+        else:
+            ret += '%e ' % self.val
         for u, name in zip(self.units, UNIT_NAMES):
             if u == 1:
                 ret += '%s.' % name
@@ -137,7 +144,7 @@ def from_str(expr, prev_res=None):
         raise ValueError('Malformed units: `%s`' % units)
 
     for unit_group, sign in [(units_top, 1), (units_bot, -1)]:
-        if unit_group is None:
+        if not unit_group:
             continue
 
         for u in unit_group.split('.'):
@@ -274,7 +281,10 @@ if __name__ == '__main__':
         for expr in sys.argv[1: ]:
             readline.add_history(expr)
             print('>>>', expr)
-            print(eval_expr(expr))
+            try:
+                print(eval_expr(expr))
+            except ValueError as e:
+                print(e)
     else:
         prev_res = None
         while True:
