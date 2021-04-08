@@ -46,6 +46,6 @@ statusLoop
 dwm_rebg
 
 # try to enable bluetooth
-bluetoothctl power on || :
+# bluetoothctl power on || :
 
 exec dwmalt

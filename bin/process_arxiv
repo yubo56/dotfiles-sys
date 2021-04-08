@@ -51,5 +51,5 @@ def process_file(in_filename):
     shutil.rmtree(in_filename.replace('.html', '_files'))
 
 if __name__ == '__main__':
-    for fn in sys.argv[1: ]:
+    for fn in [f for f in os.listdir() if f.endswith('.html')]:
         process_file(fn)
