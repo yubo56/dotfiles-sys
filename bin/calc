@@ -159,7 +159,7 @@ def from_str(expr, prev_res=None):
             continue
 
         for u in unit_group.split('.'):
-            components = u.split('^')
+            components = u.split('#')
             if len(components) == 1:
                 unit = components[0]
                 power = 1
