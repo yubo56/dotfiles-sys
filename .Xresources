@@ -1,5 +1,5 @@
 URxvt*transparent: true
-URxvt*shading: 30
+URxvt*shading: 50
 URxvt*scrollBar: false
 ! URxvt*font: xft:xos4 Terminus-17
 URxvt*font: xft:Source Code Pro Medium:size=13

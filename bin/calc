@@ -309,5 +309,8 @@ if __name__ == '__main__':
                 continue
             except (EOFError, KeyboardInterrupt):
                 break
+            except:
+                print('Whoops')
+                continue
         print('\nBye!')
         readline.write_history_file(HIST_FN)

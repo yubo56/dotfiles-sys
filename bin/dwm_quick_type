@@ -1,5 +1,5 @@
 #! /bin/zsh
-TYPE_DELAY=50
+TYPE_DELAY=10
 
 case $1 in
     sshot)
@@ -9,11 +9,25 @@ case $1 in
             sleep 0.1 &&
             xdotool key --delay 2 --clearmodifiers Super_L+apostrophe &&
             sleep 0.1 &&
-            xdotool type "import $FILENAME" &&
+            xdotool type --delay $TYPE_DELAY --clearmodifiers "import $FILENAME" &&
             xdotool key Return
         ;;
+    shrug)
+        for i in 00AF 005C 005F 0028 30C4 0029 005F 002F 00AF; do
+            xdotool key --delay $TYPE_DELAY --clearmodifiers Control_L+Shift_L+u &&
+            xdotool type --delay $TYPE_DELAY --clearmodifiers $i &&
+            xdotool key Return
+        done
+        ;;
+    tableflip)
+        for i in 0028 256F 00B0 25A1 00B0 FF09 256F FE35 0020 253B 2501 253B 0029; do
+            xdotool key --delay $TYPE_DELAY --clearmodifiers Control_L+Shift_L+u &&
+            xdotool type --delay $TYPE_DELAY --clearmodifiers $i &&
+            xdotool key Return
+        done
+        ;;
     _run)
-        CHOICES='sshot'
+        CHOICES='sshot\nshrug\ntableflip'
 
         nb="-nb \#000000"
         nf="-nf \#49e20e"
