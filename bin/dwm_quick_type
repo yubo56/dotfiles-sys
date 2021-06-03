@@ -1,5 +1,5 @@
 #! /bin/zsh
-TYPE_DELAY=10
+TYPE_DELAY=30
 
 case $1 in
     sshot)
