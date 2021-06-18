@@ -170,7 +170,8 @@ alias rf3g='rsync_from_git exo3 .'
 alias rt4g='rsync_to_git . exo4'
 alias rf4g='rsync_from_git exo4 .'
 
-searchpdf() {
+# search pdfs
+srchp() {
     unset FILES
     FILES=$(find ~/* -name MESA -prune -false -o -iname $1.pdf 2> /dev/null)
     if [[ $FILES != '' ]]; then
