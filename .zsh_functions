@@ -178,7 +178,7 @@ srchp() {
         if [[ $2 != '--quiet' ]]; then
             echo "Found:\n${FILES}"
         fi
-        zathura $(head -n 1 - <<< $FILES)
+        zathura "$(head -n 1 - <<< $FILES)"
     else;
         if [[ $2 != '--quiet' ]]; then
             echo "No files found for pattern \"$1.pdf\""
