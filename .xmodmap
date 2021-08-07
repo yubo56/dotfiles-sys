@@ -1,10 +1,14 @@
 ! remove Caps Lock
 clear Lock
-! add Mode_switch, Escape is caps lock
-! keycode 9 = Caps_Lock NoSymbol Caps_Lock
-! on 60% keyboard, no backtick, let escape key double as backtick
-keycode 9 = grave asciitilde grave asciitilde
+! add Mode_switch
 keycode 66 = Mode_switch Mode_switch
+
+! esc = caps
+keycode 9 = Caps_Lock NoSymbol Caps_Lock
+! on 60% keyboard, no backtick, let escape key double as backtick
+! keycode 9 = grave asciitilde grave asciitilde
+! custom keeb, use standard escape key!
+! keycode 9 = Escape NoSymbol Escape
 
 keycode 38 = a A Home
 keycode 40 = e E End
