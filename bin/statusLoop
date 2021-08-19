@@ -140,7 +140,7 @@ while true; do
     fi
 
     #-------------------------------------------------------SET REPLY--------------------------------------------
-    REPLY="${usage}${temp}${sep}${mem}${sep}$(hostname -i | tr -d ' ')(${pingstat}${net})${battAll}"
+    REPLY="${usage}${temp}${sep}${mem}${sep}$(hostname -i | sed 's/ .*//g')(${pingstat}${net})${battAll}"
 
     if [[ "$(hostname)" =~ BlendArch ]]; then
         read fan_in < /sys/devices/platform/applesmc.768/fan1_output

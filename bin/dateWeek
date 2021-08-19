@@ -10,13 +10,13 @@
 # [[ `date +%w` = '6' ]] && echo 토 # 土
 
 # CN
-[[ `date +%w` = '0' ]] && echo 日
-[[ `date +%w` = '1' ]] && echo 一
-[[ `date +%w` = '2' ]] && echo 二
-[[ `date +%w` = '3' ]] && echo 三
-[[ `date +%w` = '4' ]] && echo 四
-[[ `date +%w` = '5' ]] && echo 五
-[[ `date +%w` = '6' ]] && echo 六
+# [[ `date +%w` = '0' ]] && echo 日
+# [[ `date +%w` = '1' ]] && echo 一
+# [[ `date +%w` = '2' ]] && echo 二
+# [[ `date +%w` = '3' ]] && echo 三
+# [[ `date +%w` = '4' ]] && echo 四
+# [[ `date +%w` = '5' ]] && echo 五
+# [[ `date +%w` = '6' ]] && echo 六
 
 # FR
 # [[ `date +%w` = '0' ]] && echo Di
@@ -29,9 +29,10 @@
 # [[ `date +%w` = '0' ]] && echo Su
 
 # EN
-# [[ `date +%w` = '1' ]] && echo M
-# [[ `date +%w` = '2' ]] && echo Tu
-# [[ `date +%w` = '3' ]] && echo W
-# [[ `date +%w` = '4' ]] && echo Th
-# [[ `date +%w` = '5' ]] && echo F
-# [[ `date +%w` = '6' ]] && echo Sa
+[[ `date +%w` = '1' ]] && echo M
+[[ `date +%w` = '2' ]] && echo Tu
+[[ `date +%w` = '3' ]] && echo W
+[[ `date +%w` = '4' ]] && echo Th
+[[ `date +%w` = '5' ]] && echo F
+[[ `date +%w` = '6' ]] && echo Sa
+[[ `date +%w` = '7' ]] && echo Su
