@@ -124,7 +124,10 @@ export QT_IM_MODULE="ibus"
 
 # prompt
 NEWLINE=$'\n'
-PROMPT1='$(git_status)[%{$fg_bold[white]%}%~%{$reset_color%}] [%B%F{cyan}%* %F{green}%n@%m%f%b]$(brack_fmt $STY)$(brack_fmt $AWS_VAULT) %(?..(%F{red}%?%{$reset_color%}%) )'
+KER1=$(uname -r | sed -E 's/-arch(.).*/-\1/g')
+KER2=$(pacman -Q linux | sed -E 's/linux (.*)\.arch(.).*/\1-\2/g')
+KER=$( [[ $KER1 == $KER2 ]] && echo $KER1 || echo '!!')
+PROMPT1='$(git_status)[%{$fg_bold[white]%}%~%{$reset_color%}] [%B%F{cyan}%* %F{green}%n@%m%b%f (%F{white}${KER}%f)]$(brack_fmt $STY)$(brack_fmt $AWS_VAULT) %(?..(%F{red}%?%{$reset_color%}%) )'
 PROMPT2='> '
 PROMPT="${PROMPT1}${NEWLINE}${PROMPT2}"
 setopt PROMPT_SUBST
