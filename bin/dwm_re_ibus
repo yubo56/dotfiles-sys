@@ -1,0 +1,2 @@
+pkill ibus
+ibus-daemon -drx
