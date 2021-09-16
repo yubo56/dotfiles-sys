@@ -28,6 +28,7 @@
 *.run.xml
 *.nav
 *.snm
+*.fff
 
 *.pyc
 *.pkl

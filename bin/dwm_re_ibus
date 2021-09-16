@@ -1,2 +1,1 @@
-pkill ibus
-ibus-daemon -drx
+pkill -9 ibus; ibus-daemon -drx

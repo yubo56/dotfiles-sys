@@ -29,10 +29,10 @@
 # [[ `date +%w` = '0' ]] && echo Su
 
 # EN
+[[ `date +%w` = '0' ]] && echo Su
 [[ `date +%w` = '1' ]] && echo M
 [[ `date +%w` = '2' ]] && echo Tu
 [[ `date +%w` = '3' ]] && echo W
 [[ `date +%w` = '4' ]] && echo Th
 [[ `date +%w` = '5' ]] && echo F
 [[ `date +%w` = '6' ]] && echo Sa
-[[ `date +%w` = '7' ]] && echo Su
