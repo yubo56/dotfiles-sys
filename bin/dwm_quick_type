@@ -26,8 +26,13 @@ case $1 in
             xdotool key Return
         done
         ;;
+    deer)
+        xdotool key --delay $TYPE_DELAY --clearmodifiers Control_L+Shift_L+u &&
+        xdotool type --delay $TYPE_DELAY --clearmodifiers 1f98c &&
+        xdotool key Return
+        ;;
     _run)
-        CHOICES='sshot\nshrug\ntableflip'
+        CHOICES='sshot\nshrug\ntableflip\ndeer'
 
         nb="-nb \#000000"
         nf="-nf \#49e20e"
