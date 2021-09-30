@@ -62,6 +62,6 @@ alias rf15='rsync -aLP exo15c:$(dirs) .. --exclude=*.h5 --exclude=.dropbox*'
 
 # or maybe `script -q -c`
 alias unbuffer='stdbuf -i0 -e0 -o0'
-alias vpnui='xclip -i -sel c < ~/tmp/vpnui_pass && echo "Copied pass!"; /opt/cisco/anyconnect/bin/vpnui'
+alias vpnui='xclip -i -sel c < ~/tmp/vpnui_pass && echo "Copied pass!"; /opt/cisco/anyconnect/bin/vpn connect cuvpn.cuvpn.cornell.edu'
 
 alias scr='exec screen -xORR'
