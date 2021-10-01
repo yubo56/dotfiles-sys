@@ -51,14 +51,13 @@ alias rewlo1='sudo ip link set $WIFI down && sudo ip link set $WIFI up'
 alias reeno1='sudo modprobe -r r8169; sleep .1s; sudo modprobe r8169'
 
 #alias pacrank='sudo rankmirrors /etc/pacman.d/mirrorlist.backup | sudo tee /etc/pacman.d/mirrorlist'
-#alias xmerge='xrdb -merge ~/.Xresources'
 
-alias rt3='rsync -aLP . exo3:$(dirs) --exclude=*.h5 --exclude=.dropbox*'
-alias rf3='rsync -aLP exo3:$(dirs) .. --exclude=*.h5 --exclude=.dropbox*'
-alias rt4='rsync -aLP . exo4:$(dirs) --exclude=*.h5 --exclude=.dropbox*'
-alias rf4='rsync -aLP exo4:$(dirs) .. --exclude=*.h5 --exclude=.dropbox*'
-alias rt15='rsync -aLP . exo15c:$(dirs) --exclude=*.h5 --exclude=.dropbox*'
-alias rf15='rsync -aLP exo15c:$(dirs) .. --exclude=*.h5 --exclude=.dropbox*'
+alias rt3='rsync -aLP --suffix=.bak . exo3:$(dirs) --exclude=*.h5 --exclude=.dropbox*'
+alias rf3='rsync -aLP --suffix=.bak exo3:$(dirs) .. --exclude=*.h5 --exclude=.dropbox*'
+alias rt4='rsync -aLP --suffix=.bak . exo4:$(dirs) --exclude=*.h5 --exclude=.dropbox*'
+alias rf4='rsync -aLP --suffix=.bak exo4:$(dirs) .. --exclude=*.h5 --exclude=.dropbox*'
+alias rt15='rsync -aLP --suffix=.bak . exo15c:$(dirs) --exclude=*.h5 --exclude=.dropbox*'
+alias rf15='rsync -aLP --suffix=.bak exo15c:$(dirs) .. --exclude=*.h5 --exclude=.dropbox*'
 
 # or maybe `script -q -c`
 alias unbuffer='stdbuf -i0 -e0 -o0'
