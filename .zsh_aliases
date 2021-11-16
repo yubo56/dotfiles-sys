@@ -25,14 +25,11 @@ alias less='less -R'
 alias zathura='zathura --fork'
 alias ts='ts "$fg[cyan]%b %d %H:%M:%.S${reset_color}"'
 alias venv='source venv/bin/activate'
-alias ghc='ghc -dynamic -i$HOME/hs_libs'
-function ghcc { ghc -dynamic -i$HOME/hs_libs $1.hs -o $1.bin && rm -f $i.hi $i.o }
-alias ci='cabal install --ghc-option=-dynamic'
 alias ip='ipython3 --no-banner --pylab'
 
 # Utilities
 alias g='git'
-alias cleantex='find ./* | '\'grep\'' -E "\.(aux|bbl|out|blg|log|nav|snm|toc|vrb)" | tee /dev/stderr | (xargs rm -f)'
+alias cleantex='find ./* | '\'grep\'' -E "\.(fff|aux|bbl|out|blg|log|nav|snm|toc|vrb)" | tee /dev/stderr | (xargs rm -f)'
 alias clearmem='sync; echo 3 | sudo tee /proc/sys/vm/drop_caches'
 alias pacrmdep='sudo pacman -Qtdq > /dev/null && sudo pacman -Rs $(pacman -Qtdq)'
 alias mountwin='sudo mount /dev/sda3 /mnt'
