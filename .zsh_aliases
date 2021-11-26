@@ -29,7 +29,7 @@ alias ip='ipython3 --no-banner --pylab'
 
 # Utilities
 alias g='git'
-alias cleantex='find ./* | '\'grep\'' -E "\.(fff|aux|bbl|out|blg|log|nav|snm|toc|vrb)" | tee /dev/stderr | (xargs rm -f)'
+alias cleantex='find ./* | '\'grep\'' -E "\.(.fff|aux|out|blg|log|nav|snm|toc|vrb)" | tee /dev/stderr | (xargs rm -f)'
 alias clearmem='sync; echo 3 | sudo tee /proc/sys/vm/drop_caches'
 alias pacrmdep='sudo pacman -Qtdq > /dev/null && sudo pacman -Rs $(pacman -Qtdq)'
 alias mountwin='sudo mount /dev/sda3 /mnt'
@@ -61,3 +61,5 @@ alias unbuffer='stdbuf -i0 -e0 -o0'
 alias vpnui='xclip -i -sel c < ~/tmp/vpnui_pass && echo "Copied pass!"; /opt/cisco/anyconnect/bin/vpn connect cuvpn.cuvpn.cornell.edu'
 
 alias scr='exec screen -xORR'
+alias xsetacpi='systemctl --user stop statusbar.timer && while :; do xsetroot -name "$('\''acpi'\'') | $(date)"; sleep 5s; done'
+

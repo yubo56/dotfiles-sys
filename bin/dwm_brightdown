@@ -1,14 +1,14 @@
 #! /bin/bash
 . ~/.shell_envs
-if [[ "$(hostname)" == ArchTest ]]; then
+curr=`cat $brightfile`
+if [[ "$(hostname)" == ArchTest ]] || [[ $curr < 30 ]]; then
     inc=3
 else
     inc=30
 fi
 
-curr=`cat $brightfile`
 new=`echo "$curr-$inc" | 'bc'`
-new=$( (( $new >= 30)) && echo $new || echo 30)
+new=$( (( $new >= $inc)) && echo $new || echo $inc)
 echo $new | sudo tee $brightfile > /dev/null
 
 echo $(( $(cat $brightfile) * 100 / $(cat $brightmax) )) > /tmp/brightness
