@@ -1,0 +1,44 @@
+! remove Caps Lock
+clear Lock
+! add Mode_switch
+keycode 66 = Mode_switch Mode_switch
+
+! esc = caps
+! keycode 9 = Caps_Lock NoSymbol Caps_Lock
+! on 60% keyboard, no backtick, let escape key double as backtick
+! keycode 9 = grave asciitilde grave asciitilde
+! custom keeb, use standard escape key!
+keycode 9 = Escape NoSymbol Escape
+
+keycode 38 = a A Home
+keycode 40 = e E End
+keycode 27 = p P Up
+keycode 29 = f F Right
+keycode 43 = d D Delete
+keycode 44 = h H BackSpace
+keycode 46 = n N Down
+keycode 57 = b B Left
+
+keycode 41 = u U Escape
+
+keycode 59 = w W F8
+keycode 39 = o O F11
+
+! On chrome, F6 gets you out of address bar focus (moves to next focusable area)
+keycode 55 = k K F6
+
+! Page up/Page down
+keycode  42 = i I Prior
+keycode  56 = x X Next
+
+keycode  18 = 9 parenleft bracketleft braceleft
+keycode  19 = 0 parenright bracketright braceright
+keycode  20 =
+keycode  21 =
+keycode  22 =
+
+keycode  32 = r R slash question
+keycode  33 = l L equal plus
+keycode  34 = backslash bar
+keycode  35 =
+keycode  51 =

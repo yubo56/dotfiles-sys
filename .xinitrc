@@ -36,7 +36,9 @@ redshift&
 ibus-daemon -rxv &
 
 ## various system settings
-setxkbmap us -variant dvorak && xmodmap ~/.xmodmap
+setxkbmap us -variant dvorak
+# xmodmap ~/.xmodmap
+xmodmap ~/.xmodmap_compact
 dconf load / < .dconf
 xset r rate 150 60 && xset -dpms && xset s off
 xrdb ~/.Xresources

@@ -1,3 +1,4 @@
 #!/usr/bin/zsh
-brave-beta # &
+# brave-beta # &
 # sleep 1s && dwm_set_transp
+firefox &
