@@ -1,4 +1,4 @@
-! /bin/zsh
+#! /bin/zsh
 
 if [[ $(setxkbmap -query | grep 'variant') =~ "mac" ]]; then
     setxkbmap us -variant dvorak
