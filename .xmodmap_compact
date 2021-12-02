@@ -33,12 +33,16 @@ keycode  56 = x X Next
 
 keycode  18 = 9 parenleft bracketleft braceleft
 keycode  19 = 0 parenright bracketright braceright
+keycode  47 = s S minus underscore
+
+keycode  32 = r R slash question
+keycode  33 = l L equal plus
+
+! on non-compact keebs, disable extra keys until muscle memory used to it
 keycode  20 =
 keycode  21 =
 keycode  22 =
 
-keycode  32 = r R slash question
-keycode  33 = l L equal plus
 keycode  34 = backslash bar
 keycode  35 =
 keycode  51 =
