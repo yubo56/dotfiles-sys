@@ -2,7 +2,7 @@
 
 if [[ $(setxkbmap -query | grep 'variant') =~ "mac" ]]; then
     setxkbmap us -variant dvorak
-    xmodmap ~/.xmodmap_compact
+    xmodmap ~/.xmodmap
 elif [[ $(setxkbmap -query | grep 'variant') =~ "dvorak-l" ]]; then
     setxkbmap us -variant mac
 else

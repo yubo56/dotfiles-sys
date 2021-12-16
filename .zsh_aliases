@@ -62,4 +62,4 @@ alias vpnui='xclip -i -sel c < ~/tmp/vpnui_pass && echo "Copied pass!"; /opt/cis
 
 alias scr='exec screen -xORR'
 alias xsetacpi='systemctl --user stop statusbar.timer && while :; do xsetroot -name "$('\''acpi'\'') | $(date)"; sleep 5s; done'
-
+alias mouseaccel='for i in $(xinput | grep pointer | sed -rn '\''s/.*id=([0-9]+).*/\1/p'\''); do xinput --set-prop $i '\''libinput Accel Profile Enabled'\'' 0, 1 2> /dev/null; done'
