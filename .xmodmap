@@ -3,10 +3,6 @@ clear Lock
 ! add Mode_switch
 keycode 66 = Mode_switch Mode_switch
 
-! on 60% keyboard, swap grave accent and escape
-keycode 9 = grave asciitilde grave asciitilde
-keycode 49 = Escape Escape
-
 keycode 38 = a A Home
 keycode 40 = e E End
 keycode 27 = p P Up
