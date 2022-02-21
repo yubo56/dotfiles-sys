@@ -33,7 +33,7 @@ xcompmgr -o.00 &
 xscreensaver -nosplash &
 goldendict &
 redshift&
-ibus-daemon -rxv &
+ibus-daemon -drx
 
 ## various system settings
 setxkbmap us -variant dvorak
