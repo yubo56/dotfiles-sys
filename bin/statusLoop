@@ -111,7 +111,7 @@ while true; do
     (( mem = 100 * ($total - $free) / $total ))
 
     #------------------------------------ PING ----------------------------------------
-    pingMS=$(ping 8.8.8.8 -c 1 -W 0.7 | sed -nE 's/.*time=([^ ]+) ms/\1/p')
+    pingMS=$(ping 8.8.8.8 -c 1 -W 0.7 2> /dev/null | sed -nE 's/.*time=([^ ]+) ms/\1/p')
     if [[ -n ${pingMS} ]]; then
         pingstat="$(printf '%04.1f' ${pingMS})"
     else
