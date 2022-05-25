@@ -83,16 +83,21 @@ class Quant(object):
     '''
     units = (mass, length, time) powers (kg, m, s)
     '''
-    def __init__(self, val, units):
+    def __init__(self, val, units, log=False):
         super(Quant, self).__init__()
+        self.log = log
         self.val = val
         self.units = units
     def __str__(self):
         ret = ''
-        if abs(np.log10(self.val)) < 4:
-            ret += '%f ' % self.val
+        if self.log:
+            basepow = int(np.floor(self.val))
+            ret += '{0:.6f}e{1:+d} '.format(10**(self.val - basepow), basepow)
         else:
-            ret += '%e ' % self.val
+            if abs(np.log10(self.val)) < 4:
+                ret += '%f ' % self.val
+            else:
+                ret += '%e ' % self.val
         for u, name in zip(self.units, UNIT_NAMES):
             if u == 1:
                 ret += '%s.' % name
@@ -111,37 +116,83 @@ class Quant(object):
         for u1, u2 in zip(self.units, q1.units):
             if u1 != u2:
                 raise ValueError('Incompatible units: [%s, %s]' % (self, q1))
-        return Quant(self.val + q1.val, self.units)
+        if self.log:
+            raise ValueError('Cannot add with log')
+        else:
+            newval = self.val + q1.val
+        return Quant(newval, self.units, self.log)
     def __sub__(self, q1):
         for u1, u2 in zip(self.units, q1.units):
             if u1 != u2:
                 raise ValueError('Incompatible units: [%s, %s]' % (self, q1))
-        return Quant(self.val - q1.val, self.units)
+        if self.log:
+            raise ValueError('Cannot sub with log')
+        else:
+            newval = self.val - q1.val
+        return Quant(newval, self.units, self.log)
     def __mul__(self, q1):
-        return Quant(self.val * q1.val,
-                     [u1 + u2 for u1, u2 in zip(self.units, q1.units)])
+        if self.log:
+            newval = self.val + q1.val
+        else:
+            newval = self.val * q1.val
+        return Quant(newval,
+                     [u1 + u2 for u1, u2 in zip(self.units, q1.units)],
+                     self.log)
     def __truediv__(self, q1):
-        return Quant(self.val / q1.val,
-                     [u1 - u2 for u1, u2 in zip(self.units, q1.units)])
+        if self.log:
+            newval = self.val - q1.val
+        else:
+            newval = self.val / q1.val
+        return Quant(newval,
+                     [u1 - u2 for u1, u2 in zip(self.units, q1.units)],
+                     self.log)
     def __pow__(self, n):
         if n.units != [0, 0, 0]:
             raise ValueError('Power with units: (`%s` ^ `%s`)' % (self, n))
-        return Quant(self.val**n.val, [u1 * n.val for u1 in self.units])
+        if self.log:
+            nval = 10**(n.val)
+            newval = self.val * nval
+        else:
+            nval = n.val
+            newval = self.val ** nval
+        return Quant(newval, [u1 * nval for u1 in self.units],
+                     self.log)
+    def __eq__(self, v):
+        self_val = self.val
+        v_val = v.val
+        if not self.log:
+            self_val = np.log10(self_val)
+        if not v.log:
+            v_val = np.log10(v_val)
+        if abs(self_val - v_val) / self_val > 1e-6:
+            return False
+        for u1, u2 in zip(self.units, v.units):
+            if (u1 - u2) > 1e-3:
+                return False
+        return True
 
 # generate a Quant from a str
-def from_str(expr, prev_res=None):
+def from_str(expr, prev_res=None, log=False):
     expr_split = expr.split(' ')
     if len(expr_split) == 1:
         if expr == '!!':
             return prev_res
         elif expr in UNITS_DICT:
-            return Quant(*UNITS_DICT[expr])
-        return Quant(float(expr), [0, 0, 0])
+            val, units = UNITS_DICT[expr]
+            if log:
+                val = np.log10(val)
+            return Quant(val, units, log)
+        baseval = float(expr)
+        if log:
+            baseval = np.log10(baseval)
+        return Quant(baseval, [0, 0, 0], log)
     elif len(expr_split) != 2:
         raise ValueError('Malformated Quant: `%s`' % expr)
 
     _quant_val, units = expr_split
     quant_val = float(_quant_val)
+    if log:
+        quant_val = np.log10(quant_val)
     quant_units = [0, 0, 0]
     def add_unit(new_units, mult):
         for i, u in enumerate(new_units):
@@ -174,9 +225,13 @@ def from_str(expr, prev_res=None):
             if unit not in UNITS_DICT:
                 raise ValueError('Unknown unit: `%s`' % u)
             val, new_units = UNITS_DICT[unit]
-            quant_val *= val**(sign * power)
+            if log:
+                val = np.log10(val)
+                quant_val += val*(sign * power)
+            else:
+                quant_val *= val**(sign * power)
             add_unit(new_units, sign * power)
-    return Quant(quant_val, quant_units)
+    return Quant(quant_val, quant_units, log)
 
 def split_with_parens(instr, base_seps, lparen='(', rparen=')', space=' '):
     instr = instr.strip()
@@ -260,14 +315,14 @@ operator_tiers = [
     ['/', '*'],
     ['+', '-'],
 ]
-def eval_expr(expr, prev_res=None):
+def eval_expr(expr, prev_res=None, log=False):
     pieces, ops = split_with_parens(expr, operators.keys())
     # base case
     if len(ops) == 0:
-        return from_str(expr, prev_res=prev_res)
+        return from_str(expr, prev_res=prev_res, log=log)
 
     # recursive case, use order of operations by doing 2 passes
-    pieces1 = [eval_expr(p, prev_res=prev_res) for p in pieces]
+    pieces1 = [eval_expr(p, prev_res=prev_res, log=log) for p in pieces]
 
     for curr_operators in operator_tiers:
         pieces2 = []
@@ -300,10 +355,24 @@ if __name__ == '__main__':
                 print(e)
     else:
         prev_res = None
+        prev_log = False
         while True:
             try:
                 in_str = input('>>> ')
                 res = eval_expr(in_str, prev_res=prev_res)
+                if np.isinf(res.val):
+                    raise OverflowError('ack')
+                print(res)
+                res2 = eval_expr(in_str, prev_res=prev_res, log=True)
+                if res != res2:
+                    raise ValueError('Logcheck error: %s != %s' % (res, res2))
+                prev_res = res
+            except OverflowError as e:
+                print('Overflow, retrying with log')
+                try:
+                    res = eval_expr(in_str, prev_res=prev_res, log=True)
+                except OverflowError as e:
+                    print('Retry failed')
                 print(res)
                 prev_res = res
             except ValueError as e:
@@ -311,8 +380,9 @@ if __name__ == '__main__':
                 continue
             except (EOFError, KeyboardInterrupt):
                 break
-            except:
-                print('Whoops')
+            except Exception as e:
+                print(e)
+                print('whoops')
                 continue
         print('\nBye!')
         readline.write_history_file(HIST_FN)
