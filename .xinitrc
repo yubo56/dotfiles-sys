@@ -48,5 +48,7 @@ dwm_rebg
 
 # try to enable bluetooth
 bluetoothctl power on || :
+# try to start ultimate remote server
+(/opt/urserver/urserver-start --no-manager || :) &!
 
 exec dwmalt
