@@ -6,10 +6,6 @@
 # syntax)
 #
 
-if [[ "$(hostname)" =~ BL-yubo- ]]; then
-    sudo scutil --set HostName BlendNew
-fi
-
 # global exports
 export LC_ALL=C
 export HOMEBREW_NO_AUTO_UPDATE=1
@@ -53,9 +49,12 @@ bindkey "${terminfo[kcbt]}" reverse-menu-complete
 # if tmux exists then either
 #   - try to start main (and fail if already existing) in OS X
 #   - start tmux without name in otherwise
-grep -q darwin <<< $OSTYPE 2> /dev/null && export PATH="/opt/homebrew/bin:/Users/yubo/bin:$PATH"
-if [ "$TERM" =~ "xterm" ] || [ "$TERM" =~ "rxvt" ]
-    then hash tmux 2> /dev/null && {
+grep -q darwin <<< $OSTYPE 2> /dev/null && {
+    export PATH="/opt/homebrew/bin:/Users/yubo56/bin:$PATH"
+    defaults write .GlobalPreferences com.apple.mouse.scaling -1
+}
+if [ "$TERM" =~ "xterm" ] || [ "$TERM" =~ "rxvt" ]; then
+    hash tmux && {
         FIRST_SESSION=$(tmux ls -F '#{session_attached}#{session_id}' | 'grep' '0\$' | head -n 1 | cut -c 2-)
         if [[ -z $FIRST_SESSION ]]; then
             exec tmux -2;
@@ -119,7 +118,7 @@ if [ $OSTYPE =~ "linux-gnu" ]; then
     KER2=$(pacman -Q linux | sed -E 's/linux (.*)\.arch(.).*/\1-\2/g')
     KER=" (%F{white}$( [[ $KER1 == $KER2 ]] && echo $KER1 || echo '!!')%f) "
 else
-    export PATH="/opt/homebrew/bin:/Users/yubo/bin:$PATH"
+    export PATH="/opt/homebrew/bin:/Users/yubo56/bin:$PATH"
     KER=''
 fi
 
