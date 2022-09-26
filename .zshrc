@@ -51,7 +51,8 @@ bindkey "${terminfo[kcbt]}" reverse-menu-complete
 #   - start tmux without name in otherwise
 grep -q darwin <<< $OSTYPE 2> /dev/null && {
     export PATH="/opt/homebrew/bin:/Users/yubo56/bin:$PATH"
-    defaults write .GlobalPreferences com.apple.mouse.scaling -1
+    # dock delay time (in seconds)
+    defaults write com.apple.dock autohide-delay -float 5; killall Dock
 }
 if [ "$TERM" =~ "xterm" ] || [ "$TERM" =~ "rxvt" ]; then
     hash tmux && {
@@ -106,11 +107,11 @@ fi
 
 # variables
 export EDITOR="vim"
+eval "$($DIRCOLORS -b)"
+zstyle ':completion:*' list-colors '${(s.:.)LS_COLORS}'
+zstyle ':completion:*' menu select eval "$($DIRCOLORS -b)"
 if [ $OSTYPE =~ "linux-gnu" ]; then
     export PATH="/home/yssu/.local/bin:/home/yssu/bin:$PATH"
-    eval "$($DIRCOLORS -b)"
-    zstyle ':completion:*' list-colors '${(s.:.)LS_COLORS}'
-    zstyle ':completion:*' menu select eval "$($DIRCOLORS -b)"
     # [[ $(sysctl kernel/unprivileged_userns_clone | grep 1) ]] ||\
     #     sudo sysctl kernel/unprivileged_userns_clone=1 # for brave
 
