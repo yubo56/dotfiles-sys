@@ -72,7 +72,7 @@ while true; do
     else if [[ "$(hostname)" =~ exo15c ]]; then
         xrandr --output HDMI-1 --auto --left-of VGA-1 --output VGA-1 --auto --rotate left
     else if [[ "$(hostname)" == YuboDesktop ]]; then
-        xrandr --output HDMI-1 --auto --right-of DP-1 --rotate left
+        xrandr --output HDMI-1 --auto --right-of DP-3 --rotate left
     fi; fi; fi; fi
 
     #--------------------------------------------------------CALCULATE CPU USAGE----------------------------------------
