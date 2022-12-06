@@ -12,6 +12,8 @@ if [[ $(setxkbmap -query | grep 'variant') =~ "mac" ]]; then
     suffix=U
 elif [[ $(setxkbmap -query | grep 'variant') =~ "dvorak-l" ]]; then
     suffix=L
+elif [[ $(setxkbmap -query | grep 'variant') =~ "dvorak-intl" ]]; then
+    suffix=DI
 else
     suffix=D
 fi
