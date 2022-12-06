@@ -117,7 +117,7 @@ if [ $OSTYPE =~ "linux-gnu" ]; then
 
     KER1=$(uname -r | sed -E 's/-arch(.).*/-\1/g')
     KER2=$(pacman -Q linux | sed -E 's/linux (.*)\.arch(.).*/\1-\2/g')
-    KER=" (%F{white}$( [[ $KER1 == $KER2 ]] && echo $KER1 || echo '!!')%f) "
+    KER=" (%F{white}$( [[ $KER1 == $KER2 ]] && echo $KER1 || echo '!!')%f)"
 else
     export PATH="/opt/homebrew/bin:/Users/yubo56/bin:$PATH"
     KER=''
@@ -130,7 +130,7 @@ export QT_IM_MODULE="ibus"
 
 # prompt
 NEWLINE=$'\n'
-PROMPT1='$(git_status)[%{$fg_bold[white]%}%~%{$reset_color%}] [%B%F{cyan}%* %F{green}%n@%m%b%f${KER}]$(brack_fmt $STY)$(brack_fmt $AWS_VAULT) %(?..(%F{red}%?%{$reset_color%}%) )'
+PROMPT1='$(git_status)[%{$fg_bold[white]%}%~%{$reset_color%}] [%B%F{cyan}%* %F{green}%n@%m%b%f${KER}]$(brack_fmt $STY)$(brack_fmt $AWS_VAULT)%(?..(%F{red}%?%{$reset_color%}%))'
 PROMPT2='> '
 PROMPT="${PROMPT1}${NEWLINE}${PROMPT2}"
 setopt PROMPT_SUBST
