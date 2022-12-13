@@ -89,7 +89,7 @@ while true; do
     (( idle = $incidle ))
 
     # -0.1 so that never 100%, doesn't shift digits lol
-    usage=$(printf '%.1f' $(( 100.0 * ($used - $prev2used) / (($used - $prev2used) + ($idle - $prev2idle)) - 0.1 )))
+    usage=$(printf '%04.1f' $(( 100.0 * ($used - $prev2used) / (($used - $prev2used) + ($idle - $prev2idle)) - 0.1 )))
     prev2used=$prevused
     prev2idle=$previdle
     prevused=$used
