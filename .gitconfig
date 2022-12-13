@@ -3,6 +3,7 @@
     name = Yubo Su
 [push]
     default = simple
+    autoSetupRemote = true
 [pull]
     rebase = false
 [color]
