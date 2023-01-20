@@ -4,12 +4,14 @@ import os
 import shutil
 import requests
 import sys
-import time
 '''
 New version of this script to generate arxiv-like interface but fully offline
 - curl astro-ph/new
 - download all pdf links
 - replace urls with local urls
+
+Typical runtime lesssim 2m
+    - respect that arxiv requests no more than 1 connection at a time
 '''
 
 URL = 'https://arxiv.org/list/astro-ph/new'
@@ -32,6 +34,7 @@ if __name__ == '__main__':
 
     download_pdfpaths = []
 
+    # NB: generate updated HTML, then download pdfs in background
     contents_div = soup.find('div', {'id': 'dlpage'})
     for el in contents_div.find_all('a'):
         el_href = el.get('href')
