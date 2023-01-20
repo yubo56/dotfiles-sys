@@ -1,0 +1,58 @@
+#!/usr/bin/env python
+from bs4 import BeautifulSoup as bs
+import os
+import shutil
+import requests
+import sys
+import time
+'''
+New version of this script to generate arxiv-like interface but fully offline
+- curl astro-ph/new
+- download all pdf links
+- replace urls with local urls
+'''
+
+URL = 'https://arxiv.org/list/astro-ph/new'
+FLDR = '/tmp/arxiv'
+OLD_FN = '%s/old.html' % FLDR
+FN = '%s/new.html' % FLDR
+PDF_URL = 'https://arxiv.org/%s'
+
+if __name__ == '__main__':
+    if sys.argv[1] == '-c':
+        shutil.rmtree(FLDR)
+
+    os.makedirs(FLDR + '/pdf', exist_ok=True)
+
+    html_contents = requests.get(URL).text
+    with open(OLD_FN, 'w') as f:
+        f.write(html_contents)
+
+    soup = bs(html_contents, 'html.parser')
+
+    download_pdfpaths = []
+
+    contents_div = soup.find('div', {'id': 'dlpage'})
+    for el in contents_div.find_all('a'):
+        el_href = el.get('href')
+        if el_href is not None:
+            if 'pdf' in el_href:
+                # convert: '/pdf/123.456' -> 'pdf/123.456.pdf'
+                pdf_path = el_href[1: ] + '.pdf'
+                download_pdfpaths.append(pdf_path)
+                el['href'] = pdf_path
+            else:
+                del el['href']
+
+    with open(FN, 'w') as f:
+        f.write(str(contents_div))
+
+    for pdf_path in download_pdfpaths:
+        pdf_dlpath = '%s/%s' % (FLDR, pdf_path)
+        if os.path.exists(pdf_dlpath):
+            print('Exists', pdf_path)
+        else:
+            print('Downloading', pdf_path)
+            pdf_out = requests.get(PDF_URL % pdf_path)
+            with open(pdf_dlpath, 'wb') as f:
+                f.write(pdf_out.content)
