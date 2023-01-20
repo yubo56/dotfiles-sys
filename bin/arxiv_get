@@ -4,6 +4,7 @@ import os
 import shutil
 import requests
 import sys
+import time
 '''
 New version of this script to generate arxiv-like interface but fully offline
 - curl astro-ph/new
@@ -15,27 +16,28 @@ Typical runtime lesssim 2m
 '''
 
 URL = 'https://arxiv.org/list/astro-ph/new'
-FLDR = '/tmp/arxiv'
-OLD_FN = '%s/old.html' % FLDR
+FLDR = '%s/tmp/arxiv' % os.getenv('HOME')
 FN = '%s/new.html' % FLDR
 PDF_URL = 'https://arxiv.org/%s'
 
 if __name__ == '__main__':
-    if sys.argv[1] == '-c':
+    if '-c' in sys.argv:
         shutil.rmtree(FLDR)
 
     os.makedirs(FLDR + '/pdf', exist_ok=True)
 
     html_contents = requests.get(URL).text
-    with open(OLD_FN, 'w') as f:
-        f.write(html_contents)
 
-    soup = bs(html_contents, 'html.parser')
+    arxivsoup = bs(html_contents, 'html.parser')
+    dateline = arxivsoup.find('div', {'class': 'list-dateline'}).text
+    announcedate = dateline.split('announced ')[-1]
+    parseddate = time.strptime(announcedate, '%a, %d %b %y')
+    newdate = time.strftime('%y%m%d', parseddate)
 
     download_pdfpaths = []
 
     # NB: generate updated HTML, then download pdfs in background
-    contents_div = soup.find('div', {'id': 'dlpage'})
+    contents_div = arxivsoup.find('div', {'id': 'dlpage'})
     for el in contents_div.find_all('a'):
         el_href = el.get('href')
         if el_href is not None:
@@ -44,16 +46,38 @@ if __name__ == '__main__':
                 pdf_path = el_href[1: ] + '.pdf'
                 download_pdfpaths.append(pdf_path)
                 el['href'] = pdf_path
+                el['target'] = '_blank'
             else:
                 del el['href']
 
-    with open(FN, 'w') as f:
-        f.write(str(contents_div))
+    # save both to new.html & <date>.html, not sure which is more useful
+    mysoup = bs('''
+<html><head><style>
+body {
+  background-color: rgb(10, 10, 10);
+  color: rgb(220, 220, 220);
+}
+
+a:link {
+  color: rgb(180, 180, 255);
+}
+a:visited {
+  color: rgb(220, 150, 255);
+}
+</style></head>
+<body></body>
+</html>
+''', 'html.parser')
+    mysoup.body.insert(0, contents_div)
+    with open('%s/%s.html' % (FLDR, newdate), 'w') as f1:
+        with open('%s/new.html' % FLDR, 'w') as f2:
+            for f in [f1, f2]:
+                f.write(mysoup.prettify())
 
     for pdf_path in download_pdfpaths:
         pdf_dlpath = '%s/%s' % (FLDR, pdf_path)
         if os.path.exists(pdf_dlpath):
-            print('Exists', pdf_path)
+            print('Exists:', pdf_path)
         else:
             print('Downloading', pdf_path)
             pdf_out = requests.get(PDF_URL % pdf_path)
