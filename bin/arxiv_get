@@ -5,6 +5,7 @@ import shutil
 import requests
 import sys
 import time
+import copy
 '''
 New version of this script to generate arxiv-like interface but fully offline
 - curl astro-ph/new
@@ -22,7 +23,9 @@ PDF_URL = 'https://arxiv.org/%s'
 
 if __name__ == '__main__':
     if '-c' in sys.argv:
-        shutil.rmtree(FLDR)
+        print('Cleaning up, CTRL+C in 2s to cancel')
+        time.sleep(2)
+        shutil.rmtree(FLDR + '/pdf')
 
     os.makedirs(FLDR + '/pdf', exist_ok=True)
 
@@ -47,6 +50,11 @@ if __name__ == '__main__':
                 download_pdfpaths.append(pdf_path)
                 el['href'] = pdf_path
                 el['target'] = '_blank'
+
+                el2 = copy.copy(el)
+                el2.string = 'arXiv'
+                el2['href'] = PDF_URL % pdf_path
+                el.parent.contents.append(el2)
             else:
                 del el['href']
 
