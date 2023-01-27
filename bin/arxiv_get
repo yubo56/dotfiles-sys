@@ -47,8 +47,11 @@ if __name__ == '__main__':
             if 'pdf' in el_href:
                 # convert: '/pdf/123.456' -> 'pdf/123.456.pdf'
                 pdf_path = el_href[1: ] + '.pdf'
+
+                # some filenames are '/pdf/astro-ph/123.456.pdf'
+                pdf_filename = 'pdf/%s' % pdf_path.split('/')[-1]
                 download_pdfpaths.append(pdf_path)
-                el['href'] = pdf_path
+                el['href'] = pdf_filename
                 el['target'] = '_blank'
 
                 el2 = copy.copy(el)
@@ -83,7 +86,9 @@ a:visited {
                 f.write(mysoup.prettify())
 
     for pdf_path in download_pdfpaths:
-        pdf_dlpath = '%s/%s' % (FLDR, pdf_path)
+        # some filenames are 'pdf/astro-ph/123.456.pdf'
+        pdf_filename = 'pdf/%s' % pdf_path.split('/')[-1]
+        pdf_dlpath = '%s/%s' % (FLDR, pdf_filename)
         if os.path.exists(pdf_dlpath):
             print('Exists:', pdf_path)
         else:
