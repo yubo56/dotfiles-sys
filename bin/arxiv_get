@@ -84,15 +84,20 @@ a:visited {
         with open('%s/new.html' % FLDR, 'w') as f2:
             for f in [f1, f2]:
                 f.write(mysoup.prettify())
+    print('Downloaded html')
 
-    for pdf_path in download_pdfpaths:
-        # some filenames are 'pdf/astro-ph/123.456.pdf'
-        pdf_filename = 'pdf/%s' % pdf_path.split('/')[-1]
-        pdf_dlpath = '%s/%s' % (FLDR, pdf_filename)
-        if os.path.exists(pdf_dlpath):
-            print('Exists:', pdf_path)
-        else:
-            print('Downloading', pdf_path)
-            pdf_out = requests.get(PDF_URL % pdf_path)
-            with open(pdf_dlpath, 'wb') as f:
-                f.write(pdf_out.content)
+    if '-o' in sys.argv:
+        print('Downloading pdfs for offline reading')
+        for pdf_path in download_pdfpaths:
+            # some filenames are 'pdf/astro-ph/123.456.pdf'
+            pdf_filename = 'pdf/%s' % pdf_path.split('/')[-1]
+            pdf_dlpath = '%s/%s' % (FLDR, pdf_filename)
+            if os.path.exists(pdf_dlpath):
+                print('Exists:', pdf_path)
+            else:
+                print('Downloading', pdf_path)
+                pdf_out = requests.get(PDF_URL % pdf_path)
+                with open(pdf_dlpath, 'wb') as f:
+                    f.write(pdf_out.content)
+    else:
+        print('Skipping Downloads')
