@@ -53,6 +53,7 @@ if __name__ == '__main__':
                 download_pdfpaths.append(pdf_path)
                 el['href'] = pdf_filename
                 el['target'] = '_blank'
+                del el['title']
 
                 el2 = copy.copy(el)
                 el2.string = 'arXiv'
@@ -80,6 +81,10 @@ a:visited {
 </html>
 ''', 'html.parser')
     mysoup.body.insert(0, contents_div)
+    parent_tag = mysoup.new_tag('a')
+    parent_tag['href'] = '.'
+    parent_tag.string = 'Parent Directory'
+    mysoup.body.append(parent_tag)
     with open('%s/%s.html' % (FLDR, newdate), 'w') as f1:
         with open('%s/new.html' % FLDR, 'w') as f2:
             for f in [f1, f2]:
