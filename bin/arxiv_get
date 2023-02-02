@@ -85,6 +85,7 @@ a:visited {
     parent_tag['href'] = '.'
     parent_tag.string = 'Parent Directory'
     mysoup.body.append(parent_tag)
+    mysoup.body.insert(0, copy.copy(parent_tag))
     with open('%s/%s.html' % (FLDR, newdate), 'w') as f1:
         with open('%s/new.html' % FLDR, 'w') as f2:
             for f in [f1, f2]:
