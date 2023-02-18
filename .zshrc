@@ -68,8 +68,8 @@ fi
 # history
 setopt appendhistory autocd extendedglob
 HISTFILE=~/.zshist
-HISTSIZE=1000
-SAVEHIST=1000
+HISTSIZE=100000
+SAVEHIST=100000
 
 # coloring, autocompletion
 ### CODY MADE EDITS DOCUMENTED WITH ###
@@ -82,7 +82,7 @@ compinit && . ~/.zsh_compdefs
 select-word-style bash
 
 # report time for >5s processes
-REPORTTIME=5
+REPORTTIME=1
 
 # cdr configuration
 autoload -Uz chpwd_recent_dirs cdr add-zsh-hook
@@ -98,12 +98,6 @@ fi
 if [ -e ~/.zsh_functions ]; then
     . ~/.zsh_functions
 fi
-if [[ "$(hostname)" =~ "Blend" ]]; then
-    . ~/.blend_aliases
-fi
-
-
-# pimp out tab completion a bit
 
 # variables
 export EDITOR="vim"

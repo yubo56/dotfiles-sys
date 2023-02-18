@@ -49,10 +49,6 @@ alias reeno1='sudo modprobe -r r8169; sleep .1s; sudo modprobe r8169'
 
 #alias pacrank='sudo rankmirrors /etc/pacman.d/mirrorlist.backup | sudo tee /etc/pacman.d/mirrorlist'
 
-alias rt3='rsync -aLP --suffix=.bak . exo3:$(dirs) --exclude=*.h5 --exclude=.dropbox*'
-alias rf3='rsync -aLP --suffix=.bak exo3:$(dirs) .. --exclude=*.h5 --exclude=.dropbox*'
-alias rt4='rsync -aLP --suffix=.bak . exo4:$(dirs) --exclude=*.h5 --exclude=.dropbox*'
-alias rf4='rsync -aLP --suffix=.bak exo4:$(dirs) .. --exclude=*.h5 --exclude=.dropbox*'
 alias rt15='rsync -aLP --suffix=.bak . exo15c:$(dirs) --exclude=*.h5 --exclude=.dropbox*'
 alias rf15='rsync -aLP --suffix=.bak exo15c:$(dirs) .. --exclude=*.h5 --exclude=.dropbox*'
 
