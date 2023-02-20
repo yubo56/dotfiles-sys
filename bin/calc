@@ -20,69 +20,76 @@ import readline
 
 # map of supported units -> (val, (units))
 ONE_AU = 1.496e11
+UNITLESS = [0, 0, 0, 0]
 UNITS_DICT = {
-    'kg': (1, [1, 0, 0]),
-    'm': (1, [0, 1, 0]),
-    's': (1, [0, 0, 1]),
+    'kg': (1, [1, 0, 0, 0]),
+    'm': (1, [0, 1, 0, 0]),
+    's': (1, [0, 0, 1, 0]),
 
-    'g': (1e-3, [1, 0, 0]),
-    'km': (1e3, [0, 1, 0]),
-    'cm': (1e-2, [0, 1, 0]),
-    'mm': (1e-3, [0, 1, 0]),
+    'g': (1e-3, [1, 0, 0, 0]),
+    'km': (1e3, [0, 1, 0, 0]),
+    'cm': (1e-2, [0, 1, 0, 0]),
+    'mm': (1e-3, [0, 1, 0, 0]),
 
-    'Msun': (1.989e30, [1, 0, 0]),
-    'Rsun': (6.955e8, [0, 1, 0]),
-    'Mmercury': (3.3011e23, [1, 0, 0]),
-    'Rmercury': (2.439e6, [0, 1, 0]),
-    'amercury': (0.387 * ONE_AU, [0, 1, 0]),
-    'Mvenus': (4.867e24, [1, 0, 0]),
-    'Rvenus': (6.052e6, [0, 1, 0]),
-    'avenus': (0.723 * ONE_AU, [0, 1, 0]),
-    'Mearth': (5.972e24, [1, 0, 0]),
-    'Rearth': (6.371e6, [0, 1, 0]),
-    'AU': (ONE_AU, [0, 1, 0]),
-    'Mmoon': (7.3477e22, [1, 0, 0]),
-    'amoon': (384399e3, [0, 1, 0]),
-    'Rmoon': (1737e3, [0, 1, 0]),
-    'Mmars': (6.41e23, [1, 0, 0]),
-    'Rmars': (3.389e6, [0, 1, 0]),
-    'amars': (1.524 * ONE_AU, [0, 1, 0]),
-    'Mjup': (1.898e27, [1, 0, 0]),
-    'Rjup': (6.991e7, [0, 1, 0]),
-    'ajup': (5.202 * ONE_AU, [0, 1, 0]),
-    'Msat': (5.683e26, [1, 0, 0]),
-    'Rsat': (5.823e7, [0, 1 ,0]),
-    'asat': (9.537 * ONE_AU, [0, 1, 0]),
-    'Muranus': (8.681e25, [1, 0, 0]),
-    'Ruranus': (2.537e7, [0, 1, 0]),
-    'auranus': (19.189 * ONE_AU, [0, 1, 0]),
-    'Mneptune': (1.02e26, [1, 0, 0]),
-    'Rneptune': (2.4622e7, [0, 1, 0]),
-    'aneptune': (30.07 * ONE_AU, [0, 1, 0]),
+    'Msun': (1.989e30, [1, 0, 0, 0]),
+    'Rsun': (6.955e8, [0, 1, 0, 0]),
+    'Mmercury': (3.3011e23, [1, 0, 0, 0]),
+    'Rmercury': (2.439e6, [0, 1, 0, 0]),
+    'amercury': (0.387 * ONE_AU, [0, 1, 0, 0]),
+    'Mvenus': (4.867e24, [1, 0, 0, 0]),
+    'Rvenus': (6.052e6, [0, 1, 0, 0]),
+    'avenus': (0.723 * ONE_AU, [0, 1, 0, 0]),
+    'Mearth': (5.972e24, [1, 0, 0, 0]),
+    'Rearth': (6.371e6, [0, 1, 0, 0]),
+    'AU': (ONE_AU, [0, 1, 0, 0]),
+    'Mmoon': (7.3477e22, [1, 0, 0, 0]),
+    'amoon': (384399e3, [0, 1, 0, 0]),
+    'Rmoon': (1737e3, [0, 1, 0, 0]),
+    'Mmars': (6.41e23, [1, 0, 0, 0]),
+    'Rmars': (3.389e6, [0, 1, 0, 0]),
+    'amars': (1.524 * ONE_AU, [0, 1, 0, 0]),
+    'Mjup': (1.898e27, [1, 0, 0, 0]),
+    'Rjup': (6.991e7, [0, 1, 0, 0]),
+    'ajup': (5.202 * ONE_AU, [0, 1, 0, 0]),
+    'Msat': (5.683e26, [1, 0, 0, 0]),
+    'Rsat': (5.823e7, [0, 1 ,0, 0]),
+    'asat': (9.537 * ONE_AU, [0, 1, 0, 0]),
+    'Muranus': (8.681e25, [1, 0, 0, 0]),
+    'Ruranus': (2.537e7, [0, 1, 0, 0]),
+    'auranus': (19.189 * ONE_AU, [0, 1, 0, 0]),
+    'Mneptune': (1.02e26, [1, 0, 0, 0]),
+    'Rneptune': (2.4622e7, [0, 1, 0, 0]),
+    'aneptune': (30.07 * ONE_AU, [0, 1, 0, 0]),
 
-    'c': (2.9979e8, [0, 1, -1]),
-    'G': (6.674e-11, [-1, 3, -2]),
-    'min': (60, [0, 0, 1]),
-    'hr': (3600, [0, 0, 1]),
-    'day': (86400, [0, 0, 1]),
-    'yr': (86400 * 365.24, [0, 0, 1]),
+    'c': (2.9979e8, [0, 1, -1, 0]),
+    'G': (6.674e-11, [-1, 3, -2, 0]),
+    'min': (60, [0, 0, 1, 0]),
+    'hr': (3600, [0, 0, 1, 0]),
+    'day': (86400, [0, 0, 1, 0]),
+    'yr': (86400 * 365.24, [0, 0, 1, 0]),
 
-    'pc': (3.0856e16, [0, 1, 0]),
-    'ly': (9.461e15, [0, 1, 0]),
+    'pc': (3.0856e16, [0, 1, 0, 0]),
+    'ly': (9.461e15, [0, 1, 0, 0]),
 
-    'J': (1, [1, 2, -2]),
-    'erg': (1e-7, [1, 2, -2]),
-    'W': (1, [1, 2, -3]),
-    'Lsun': (3.83e26, [1, 2, -3]),
+    'J': (1, [1, 2, -2, 0]),
+    'erg': (1e-7, [1, 2, -2, 0]),
+    'W': (1, [1, 2, -3, 0]),
+    'Lsun': (3.83e26, [1, 2, -3, 0]),
+    'Tsun': (5778, [0, 0, 0, 1]),
+    'mp': (1.673e-27, [1, 0, 0, 0]),
 
-    'pi': (np.pi, [0, 0, 0]),
-    'e': (np.e, [0, 0, 0]),
+    'pi': (np.pi, UNITLESS.copy()),
+    'e': (np.e, UNITLESS.copy()),
+
+    'K': (1, [0, 0, 0, 1]),
+    'kB': (1.381e-23, [1, 2, -2, -1]),
+    'sB': (5.67e-8, [1, 0, -3, -4]),
 }
 
 HIST_FN = '%s/.calchist' % os.environ['HOME']
 HIST_LEN = 10000
 
-UNIT_NAMES = ['kg', 'm', 's']
+UNIT_NAMES = ['kg', 'm', 's', 'K']
 class Quant(object):
     '''
     units = (mass, length, time) powers (kg, m, s)
@@ -151,7 +158,7 @@ class Quant(object):
                      [u1 - u2 for u1, u2 in zip(self.units, q1.units)],
                      self.log)
     def __pow__(self, n):
-        if n.units != [0, 0, 0]:
+        if n.units != UNITLESS:
             raise ValueError('Power with units: (`%s` ^ `%s`)' % (self, n))
         if self.log:
             nval = 10**(n.val)
@@ -168,6 +175,8 @@ class Quant(object):
             self_val = np.log10(self_val)
         if not v.log:
             v_val = np.log10(v_val)
+        if self_val == 0 and v_val == 0:
+            return True
         if abs(self_val - v_val) / self_val > 1e-6:
             return False
         for u1, u2 in zip(self.units, v.units):
@@ -189,7 +198,7 @@ def from_str(expr, prev_res=None, log=False):
         baseval = float(expr)
         if log:
             baseval = np.log10(baseval)
-        return Quant(baseval, [0, 0, 0], log)
+        return Quant(baseval, UNITLESS.copy(), log)
     elif len(expr_split) != 2:
         raise ValueError('Malformated Quant: `%s`' % expr)
 
@@ -197,7 +206,7 @@ def from_str(expr, prev_res=None, log=False):
     quant_val = float(_quant_val)
     if log:
         quant_val = np.log10(quant_val)
-    quant_units = [0, 0, 0]
+    quant_units = UNITLESS.copy()
     def add_unit(new_units, mult):
         for i, u in enumerate(new_units):
             quant_units[i] += mult * u
@@ -366,8 +375,8 @@ if __name__ == '__main__':
                 res = eval_expr(in_str, prev_res=prev_res)
                 if np.isinf(res.val):
                     raise OverflowError('ack')
-                print(res)
                 res2 = eval_expr(in_str, prev_res=prev_res, log=True)
+                print(res)
                 if res != res2:
                     raise ValueError('Logcheck error: %s != %s' % (res, res2))
                 prev_res = res
