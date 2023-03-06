@@ -22,7 +22,13 @@ FN = '%s/new.html' % FLDR
 PDF_URL = 'https://arxiv.org/%s'
 
 if __name__ == '__main__':
-    if '-c' in sys.argv:
+    if '-h' in sys.argv or '--help' in sys.argv:
+        print('''Usage: arxiv_get [-h] [-o] [-c]
+    -h: print this message
+    -o: save files for offline reading
+    -c: remove offline files''')
+        quit()
+    elif '-c' in sys.argv:
         print('Cleaning up, CTRL+C in 2s to cancel')
         time.sleep(2)
         shutil.rmtree(FLDR + '/pdf')

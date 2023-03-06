@@ -375,8 +375,8 @@ if __name__ == '__main__':
                 res = eval_expr(in_str, prev_res=prev_res)
                 if np.isinf(res.val):
                     raise OverflowError('ack')
-                res2 = eval_expr(in_str, prev_res=prev_res, log=True)
                 print(res)
+                res2 = eval_expr(in_str, prev_res=prev_res, log=True)
                 if res != res2:
                     raise ValueError('Logcheck error: %s != %s' % (res, res2))
                 prev_res = res
