@@ -195,10 +195,9 @@ ys_scroll() {
     ); do
         echo $fg[green]$i$reset_color
         sleep 1
-        while read -r s; do
-            while [ ${#s} -gt 0 ]; do
-                printf '%s' "${s%${s#?}}"
-                s=${s#?}
+        while IFS= read -r s; do
+            for (( i=0; i<${#s}; i++ )); do
+                printf "${s:$i:1}"
                 sleep 0.005
             done
             printf '\n'
