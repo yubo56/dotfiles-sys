@@ -185,3 +185,23 @@ srchp() {
         fi
     fi
 }
+
+# fun function to scroll thru files in local
+ys_scroll() {
+    for i in $(\
+        find ${1=/opt/homebrew/Cellar/gcc/12.2.0} \
+        -iname '*.c' -or -iname '*.cpp' -or -iname '*.h' -or -iname '*.hpp' \
+        2> /dev/null | shuf
+    ); do
+        echo $fg[green]$i$reset_color
+        sleep 1
+        while read -r s; do
+            while [ ${#s} -gt 0 ]; do
+                printf '%s' "${s%${s#?}}"
+                s=${s#?}
+                sleep 0.005
+            done
+            printf '\n'
+        done < $i
+    done
+}
