@@ -45,24 +45,27 @@ bindkey "${terminfo[kcbt]}" reverse-menu-complete
 # bindkey "${terminfo[kf9]}" backward-kill-line
 # bindkey "${terminfo[kf10]}" kill-line
 
-# if term is xterm (and not login shell) then
-# if tmux exists then either
-#   - try to start main (and fail if already existing) in OS X
-#   - start tmux without name in otherwise
 grep -q darwin <<< $OSTYPE 2> /dev/null && {
     export PATH="/opt/homebrew/bin:/Users/yubo56/bin:$PATH"
     # dock delay time (in seconds)
     defaults write com.apple.dock autohide-delay -float 5; killall Dock
 }
-if [ "$TERM" =~ "xterm" ] || [ "$TERM" =~ "rxvt" ]; then
-    hash tmux && {
-        FIRST_SESSION=$(tmux ls -F '#{session_attached}#{session_id}' | 'grep' '0\$' | head -n 1 | cut -c 2-)
-        if [[ -z $FIRST_SESSION ]]; then
-            exec tmux -2;
-        else
-            exec tmux attach-session -t $FIRST_SESSION
-        fi
-    }
+
+# if term is xterm (and not login shell) then
+# if tmux exists then either
+#   - try to start main (and fail if already existing) in OS X
+#   - start tmux without name in otherwise
+if [ "$NO_TMUX" != "true" ]; then
+    if [ "$TERM" =~ "xterm" ] || [ "$TERM" =~ "rxvt" ]; then
+        hash tmux && {
+            FIRST_SESSION=$(tmux ls -F '#{session_attached}#{session_id}' | 'grep' '0\$' | head -n 1 | cut -c 2-)
+            if [[ -z $FIRST_SESSION ]]; then
+                exec tmux -2;
+            else
+                exec tmux attach-session -t $FIRST_SESSION
+            fi
+        }
+    fi
 fi
 
 # history
