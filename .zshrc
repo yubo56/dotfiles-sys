@@ -46,10 +46,9 @@ bindkey "${terminfo[kcbt]}" reverse-menu-complete
 # bindkey "${terminfo[kf10]}" kill-line
 
 grep -q darwin <<< $OSTYPE 2> /dev/null && {
-    export PATH="/opt/homebrew/bin:/Users/yubo56/bin:$PATH"
     # dock delay time (in seconds)
     defaults write com.apple.dock autohide-delay -float 5; killall Dock
-}
+} &!
 
 # if term is xterm (and not login shell) then
 # if tmux exists then either
@@ -115,15 +114,15 @@ if [ $OSTYPE =~ "linux-gnu" ]; then
     KER1=$(uname -r | sed -E 's/-arch(.).*/-\1/g')
     KER2=$(pacman -Q linux | sed -E 's/linux (.*)\.arch(.).*/\1-\2/g')
     KER=" (%F{white}$( [[ $KER1 == $KER2 ]] && echo $KER1 || echo '!!')%f)"
+
+    # ibus
+    export XMODIFIERS="@im=ibus"
+    export GTK_IM_MODULE="ibus"
+    export QT_IM_MODULE="ibus"
 else
     export PATH="/opt/homebrew/bin:/Users/yubo56/bin:$PATH"
     KER=''
 fi
-
-# ibus
-export XMODIFIERS="@im=ibus"
-export GTK_IM_MODULE="ibus"
-export QT_IM_MODULE="ibus"
 
 # prompt
 NEWLINE=$'\n'
