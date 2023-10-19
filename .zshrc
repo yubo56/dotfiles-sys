@@ -115,15 +115,14 @@ if [ $OSTYPE =~ "linux-gnu" ]; then
     KER1=$(uname -r | sed -E 's/-arch(.).*/-\1/g')
     KER2=$(pacman -Q linux | sed -E 's/linux (.*)\.arch(.).*/\1-\2/g')
     KER=" (%F{white}$( [[ $KER1 == $KER2 ]] && echo $KER1 || echo '!!')%f)"
+
+    # ibus
+    export XMODIFIERS="@im=ibus"
+    export GTK_IM_MODULE="ibus"
+    export QT_IM_MODULE="ibus"
 else
-    export PATH="/opt/homebrew/bin:/Users/yubo56/bin:$PATH"
     KER=''
 fi
-
-# ibus
-export XMODIFIERS="@im=ibus"
-export GTK_IM_MODULE="ibus"
-export QT_IM_MODULE="ibus"
 
 # prompt
 NEWLINE=$'\n'
