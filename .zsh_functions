@@ -115,6 +115,11 @@ function cd() {
     fi
 }
 
+###
+#NB: these commands are wrong, need to recursively include parent folders for
+#all files first before the general exclude=* command
+###
+
 # rsync commands in git folders, rsync everything *untracked* so that with git
 # push/pull synchronizes
 rsync_to_git() {
@@ -149,7 +154,7 @@ rsync_from_git() {
         # cd $(git rev-parse --show-toplevel)
         BASENAME=${PWD##*/} # current directory
 
-        FILE_LIST=$(rsync -aLPn $1:$(dirs)/* $2 $3 | 'grep' -v "^$BASENAME/.git\\|venv\\|incremental file list\\|to consider\\|receiving file")
+        FILE_LIST=$(rsync -aLPn $1:$(dirs)/* $2 $3 | 'grep' -v "^$BASENAME/.git\\|venv\\|incremental file list\\|to consider\\|receiving file\\|.swp")
         GIT_FILES_LIST=$(git ls-files)
 
         RSYNC_LIST=' '
