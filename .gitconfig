@@ -65,3 +65,8 @@
 
     rebasestaging = !export _CURR_GIT=$(git bn) && git rebase --onto origin/staging origin/master HEAD && git branch -D $_CURR_GIT && git checkout -b $_CURR_GIT
     deletehistory = !git checkout --orphan _master && git add -A && git commit -am "initial" && git branch -D master && git branch -m master && git push --set-upstream origin $(git bn) --force
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true

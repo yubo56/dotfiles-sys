@@ -48,7 +48,7 @@ bindkey "${terminfo[kcbt]}" reverse-menu-complete
 grep -q darwin <<< $OSTYPE 2> /dev/null && {
     export PATH="/opt/homebrew/bin:/Users/yubo56/bin:$PATH"
     # dock delay time (in seconds)
-    defaults write com.apple.dock autohide-delay -float 5; killall Dock
+    defaults write com.apple.dock autohide-delay -float 5 #; killall Dock
 }
 
 # if term is xterm (and not login shell) then
