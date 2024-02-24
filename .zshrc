@@ -30,7 +30,7 @@ stty sane # fix backspace
 bindkey -e # emacsmode :( (-v is vim mode)
 bindkey -r '^J' # unbind ^J to be able to use tmux
 
-# infocmp -L1 [-I] is your friend
+# infocmp -L1 [-I] is your friend (or cat -v)
 # function keys are no longer our friends! currently disabled:
 #       - F8 (vim C-w), F9 (zsh C-u), F10 (zsh C-k), F11 (tmux C-j)
 # bindkey '^B' backward-word
