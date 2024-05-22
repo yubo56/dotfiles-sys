@@ -36,21 +36,25 @@
     puf = !git p --set-upstream origin $(git bn) --force
     pl = pull
     plf = pull --force
-    pm = pull origin master
-    mb = merge-base HEAD origin/master
+    pms = pull origin master
+    pm = pull origin main
+    mbs = merge-base HEAD origin/master
+    mb = merge-base HEAD origin/main
 
     st = stash
     sa = stash apply
     rh = reset --hard HEAD
     rh1= reset --hard HEAD^1
-    rhm = reset --hard origin/master
+    rhms = reset --hard origin/master
+    rhm = reset --hard origin/main
 
     b = branch
     bd = branch -D
     bdr = !git branch -D $(git branch --no-color --no-column | grep -v '^\\*')
     bda = !git cm && git bdr
     ch = checkout
-    cm = checkout master
+    cms = checkout master
+    cm = checkout main
     cb = checkout -b
     dh1 = diff HEAD^1
     d = "!f() { git diff ${1:-HEAD}; }; f"
@@ -61,9 +65,9 @@
     sps = !git stash && git pl && git sa
     spms = !git stash && git pm && git sa
     bdm = !export _CURR_GIT=$(git bn) && git cmp && git branch -D $_CURR_GIT
-    cmp = !git ch master && git plp
+    cmsp = !git ch master && git plp
+    cmp = !git ch main && git plp
 
-    rebasestaging = !export _CURR_GIT=$(git bn) && git rebase --onto origin/staging origin/master HEAD && git branch -D $_CURR_GIT && git checkout -b $_CURR_GIT
     deletehistory = !git checkout --orphan _master && git add -A && git commit -am "initial" && git branch -D master && git branch -m master && git push --set-upstream origin $(git bn) --force
 [filter "lfs"]
 	clean = git-lfs clean -- %f
