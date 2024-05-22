@@ -365,7 +365,11 @@ def eval_expr(expr, prev_res=None, log=False):
 
 if __name__ == '__main__':
     open(HIST_FN, 'a').close()
-    readline.read_history_file(HIST_FN)
+    try:
+        readline.read_history_file(HIST_FN)
+    except OSError:
+        print('Error reading history file; maybe gnureadline?')
+        raise
     readline.set_history_length(HIST_LEN)
     if len(sys.argv) > 1:
         for expr in sys.argv[1: ]:

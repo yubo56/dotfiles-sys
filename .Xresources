@@ -12,8 +12,8 @@ URxvt*scrollBar: false
 URxvt*font: xft:Source Code Pro Medium:size=13
 
 ! disable urxvt perl extensions
-/* URxvt.perl-ext: */
-/* URxvt.perl-ext-common: */
+URxvt.perl-ext:
+URxvt.perl-ext-common:
 
 ! neutralize highlight blue a bit
 ! command to print all colors out
