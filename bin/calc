@@ -8,7 +8,7 @@ Sometimes it fails to parse, and it requires being online, and is slow. I want
 to write a quick script to evaluate such expressions, maybe with some support
 for "!!" (previous result) and "!-N" (N results ago) syntaxes.
 
-NB: use "m\s" in input expressions for units of "meters per second", hack
+NB: use "m\\s" in input expressions for units of "meters per second", hack
 
 TODO:
 - mode to read previous results
