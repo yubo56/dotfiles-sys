@@ -178,12 +178,18 @@ alias rf4g='rsync_from_git exo4 .'
 # search pdfs
 srchp() {
     unset FILES
-    FILES=$(find ~/* -name MESA -prune -false -o -iname $1.pdf 2> /dev/null)
+    FILES=$(find ~/* \
+        -name "Applications" -prune -false -o \
+        -name "Library" -prune -false -o \
+        -name "MESA" -prune -false -o \
+        -name "opt" -prune -false -o \
+        -iname $1.pdf 2> /dev/null)
     if [[ $FILES != '' ]]; then
         if [[ $2 != '--quiet' ]]; then
             echo "Found:\n${FILES}"
         fi
-        zathura "$(head -n 1 - <<< $FILES)"
+        FILE=$(ghead -n 1 <<< $FILES)
+        zathura $FILE 2> /dev/null || open $FILE
     else;
         if [[ $2 != '--quiet' ]]; then
             echo "No files found for pattern \"$1.pdf\""

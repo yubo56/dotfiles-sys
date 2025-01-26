@@ -14,6 +14,7 @@ Supported convention for drawing conventions include:
 #   Solvable: 1362          Total: 1820              Probability: 74.84%
 # (13, 4, 24, deck)
 # Solvable: 0.8046          Total: 1.000             Probability: 80.46%
+import readline
 import numpy as np
 import math
 import random
