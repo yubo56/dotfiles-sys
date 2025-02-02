@@ -15,6 +15,7 @@ if [[ "$(hostname)" =~ ArchTest ]]; then
 else if [[ "$(hostname)" =~ YuboDesktop ]]; then
     export WIFI=wlp8s0
     alias rewin='sudo efibootmgr -n 0 && sudo reboot'
+    alias relin='sudo efibootmgr -n 1 && sudo reboot'
 fi; fi
 
 export _JAVA_AWT_WM_NONREPARENTING=1 # java swing hates dwm
@@ -139,6 +140,11 @@ if [ ! -S /tmp/ssh_auth_sock ]; then
 fi
 export SSH_AUTH_SOCK=/tmp/ssh_auth_sock
 ssh-add -l > /dev/null || ssh-add ~/.ssh/id_rsa
+
+# workaround for archlinux + pip
+if [ $OSTYPE =~ "linux-gnu" ] && [ -e $HOME/venv ]; then
+    source $HOME/venv/bin/activate
+fi
 
 # trigger any venv stuff
 cd .
