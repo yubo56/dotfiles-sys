@@ -35,13 +35,17 @@ if __name__ == '__main__':
 
     os.makedirs(FLDR + '/pdf', exist_ok=True)
 
-    html_contents = requests.get(URL).text
+    html_req = requests.get(URL)
+    print(html_req.status_code)
+    html_contents = html_req.text
 
     arxivsoup = bs(html_contents, 'html.parser')
-    dateline = arxivsoup.find('div', {'class': 'list-dateline'}).text
-    announcedate = dateline.split('announced ')[-1]
-    parseddate = time.strptime(announcedate, '%a, %d %b %y')
-    newdate = time.strftime('%y%m%d', parseddate)
+    ### TODO they removed this div whyyyyyyyyyyy
+    # dateline = arxivsoup.find('div', {'class': 'list-dateline'}).text
+    # announcedate = dateline.split('announced ')[-1]
+    # parseddate = time.strptime(announcedate, '%a, %d %b %y')
+    # newdate = time.strftime('%y%m%d', parseddate)
+    newdate = time.strftime('%y%m%d', time.gmtime())
 
     download_pdfpaths = []
 
@@ -111,5 +115,7 @@ a:visited {
                 pdf_out = requests.get(PDF_URL % pdf_path)
                 with open(pdf_dlpath, 'wb') as f:
                     f.write(pdf_out.content)
+                print('Waiting a bit...')
+                time.sleep(5)
     else:
         print('Skipping Downloads')

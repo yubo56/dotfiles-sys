@@ -14,6 +14,8 @@ Supported convention for drawing conventions include:
 #   Solvable: 1362          Total: 1820              Probability: 74.84%
 # (13, 4, 24, deck)
 # Solvable: 0.8046          Total: 1.000             Probability: 80.46%
+import readline
+import numpy as np
 import math
 import random
 import operator
@@ -45,12 +47,11 @@ def solve(nums, conf):
             for idx, opt in enumerate(OPS):
                 # print(nums, i, j, OP_NAMES[idx]) # debug
                 child_nums = list(nums)
-                try:
-                    child_nums[min(i, j)] = opt(child_nums[i],
-                                                child_nums[j])
-                    child_nums.pop(max(i, j))
-                except ZeroDivisionError:
+                if opt == operator.truediv and child_nums[j] == 0:
                     continue
+                child_nums[min(i, j)] = opt(child_nums[i],
+                                            child_nums[j])
+                child_nums.pop(max(i, j))
 
                 sol, sol_str = solve(child_nums, conf)
                 if sol:
@@ -188,6 +189,27 @@ def solve_game(args, conf):
                   round(count_total, 3),
                   round(100 * count_success / count_total, 2)))
 
+def sim_many_decks(nums, conf):
+    try:
+        N = int(nums[0])
+    except:
+        print('Number decks not specified, defaulting to 100')
+        N = 100
+    deck0 = np.repeat(np.arange(1, conf['max'] + 1), conf['count'])
+    solvable_decks = 0
+    for _ in range(N):
+        deck_i = np.random.permutation(deck0)
+        for i in range(conf['max']):
+            cards = deck_i[conf['count'] * i: conf['count'] * (i + 1)]
+            solvable = solve(cards, conf)[0]
+            if not solvable:
+                # print(cards, solvable)
+                break
+        else:
+            solvable_decks += 1
+    print('Probability = %f: %d decks solved out of %d' %
+          (solvable_decks / N, solvable_decks, N))
+
 def print_help(conf):
     """ print help """
     print('Allowed inputs are:\n' +
@@ -201,7 +223,12 @@ def print_help(conf):
               'arbitrary hand is solvable. Runs with parameters: ' + \
               'n_max: {}, n_numbers {}, target: {}.\n\t\t'\
               .format(conf['max'], conf['count'], conf['target']) + \
-              '[method] is one of "uniform", "scenario", or "deck"')
+              '[method] is one of "uniform", "scenario", or "deck"\n'
+          '\t"deck_prob M" -- simulates M decks to check ' + \
+              'solvability. Runs with parameters: ' + \
+              'n_max: {}, n_numbers {}, target: {}.\n\t\t'\
+              .format(conf['max'], conf['count'], conf['target'])
+          )
 
 def parse_input(nums, conf):
     """ parse the inputted string. Return True if need to exit event loop """
@@ -220,6 +247,8 @@ def parse_input(nums, conf):
         print('Took {} s'.format(round(time.time() - start_time, 2)))
     elif command == 'show' or command.isdigit():
         solve_wrap(command, nums, conf)
+    elif command == 'deck_prob':
+        sim_many_decks(nums, conf)
     else:
         print('Unrecognized command {}'.format(command))
     return False
