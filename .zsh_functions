@@ -183,7 +183,29 @@ srchp() {
         -name "Library" -prune -false -o \
         -name "MESA" -prune -false -o \
         -name "opt" -prune -false -o \
-        -iname $1.pdf 2> /dev/null)
+        -iname *$1*.pdf 2> /dev/null)
+    if [[ $FILES != '' ]]; then
+        if [[ $2 != '--quiet' ]]; then
+            echo "Found:\n${FILES}"
+        fi
+        FILE=$(ghead -n 1 <<< $FILES)
+        zathura $FILE 2> /dev/null || open $FILE
+    else;
+        if [[ $2 != '--quiet' ]]; then
+            echo "No files found for pattern \"$1.pdf\""
+        fi
+    fi
+}
+srchp_quick() {
+    if [ ! -e /tmp/pdf_filelist ]; then
+        find ~/* \
+            -name "Applications" -prune -false -o \
+            -name "Library" -prune -false -o \
+            -name "MESA" -prune -false -o \
+            -name "opt" -prune -false -o \
+            -iname '*.pdf' > /tmp/pdf_filelist
+    fi
+    FILES=$('grep' -i $1 /tmp/pdf_filelist)
     if [[ $FILES != '' ]]; then
         if [[ $2 != '--quiet' ]]; then
             echo "Found:\n${FILES}"
