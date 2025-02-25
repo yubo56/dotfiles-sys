@@ -188,7 +188,7 @@ srchp() {
         if [[ $2 != '--quiet' ]]; then
             echo "Found:\n${FILES}"
         fi
-        FILE=$(ghead -n 1 <<< $FILES)
+        FILE=$(ghead -n 1 <<< $FILES || head -n 1 <<< $FILES)
         zathura $FILE 2> /dev/null || open $FILE
     else;
         if [[ $2 != '--quiet' ]]; then
@@ -210,7 +210,7 @@ srchp_quick() {
         if [[ $2 != '--quiet' ]]; then
             echo "Found:\n${FILES}"
         fi
-        FILE=$(ghead -n 1 <<< $FILES)
+        FILE=$(ghead -n 1 <<< $FILES || head -n 1 <<< $FILES)
         zathura $FILE 2> /dev/null || open $FILE
     else;
         if [[ $2 != '--quiet' ]]; then
