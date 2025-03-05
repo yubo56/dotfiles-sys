@@ -185,15 +185,15 @@ srchp() {
         -name "opt" -prune -false -o \
         -iname *$1*.pdf 2> /dev/null)
     if [[ $FILES != '' ]]; then
-        if [[ $2 != '--quiet' ]]; then
-            echo "Found:\n${FILES}"
-        fi
-        FILE=$(ghead -n 1 <<< $FILES)
+        # if [[ $2 != '--quiet' ]]; then
+        #     echo "Found:\n${FILES}"
+        # fi
+        FILE=$(ghead -n ${2-1} <<< $FILES| tail -n 1)
         zathura $FILE 2> /dev/null || open $FILE
     else;
-        if [[ $2 != '--quiet' ]]; then
-            echo "No files found for pattern \"$1.pdf\""
-        fi
+        # if [[ $2 != '--quiet' ]]; then
+        #     echo "No files found for pattern \"$1.pdf\""
+        # fi
     fi
 }
 srchp_quick() {
@@ -207,15 +207,15 @@ srchp_quick() {
     fi
     FILES=$('grep' -i $1 /tmp/pdf_filelist)
     if [[ $FILES != '' ]]; then
-        if [[ $2 != '--quiet' ]]; then
-            echo "Found:\n${FILES}"
-        fi
-        FILE=$(ghead -n 1 <<< $FILES)
+        # if [[ $2 != '--quiet' ]]; then
+        #     echo "Found:\n${FILES}"
+        # fi
+        FILE=$(ghead -n ${2-1} <<< $FILES | tail -n 1)
         zathura $FILE 2> /dev/null || open $FILE
     else;
-        if [[ $2 != '--quiet' ]]; then
-            echo "No files found for pattern \"$1.pdf\""
-        fi
+        # if [[ $2 != '--quiet' ]]; then
+        #     echo "No files found for pattern \"$1.pdf\""
+        # fi
     fi
 }
 
