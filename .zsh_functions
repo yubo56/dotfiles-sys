@@ -185,9 +185,7 @@ srchp() {
         -name "opt" -prune -false -o \
         -iname *$1*.pdf 2> /dev/null)
     if [[ $FILES != '' ]]; then
-        # if [[ $2 != '--quiet' ]]; then
-        #     echo "Found:\n${FILES}"
-        # fi
+        echo "Found:\n${FILES}"
         FILE=$(ghead -n ${2-1} <<< $FILES| tail -n 1)
         zathura $FILE 2> /dev/null || open $FILE
     else;
@@ -207,9 +205,7 @@ srchp_quick() {
     fi
     FILES=$('grep' -i $1 /tmp/pdf_filelist)
     if [[ $FILES != '' ]]; then
-        # if [[ $2 != '--quiet' ]]; then
-        #     echo "Found:\n${FILES}"
-        # fi
+        echo "Found:\n${FILES}"
         FILE=$(ghead -n ${2-1} <<< $FILES | tail -n 1)
         zathura $FILE 2> /dev/null || open $FILE
     else;
