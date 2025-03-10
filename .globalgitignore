@@ -21,6 +21,7 @@
 *.ind
 *.lof
 *.log
+*.err
 *.lot
 *.toc
 *.nlo
