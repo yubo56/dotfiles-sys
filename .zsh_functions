@@ -231,7 +231,7 @@ ys_scroll() {
 }
 
 rename_mac() {
-    for i in $(find . -iname *$1*); do
-        echo $i $(sed "s/$1/$2/g" <<< $i)
+    for i in $(find . -iname $3); do
+        mv $i $(sed "s/$1/$2/g" <<< $i)
     done
 }
