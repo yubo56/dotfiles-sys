@@ -176,24 +176,25 @@ alias rt4g='rsync_to_git . exo4'
 alias rf4g='rsync_from_git exo4 .'
 
 # search pdfs
+# srchp() {
+#     unset FILES
+#     FILES=$(find ~/* \
+#         -name "Applications" -prune -false -o \
+#         -name "Library" -prune -false -o \
+#         -name "MESA" -prune -false -o \
+#         -name "opt" -prune -false -o \
+#         -iname *$1*.pdf 2> /dev/null)
+#     if [[ $FILES != '' ]]; then
+#         echo "Found:\n${FILES}"
+#         FILE=$(sed "${2-1}q;d" <<< $FILES)
+#         zathura $FILE 2> /dev/null || open $FILE
+#     else;
+#         echo "No files found for pattern \"$1.pdf\""
+#     fi
+# }
 srchp() {
-    unset FILES
-    FILES=$(find ~/* \
-        -name "Applications" -prune -false -o \
-        -name "Library" -prune -false -o \
-        -name "MESA" -prune -false -o \
-        -name "opt" -prune -false -o \
-        -iname *$1*.pdf 2> /dev/null)
-    if [[ $FILES != '' ]]; then
-        echo "Found:\n${FILES}"
-        FILE=$(sed "${2-1}q;d" <<< $FILES)
-        zathura $FILE 2> /dev/null || open $FILE
-    else;
-        echo "No files found for pattern \"$1.pdf\""
-    fi
-}
-srchp_quick() {
     if [ ! -e /tmp/pdf_filelist ]; then
+        echo 'searching...'
         find ~/* \
             -name "Applications" -prune -false -o \
             -name "Library" -prune -false -o \
@@ -203,7 +204,12 @@ srchp_quick() {
     fi
     FILES=$('grep' -i $1 /tmp/pdf_filelist)
     if [[ $FILES != '' ]]; then
-        echo "Found:\n${FILES}"
+        echo "Found:"
+        let i=1
+        while IFS= read -r l; do
+            echo "\t$i - $l"
+            let i=$i+1
+        done <<< "${FILES}"
         FILE=$(sed "${2-1}q;d" <<< $FILES)
         zathura $FILE 2> /dev/null || open $FILE
     else;
