@@ -33,7 +33,6 @@ xcompmgr -o.00 &
 xscreensaver -nosplash &
 goldendict &
 redshift&
-ibus-daemon -drx
 
 ## various system settings
 setxkbmap us -variant dvorak
@@ -42,13 +41,16 @@ dconf load / < .dconf
 xset r rate 150 60 && xset -dpms && xset s off
 xrdb ~/.Xresources
 
+# seems like need to start ibus after X server launches
+# ibus-daemon -drx
+
 ## statusbar stuff
 statusLoop
 dwm_rebg
 
 # try to enable bluetooth
-bluetoothctl power on || :
+# bluetoothctl power on || :
 # try to start ultimate remote server
-(/opt/urserver/urserver-start --no-manager || :) &!
+# (/opt/urserver/urserver-start --no-manager || :) &!
 
 exec dwmalt

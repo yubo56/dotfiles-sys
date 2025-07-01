@@ -143,11 +143,6 @@ ssh-add -l > /dev/null || ssh-add ~/.ssh/id_rsa
 # trigger any venv stuff
 cd .
 
-# workaround for archlinux + pip
-if [ $OSTYPE =~ "linux-gnu" ] && [ -e $HOME/venv ]; then
-    source $HOME/venv/bin/activate
-fi
-
 # colors
 # black | 0
 # red | 1

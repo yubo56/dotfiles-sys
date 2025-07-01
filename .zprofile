@@ -7,5 +7,3 @@
 if [ -f ~/.zsh_aliases ]; then
     . ~/.zsh_aliases
 fi
-
-[[ -f /usr/share/nvm/init-nvm.sh ]] && source /usr/share/nvm/init-nvm.sh
