@@ -1,12 +1,7 @@
 #! /bin/bash
 . ~/.shell_envs
-curr=`cat $brightfile`
-if [[ "$(hostname)" == ArchTest ]] || [[ $curr < 30 ]]; then
-    inc=3
-else
-    inc=30
-fi
 
+curr=`cat $brightfile`
 new=`echo "$curr-$inc" | 'bc'`
 new=$( (( $new >= $inc)) && echo $new || echo $inc)
 echo $new | sudo tee $brightfile > /dev/null

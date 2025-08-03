@@ -9,13 +9,7 @@
 # global exports
 export LC_ALL=C
 export HOMEBREW_NO_AUTO_UPDATE=1
-if [[ "$(hostname)" =~ ArchTest ]]; then
-    export WIFI=wlp7s0
-    alias rewin='sudo efibootmgr -n 1 && sudo reboot'
-else if [[ "$(hostname)" =~ YuboDesktop ]]; then
-    export WIFI=wlp8s0
-    alias rewin='sudo efibootmgr -n 0 && sudo reboot'
-fi; fi
+. ~/.shell_envs
 
 export _JAVA_AWT_WM_NONREPARENTING=1 # java swing hates dwm
 export PYTHONUNBUFFERED=1

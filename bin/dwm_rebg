@@ -3,7 +3,7 @@
 # feh --bg-max --no-fehbg -Z ~/single_walls/gaia_allsky.jpg
 # feh --bg-fill --no-fehbg -Z ~/single_walls/kipchoge_berlin.jpg
 
-if [[ $(hostname) == exo15c ]]; then
+if [[ $(hostnamectl hostname) == exo15c ]]; then
     feh --no-fehbg --bg-max ~/tmp/gaia_vert.jpg ~/single_walls/gaia_allsky.jpg
 # if has three screens
 else if [[ $(xrandr | 'grep' -w connected | wc -l) == '3' ]]; then
