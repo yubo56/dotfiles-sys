@@ -1,7 +1,11 @@
 #! /bin/zsh
-abcd=$(synclient | grep TouchpadOff)
-if [[ $abcd =~ '0' ]]; then
-    synclient TouchpadOff=1
+. ~/.shell_envs
+abcd=$(xinput list-props $xinput_touchpad_idx | grep 'Device Enabled')
+echo $abcd
+if [[ $abcd =~ ':.*0' ]]; then
+    echo 'enabling'
+    xinput enable $xinput_touchpad_idx
 else
-    synclient TouchpadOff=0
+    echo 'disabling'
+    xinput disable $xinput_touchpad_idx
 fi

@@ -17,4 +17,5 @@ else if [[ "$(hostnamectl hostname)" =~ YuboAcer ]]; then
     export brightfile='/sys/class/backlight/amdgpu_bl1/brightness'
     export brightmax='/sys/class/backlight/amdgpu_bl1/max_brightness'
     export inc=600
+    export xinput_touchpad_idx=9
 fi; fi; fi

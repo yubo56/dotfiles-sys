@@ -3,11 +3,11 @@
 # amixer sets return the current Master via stddout
 
 if [[ $1 == 'up' ]]; then
-    amixermaster=$(amixer set Master '1%+')
+    amixermaster=$(amixer -D pulse set Master '1%+')
 fi
 
 if [[ $1 == 'down' ]]; then
-    amixermaster=$(amixer set Master '1%-')
+    amixermaster=$(amixer -D pulse set Master '1%-')
 fi
 
 if [[ $1 == 'toggle' ]]; then
