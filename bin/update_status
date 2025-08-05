@@ -43,4 +43,4 @@ fi
 #-------------------------------------------------------SET REPLY--------------------------------------------
 REPLY="$(cat /tmp/status)${sep}${vol}${bright}${weather}${batttime}"
 
-xsetroot -name "${REPLY} $(/home/yssu/bin/dateWeek)$(date +'%m/%d/%y %H:%M:%S.%1N')$suffix"
+xsetroot -name "${REPLY} $(/home/yssu/bin/dateWeek)$(date +'%m/%d %H:%M:%S.%1N')$suffix"

@@ -73,7 +73,10 @@ while true; do
         xrandr --output HDMI-1 --auto --left-of VGA-1 --output VGA-1 --auto --rotate left
     else if [[ "$(hostnamectl hostname)" == YuboDesktop ]]; then
         xrandr --output HDMI-1 --auto --right-of DP-3 --rotate left
-    fi; fi; fi; fi
+    else if [[ "$(hostnamectl hostname)" == YuboAcer ]]; then
+        xrandr --output HDMI-1 --auto --left-of eDP-1
+        dwm_rebg
+    fi; fi; fi; fi; fi
 
     #--------------------------------------------------------CALCULATE CPU USAGE----------------------------------------
     cpustat=`cat /proc/stat | head -n 1`
