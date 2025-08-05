@@ -97,13 +97,10 @@ while true; do
 
     #---------------------------------------------------------- TEMPERATURE ----------------------------------------------------------
     temp=""
-    if [[ -a /sys/devices/platform/coretemp.0 ]]; then
-        currtemp=$(printf "%02d" $(( $(cat /sys/devices/platform/coretemp.0/hwmon/hwmon*/temp1_input) / 1000 )))
+    if [[ -a $temp_file ]]; then
+        currtemp=$(printf "%02d" $(( $(cat $temp_file) / 1000 )))
         temp="(${currtemp})"
-    else if [[ -a /sys/devices/platform/nct6775.656 ]]; then
-        currtemp=$(printf "%.1f" $(( $(cat /sys/devices/platform/nct6775.656/hwmon/hwmon*/temp2_input) / 1000.0 )))
-        temp="(${currtemp})"
-    fi; fi
+    fi
 
     #-------------------------------------------------------MEMSTATS--------------------------------------------
     total=$(cat /proc/meminfo | sed -nE 's/MemTotal:\s+(.*) kB/\1/p')
@@ -124,13 +121,15 @@ while true; do
         read _battstat < $_battdir/status
         battstat=${_battstat:0:1}
         battperc=$(printf '%.1f' $(( 100.0 * $(cat $_battdir/energy_now)/$(cat $_battdir/energy_full) )))
-        batthealth=$(printf '%.1f' $(( 100.0 * $(cat $_battdir/energy_full)/$(cat $_battdir/energy_full_design) )))
+        # display discharge time on battery, else battery health
         # assume actually on battery power if discharging & battperc < 95
         # (sensor sometimes declares discharging when nearly full)
         if [[ $battstat = 'D' ]] && (( $battperc < 95 )); then
-            batttime="${sep}$(acpi -b | awk '{print $5}' | head -n 1)"
+            battdisplay="$(acpi -b | awk '{print $5}' | head -n 1)"
+        else
+            battdisplay=$(printf '%.1f' $(( 100.0 * $(cat $_battdir/energy_full)/$(cat $_battdir/energy_full_design) )))
         fi
-        battAll="${sep}$battperc$battstat($batthealth$batttime)"
+        battAll="${sep}$battperc$battstat($battdisplay)"
     fi
 
     #---------------------------------------------------------- SIGNAL STRENGTH QUALITY/LEVEL -----------------------------------------

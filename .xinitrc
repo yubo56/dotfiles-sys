@@ -53,4 +53,7 @@ dwm_rebg
 # try to start ultimate remote server
 # (/opt/urserver/urserver-start --no-manager || :) &!
 
+gsettings set org.gnome.desktop.peripherals.touchpad disable-while-typing false
+gsettings set org.gnome.desktop.peripherals.mouse double-click 100
+
 exec dwmalt
