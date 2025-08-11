@@ -2,8 +2,6 @@
 
 if [[ "$(hostnamectl hostname)" =~ ArchTest ]]; then
     echo "disable" | sudo tee /sys/firmware/acpi/interrupts/gpe61
-    synclient TouchpadOff=1
-    synclient TapButton1=1
     xrandr --output HDMI1 --auto --left-of eDP1
 else if [[ "$(hostnamectl hostname)" =~ BlendArch ]]; then
     xrandr\
@@ -56,4 +54,5 @@ dwm_rebg
 gsettings set org.gnome.desktop.peripherals.touchpad disable-while-typing false
 gsettings set org.gnome.desktop.peripherals.mouse double-click 100
 
+# sudo cryptsetup open /dev/sdb2 root && sudo mount /dev/mapper/root /mnt
 exec dwmalt
