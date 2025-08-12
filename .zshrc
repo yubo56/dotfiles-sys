@@ -13,6 +13,7 @@ export HOMEBREW_NO_AUTO_UPDATE=1
 
 export _JAVA_AWT_WM_NONREPARENTING=1 # java swing hates dwm
 export PYTHONUNBUFFERED=1
+export OPENBLAS_NUM_THREADS=2
 
 # config options
 unsetopt beep nomatch notify
