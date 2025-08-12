@@ -1,4 +1,5 @@
 #! /bin/zsh
+. ~/.shell_envs
 while true; do
     #------------------------------------------------------IF ONLINE----------------------------------------------------------------
     if [[ "$(ip link | grep 'enp.s0' | grep ' UP ')" != "" || "$(iw dev $WIFI link 2> /dev/null | grep "Connected")" != "" ]]; then
@@ -68,7 +69,7 @@ while true; do
             fi; fi; fi
         fi
     else if [[ "$(hostnamectl hostname)" == ArchTest ]]; then
-        xrandr --output HDMI1 --auto --left-of eDP1
+        xrandr --output HDMI1 --mode 1920x1080 --left-of eDP1
     else if [[ "$(hostnamectl hostname)" =~ exo15c ]]; then
         xrandr --output HDMI-1 --auto --left-of VGA-1 --output VGA-1 --auto --rotate left
     else if [[ "$(hostnamectl hostname)" == YuboDesktop ]]; then
@@ -123,14 +124,14 @@ while true; do
     if [[ -e $_battdir/status ]]; then
         read _battstat < $_battdir/status
         battstat=${_battstat:0:1}
-        battperc=$(printf '%.1f' $(( 100.0 * $(cat $_battdir/energy_now)/$(cat $_battdir/energy_full) )))
+        battperc=$(printf '%.1f' $(( 100.0 * $(cat $_battdir/${_battname}_now)/$(cat $_battdir/${_battname}_full) )))
         # display discharge time on battery, else battery health
         # assume actually on battery power if discharging & battperc < 95
         # (sensor sometimes declares discharging when nearly full)
         if [[ $battstat = 'D' ]] && (( $battperc < 95 )); then
             battdisplay="$(acpi -b | awk '{print $5}' | head -n 1)"
         else
-            battdisplay=$(printf '%.1f' $(( 100.0 * $(cat $_battdir/energy_full)/$(cat $_battdir/energy_full_design) )))
+            battdisplay=$(printf '%.1f' $(( 100.0 * $(cat $_battdir/${_battname}_full)/$(cat $_battdir/${_battname}_full_design) )))
         fi
         battAll="${sep}$battperc$battstat($battdisplay)"
     fi

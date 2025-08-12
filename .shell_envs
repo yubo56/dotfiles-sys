@@ -6,6 +6,8 @@ if [[ "$(hostnamectl hostname)" =~ ArchTest ]]; then
     export brightmax='/sys/class/backlight/intel_backlight/max_brightness'
     # brightness increment
     export inc=3
+    export _battname='charge'
+    export temp_file=/sys/devices/platform/coretemp.0/hwmon/hwmon4/temp1_input
 else if [[ "$(hostnamectl hostname)" =~ YuboDesktop ]]; then
     export WIFI=wlp8s0
     alias rewin='sudo efibootmgr -n 0 && sudo reboot'
@@ -18,5 +20,6 @@ else if [[ "$(hostnamectl hostname)" =~ YuboAcer ]]; then
     export brightmax='/sys/class/backlight/amdgpu_bl1/max_brightness'
     export inc=600
     export xinput_touchpad_idx=9
+    export _battname='energy'
     export temp_file=/sys/devices/pci0000:00/0000:00:18.3/hwmon/hwmon4/temp1_input
 fi; fi; fi
