@@ -4,7 +4,9 @@
 if xmodmap -pke | grep ' 9 = Escape' 2> /dev/null; then
     xmodmap -e 'keycode 9 = grave asciitilde grave asciitilde'
     xmodmap -e 'keycode 49 = Escape Escape'
+    xmodmap -e 'keycode 41 = u U grave asciitilde'
 else
     xmodmap -e 'keycode 49 = grave asciitilde grave asciitilde'
     xmodmap -e 'keycode 9 = Escape Escape'
+    xmodmap -e 'keycode 41 = u U Escape'
 fi

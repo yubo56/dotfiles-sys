@@ -10,3 +10,4 @@ else
 fi
 
 xset r rate 150 60
+mouseaccel

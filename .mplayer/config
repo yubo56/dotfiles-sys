@@ -2,3 +2,4 @@
 osdlevel=3
 fs=1
 af=scaletempo
+ao=pulse
