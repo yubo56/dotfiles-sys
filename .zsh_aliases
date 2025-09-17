@@ -46,6 +46,7 @@ alias reconn='sudo pkill wpa_supplicant; sleep 0.2s; sudo wpa_supplicant -i$WIFI
 alias unwlo1='sudo ip link set $WIFI down'
 alias rewlo1='sudo ip link set $WIFI down && sudo ip link set $WIFI up'
 alias reeno1='sudo modprobe -r r8169; sleep .1s; sudo modprobe r8169'
+alias redhcpcd='sudo pkill dhcpcd; sleep 0.2s; sudo dhcpcd -B'
 
 #alias pacrank='sudo rankmirrors /etc/pacman.d/mirrorlist.backup | sudo tee /etc/pacman.d/mirrorlist'
 
