@@ -19,7 +19,7 @@ while true; do
 done &
 
 sep='|'
-refresh_interval=1 # cpu usage is averaged over 2 such intervals
+refresh_interval=2 # cpu usage is averaged over 2 such intervals
 
 DP1_val='disconnected'
 HDMI1_val='disconnected'
