@@ -99,7 +99,7 @@ while true; do
     if [[ -e $_battdir/status ]]; then
         read _battstat < $_battdir/status
         battstat=${_battstat:0:1}
-        battperc=$(printf '%.1f' $(( 100.0 * $(cat $_battdir/${_battname}_now)/$(cat $_battdir/${_battname}_full) )))
+        battperc=$(printf '%d' $(( 100.0 * $(cat $_battdir/${_battname}_now)/$(cat $_battdir/${_battname}_full) )))
         # display discharge time on battery, else battery health
         # assume actually on battery power if discharging & battperc < 95
         # (sensor sometimes declares discharging when nearly full)
