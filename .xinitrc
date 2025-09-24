@@ -19,8 +19,6 @@ xcompmgr -o.00 &
 
 #-----------------------------------------------------------AUTOSTART-----------------------------------------------
 xscreensaver -nosplash &
-goldendict &
-redshift&
 
 ## various system settings
 setxkbmap us -variant dvorak
@@ -44,5 +42,4 @@ statusLoop
 gsettings set org.gnome.desktop.peripherals.touchpad disable-while-typing false
 gsettings set org.gnome.desktop.peripherals.mouse double-click 100
 
-# sudo cryptsetup open /dev/sdb2 root && sudo mount /dev/mapper/root /mnt
 exec dwmalt
