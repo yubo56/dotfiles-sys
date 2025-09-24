@@ -34,7 +34,7 @@ xrdb ~/.Xresources
 
 ## statusbar stuff
 statusLoop
-dwm_rebg
+# dwm_rebg
 
 # try to enable bluetooth
 # bluetoothctl power on || :

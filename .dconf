@@ -1,16 +1,7 @@
 [desktop/ibus/general]
-engines-order=['xkb:us:dvorak:eng', 'hangul', 'rime']
+engines-order=['xkb:us:dvorak:eng', 'rime']
 use-system-keyboard-layout=true
-preload-engines=['xkb:us:dvorak:eng', 'rime', 'hangul']
-version='1.5.14'
+preload-engines=['xkb:us:dvorak:eng', 'rime']
 
 [desktop/ibus/general/hotkey]
 triggers=['<Control>space']
-
-[desktop/ibus/engine/hangul]
-word-commit=false
-auto-reorder=true
-hanja-keys='Hangul_Hanja,F9'
-hangul-keyboard='2'
-initial-input-mode='hangul'
-switch-keys='Alt_R'
