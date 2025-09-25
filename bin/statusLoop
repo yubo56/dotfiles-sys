@@ -19,7 +19,7 @@ while true; do
 done &
 
 sep='|'
-refresh_interval=2 # cpu usage is averaged over 2 such intervals
+refresh_interval=1 # cpu usage is averaged over 2 such intervals
 
 DP1_val='disconnected'
 HDMI1_val='disconnected'
@@ -89,7 +89,7 @@ while true; do
     #------------------------------------ PING ----------------------------------------
     pingMS=$(ping 8.8.8.8 -c 1 -W 0.7 2> /dev/null | sed -nE 's/.*time=([^ ]+) ms/\1/p')
     if [[ -n ${pingMS} ]]; then
-        pingstat="$(printf '%04.1f' ${pingMS})"
+        pingstat="$(printf '%05.1f' ${pingMS})"
     else
         pingstat="(!!)"
     fi
