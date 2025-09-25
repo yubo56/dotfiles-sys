@@ -8,7 +8,7 @@ if [[ $(hostnamectl hostname) == exo15c ]]; then
 # if has three screens
 else if [[ $(xrandr | 'grep' -w connected | wc -l) == '3' ]]; then
     feh --no-fehbg --bg-max ~/single_walls/gaia_allsky.jpg ~/tmp/gaia_vert.jpg ~/single_walls/gaia_allsky.jpg
-else if [[ $(xrandr | 'grep' x2560 | wc -l) == '1' ]]; then
+else if [[ $(xrandr | 'grep' x1920 | wc -l) == '1' ]]; then
     feh --no-fehbg --bg-max ~/single_walls/gaia_allsky.jpg ~/tmp/gaia_vert.jpg
 else if [[ $(xrandr | 'grep' x1920 | wc -l) == '1' ]]; then
     feh --no-fehbg --bg-max ~/single_walls/gaia_allsky.jpg ~/tmp/gaia_vert.jpg
