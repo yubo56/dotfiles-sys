@@ -11302,7 +11302,7 @@
 
 @article{poon2024_obl,
 	author = {{Poon}, Michael and {Bryan}, Marta L. and {Rein}, Hanno and {Morley}, Caroline V. and {Mace}, Gregory and {Zhou}, Yifan and {Bowler}, Brendan P.},
-	title = {{Leaning Sideways: VHS 1256â€‘1257 b is a Super-Jupiter with a Uranus-like Obliquity}},
+	title = {{Leaning Sideways: VHS 1256-1257 b is a Super-Jupiter with a Uranus-like Obliquity}},
 	journal = {\aj},
 	keywords = {Astrostatistics, High resolution spectroscopy, Exoplanet evolution, Exoplanet formation, Exoplanet systems, 1882, 2096, 491, 492, 484, Astrophysics - Earth and Planetary Astrophysics, Astrophysics - Solar and Stellar Astrophysics},
 	year = {2024},
@@ -11449,59 +11449,635 @@
 	url = {https://doi.org/10.1007/978-3-642-61232-9_4}
 }
 
-@ARTICLE{desurgy1997_ctides,
-       author = {{Neron de Surgy}, O. and {Laskar}, J.},
-        title = "{On the long term evolution of the spin of the Earth.}",
-      journal = {\aap},
-     keywords = {EARTH, CHAOS, INSTABILITIES, CELESTIAL MECHANICS},
-         year = 1997,
-        month = feb,
-       volume = {318},
-        pages = {975-989},
-       adsurl = {https://ui.adsabs.harvard.edu/abs/1997A&A...318..975N},
-      adsnote = {Provided by the SAO/NASA Astrophysics Data System}
+
+@article{desurgy1997_ctides,
+	author = {{Neron de Surgy}, O. and {Laskar}, J.},
+	title = {{On the long term evolution of the spin of the Earth.}},
+	journal = {\aap},
+	keywords = {EARTH, CHAOS, INSTABILITIES, CELESTIAL MECHANICS},
+	year = {1997},
+	month = {feb},
+	volume = {318},
+	pages = {975-989},
+	adsurl = {https://ui.adsabs.harvard.edu/abs/1997A&A...318..975N},
+	adsnote = {Provided by the SAO/NASA Astrophysics Data System}
 }
 
-@ARTICLE{touma1994_ctides,
-       author = {{Touma}, Jihad and {Wisdom}, Jack},
-        title = "{Evolution of the Earth-Moon System}",
-      journal = {\aj},
-     keywords = {Astronomical Models, Dynamic Models, Earth Tides, Earth-Moon System, Lunar Orbits, Lunar Tides, Orbit Perturbation, Planetary Evolution, Solar Orbits, Equations Of Motion, Hamiltonian Functions, Mathematical Models, Astrophysics, EARTH, MOON},
-         year = 1994,
-        month = nov,
-       volume = {108},
-        pages = {1943},
-          doi = {10.1086/117209},
-       adsurl = {https://ui.adsabs.harvard.edu/abs/1994AJ....108.1943T},
-      adsnote = {Provided by the SAO/NASA Astrophysics Data System}
+
+@article{touma1994_ctides,
+	author = {{Touma}, Jihad and {Wisdom}, Jack},
+	title = {{Evolution of the Earth-Moon System}},
+	journal = {\aj},
+	keywords = {Astronomical Models, Dynamic Models, Earth Tides, Earth-Moon System, Lunar Orbits, Lunar Tides, Orbit Perturbation, Planetary Evolution, Solar Orbits, Equations Of Motion, Hamiltonian Functions, Mathematical Models, Astrophysics, EARTH, MOON},
+	year = {1994},
+	month = {nov},
+	volume = {108},
+	pages = {1943},
+	doi = {10.1086/117209},
+	adsurl = {https://ui.adsabs.harvard.edu/abs/1994AJ....108.1943T},
+	adsnote = {Provided by the SAO/NASA Astrophysics Data System}
 }
 
-@ARTICLE{goldreich1966_moon,
-       author = {{Goldreich}, Peter},
-        title = "{History of the Lunar Orbit}",
-      journal = {Reviews of Geophysics and Space Physics},
-         year = 1966,
-        month = jan,
-       volume = {4},
-        pages = {411-439},
-          doi = {10.1029/RG004i004p00411},
-       adsurl = {https://ui.adsabs.harvard.edu/abs/1966RvGSP...4..411G},
-      adsnote = {Provided by the SAO/NASA Astrophysics Data System}
+
+@article{goldreich1966_moon,
+	author = {{Goldreich}, Peter},
+	title = {{History of the Lunar Orbit}},
+	journal = {Reviews of Geophysics and Space Physics},
+	year = {1966},
+	month = {jan},
+	volume = {4},
+	pages = {411-439},
+	doi = {10.1029/RG004i004p00411},
+	adsurl = {https://ui.adsabs.harvard.edu/abs/1966RvGSP...4..411G},
+	adsnote = {Provided by the SAO/NASA Astrophysics Data System}
 }
 
 
 @article{boekhold2023_tidymess,
-    author = {Boekholt, Tjarda C N and Correia, Alexandre C M},
-    title = {A direct N-body integrator for modelling the chaotic, tidal dynamics of multibody extrasolar systems: TIDYMESS},
-    journal = {Monthly Notices of the Royal Astronomical Society},
-    volume = {522},
-    number = {2},
-    pages = {2885-2900},
-    year = {2023},
-    month = {04},
-    abstract = {Tidal dissipation plays an important role in the dynamical evolution of moons, planets, stars, and compact remnants. The interesting complexity originates from the interplay between the internal structure and external tidal forcing. Recent and upcoming observing missions of exoplanets and stars in the galaxy help to provide constraints on the physics of tidal dissipation. It is timely to develop new N-body codes, which allow for experimentation with various tidal models and numerical implementations. We present the open-source N-body code TIDYMESS, which stands for âTIdal DYnamics of Multibody ExtraSolar Systemsâ. This code implements a Creep deformation law for the bodies, parametrized by their fluid Love numbers and fluid relaxation times. Due to tidal and centrifugal deformations, we approximate the general shape of a body to be an ellipsoid. We calculate the associated gravitational field to quadruple order, from which we derive the gravitational accelerations and torques. The equationsÂ of motion for the orbits, spins and deformations are integrated directly using a fourth-order integration method based on a symplectic composition. We implement a novel integration method for the deformations, which allows for a time-step solely dependent on the orbits, and not on the spin periods or fluid relaxation times. This feature greatly speeds up the calculations, while also improving the consistency when comparing different tidal regimes. We demonstrate the capabilities and performance of TIDYMESS, particularly in the niche regime of parameter space where orbits are chaotic and tides become non-linear.},
-    issn = {0035-8711},
-    doi = {10.1093/mnras/stad1133},
-    url = {https://doi.org/10.1093/mnras/stad1133},
-    eprint = {https://academic.oup.com/mnras/article-pdf/522/2/2885/56454193/stad1133.pdf},
+	author = {Boekholt, Tjarda C N and Correia, Alexandre C M},
+	title = {A direct N-body integrator for modelling the chaotic, tidal dynamics of multibody extrasolar systems: TIDYMESS},
+	journal = {Monthly Notices of the Royal Astronomical Society},
+	volume = {522},
+	number = {2},
+	pages = {2885-2900},
+	year = {2023},
+	month = {04},
+	issn = {0035-8711},
+	doi = {10.1093/mnras/stad1133},
+	url = {https://doi.org/10.1093/mnras/stad1133},
+	eprint = {https://academic.oup.com/mnras/article-pdf/522/2/2885/56454193/stad1133.pdf}
+}
+
+
+@article{iess2019measurement,
+	title = {Measurement and implications of Saturn's gravity field and ring mass},
+	author = {Iess, L and Militzer, B and Kaspi, Y and Nicholson, P and Durante, D and Racioppa, P and Anabtawi, A and Galanti, E and Hubbard, W and Mariani, MJ and others},
+	journal = {Science},
+	volume = {364},
+	number = {6445},
+	pages = {eaat2965},
+	year = {2019},
+	publisher = {American Association for the Advancement of Science}
+}
+
+
+@article{galanti2019saturn,
+	title = {Saturn's deep atmospheric flows revealed by the Cassini grand finale gravity measurements},
+	author = {Galanti, Eli and Kaspi, Yohai and Miguel, Yamila and Guillot, Tristan and Durante, Daniele and Racioppa, Paolo and Iess, Luciano},
+	journal = {Geophysical Research Letters},
+	volume = {46},
+	number = {2},
+	pages = {616--624},
+	year = {2019},
+	publisher = {Wiley Online Library}
+}
+
+
+@article{galanti2021combined,
+	title = {Combined magnetic and gravity measurements probe the deep zonal flows of the gas giants},
+	author = {Galanti, Eli and Kaspi, Yohai},
+	journal = {Monthly Notices of the Royal Astronomical Society},
+	volume = {501},
+	number = {2},
+	pages = {2352--2362},
+	year = {2021},
+	publisher = {Oxford University Press}
+}
+
+
+@article{iess2018measurement,
+	title = {Measurement of Jupiter's asymmetric gravity field},
+	author = {Iess, Luciano and Folkner, WM and Durante, D and Parisi, M and Kaspi, Y and Galanti, E and Guillot, Tristan and Hubbard, WB and Stevenson, DJ and Anderson, JD and others},
+	journal = {Nature},
+	volume = {555},
+	number = {7695},
+	pages = {220--222},
+	year = {2018},
+	publisher = {Nature Publishing Group UK London}
+}
+
+
+@article{jacobson2000comprehensive,
+	title = {A comprehensive orbit reconstruction for the Galileo prime mission in the J2000 system},
+	author = {Jacobson, RA and Haw, RJ and McElrath, TP and Antreasian, PG},
+	journal = {The Journal of the Astronautical Sciences},
+	volume = {48},
+	pages = {495--516},
+	year = {2000},
+	publisher = {Springer}
+}
+
+
+@article{kaspi2013inferring,
+	title = {Inferring the depth of the zonal jets on Jupiter and Saturn from odd gravity harmonics},
+	author = {Kaspi, Yohai},
+	journal = {Geophysical research letters},
+	volume = {40},
+	number = {4},
+	pages = {676--680},
+	year = {2013},
+	publisher = {Wiley Online Library}
+}
+
+
+@article{bolton2017jupiter,
+	title = {Jupiter's interior and deep atmosphere: The initial pole-to-pole passes with the Juno spacecraft},
+	author = {Bolton, Scott J and Adriani, Alberto and Adumitroaie, V and Allison, M and Anderson, J and Atreya, S and Bloxham, J and Brown, Shani and Connerney, JEP and DeJong, E and others},
+	journal = {Science},
+	volume = {356},
+	number = {6340},
+	pages = {821--825},
+	year = {2017},
+	publisher = {American Association for the Advancement of Science}
+}
+
+
+@article{folkner2017jupiter,
+	title = {Jupiter gravity field estimated from the first two Juno orbits},
+	author = {Folkner, WM and Iess, L and Anderson, JD and Asmar, SW and Buccino, DR and Durante, D and Feldman, M and Gomez Casajus, L and Gregnanin, M and Milani, A and others},
+	journal = {Geophysical Research Letters},
+	volume = {44},
+	number = {10},
+	pages = {4694--4700},
+	year = {2017},
+	publisher = {Wiley Online Library}
+}
+
+
+@article{debras2019new,
+	title = {New models of Jupiter in the context of Juno and Galileo},
+	author = {Debras, Florian and Chabrier, Gilles},
+	journal = {The Astrophysical Journal},
+	volume = {872},
+	number = {1},
+	pages = {100},
+	year = {2019},
+	publisher = {IOP Publishing}
+}
+
+
+@article{kaspi2018jupiter,
+	title = {Jupiter's atmospheric jet streams extend thousands of kilometres deep},
+	author = {Kaspi, Y and Galanti, E and Hubbard, William B and Stevenson, DJ and Bolton, SJ and Iess, L and Guillot, T and Bloxham, J and Connerney, JEP and Cao, H and others},
+	journal = {Nature},
+	volume = {555},
+	number = {7695},
+	pages = {223--226},
+	year = {2018},
+	publisher = {Nature Publishing Group UK London}
+}
+
+
+@article{stevenson2020jupiter,
+	title = {Jupiter's interior as revealed by Juno},
+	author = {Stevenson, David J},
+	journal = {Annual Review of Earth and Planetary Sciences},
+	volume = {48},
+	pages = {465--489},
+	year = {2020},
+	publisher = {Annual Reviews}
+}
+
+
+@article{howard2022accounting,
+	title = {Accounting for non-ideal mixing effects in the hydrogen-helium equation of state},
+	author = {Howard, Saburo and Guillot, Tristan},
+	journal = {Astron. Astrophys},
+	year = {2022}
+}
+
+
+@article{wahl2017comparing,
+	title = {Comparing Jupiter interior structure models to Juno gravity measurements and the role of a dilute core},
+	author = {Wahl, Sean M and Hubbard, William B and Militzer, Burkhard and Guillot, Tristan and Miguel, Yamila and Movshovitz, N and Kaspi, Yohai and Helled, R and Reese, D and Galanti, Eli and others},
+	journal = {Geophysical Research Letters},
+	volume = {44},
+	number = {10},
+	pages = {4649--4659},
+	year = {2017},
+	publisher = {Wiley Online Library}
+}
+
+
+@article{helled2022revelations,
+	title = {Revelations on Jupiter's formation, evolution and interior: Challenges from Juno results},
+	author = {Helled, Ravit and Stevenson, David J and Lunine, Jonathan I and Bolton, Scott J and Nettelmann, Nadine and Atreya, Sushil and Guillot, Tristan and Militzer, Burkhard and Miguel, Yamila and Hubbard, William B},
+	journal = {Icarus},
+	pages = {114937},
+	year = {2022},
+	publisher = {Elsevier}
+}
+
+
+@article{militzer2022juno,
+	title = {Juno spacecraft measurements of Jupiter's gravity imply a dilute core},
+	author = {Militzer, Burkhard and Hubbard, William B and Wahl, Sean and Lunine, Jonathan I and Galanti, Eli and Kaspi, Yohai and Miguel, Yamila and Guillot, Tristan and Moore, Kimberly M and Parisi, Marzia and others},
+	journal = {The planetary science journal},
+	volume = {3},
+	number = {8},
+	pages = {185},
+	year = {2022},
+	publisher = {IOP Publishing}
+}
+
+
+@article{idini2021dynamical,
+	title = {Dynamical tides in Jupiter as revealed by Juno},
+	author = {Idini, Benjamin and Stevenson, David J},
+	journal = {The Planetary Science Journal},
+	volume = {2},
+	number = {2},
+	pages = {69},
+	year = {2021},
+	publisher = {IOP Publishing}
+}
+
+
+@article{lai2021jupiter,
+	title = {Jupiter's Dynamical Love Number},
+	author = {Lai, Dong},
+	journal = {The Planetary Science Journal},
+	volume = {2},
+	number = {4},
+	pages = {122},
+	year = {2021},
+	publisher = {IOP Publishing}
+}
+
+
+@article{idini2022gravitational,
+	title = {The gravitational imprint of an interior--orbital resonance in Jupiter--Io},
+	author = {Idini, Benjamin and Stevenson, David J},
+	journal = {The Planetary Science Journal},
+	volume = {3},
+	number = {4},
+	pages = {89},
+	year = {2022},
+	publisher = {IOP Publishing}
+}
+
+
+@article{dewberry2022dynamical,
+	title = {Dynamical tidal Love numbers of rapidly rotating planets and stars},
+	author = {Dewberry, Janosz W and Lai, Dong},
+	journal = {The Astrophysical Journal},
+	volume = {925},
+	number = {2},
+	pages = {124},
+	year = {2022},
+	publisher = {IOP Publishing}
+}
+
+
+@article{jacobson2004orbits,
+	title = {The orbits of the major saturnian satellites and the gravity field of Saturn from spacecraft and Earth-based observations},
+	author = {Jacobson, Robert A},
+	journal = {The Astronomical Journal},
+	volume = {128},
+	number = {1},
+	pages = {492},
+	year = {2004},
+	publisher = {IOP Publishing}
+}
+
+
+@article{markham2018excitation,
+	title = {Excitation mechanisms for Jovian seismic modes},
+	author = {Markham, Steve and Stevenson, Dave},
+	journal = {Icarus},
+	volume = {306},
+	pages = {200--213},
+	year = {2018},
+	publisher = {Elsevier}
+}
+
+
+@article{hedman2013kronoseismology,
+	title = {Kronoseismology: using density waves in Saturn's C ring to probe the planet's interior},
+	author = {Hedman, MM and Nicholson, PD},
+	journal = {The Astronomical Journal},
+	volume = {146},
+	number = {1},
+	pages = {12},
+	year = {2013},
+	publisher = {IOP Publishing}
+}
+
+
+@article{fuller2014saturn,
+	title = {Saturn ring seismology: Evidence for stable stratification in the deep interior of Saturn},
+	author = {Fuller, Jim},
+	journal = {icarus},
+	volume = {242},
+	pages = {283--296},
+	year = {2014},
+	publisher = {Elsevier}
+}
+
+
+@article{mankovich2021diffuse,
+	title = {A diffuse core in Saturn revealed by ring seismology},
+	author = {Mankovich, Christopher R and Fuller, Jim},
+	journal = {Nature Astronomy},
+	volume = {5},
+	number = {11},
+	pages = {1103--1109},
+	year = {2021},
+	publisher = {Nature Publishing Group UK London}
+}
+
+
+@article{gaulme2011detection,
+	title = {Detection of Jovian seismic waves: a new probe of its interior structure},
+	author = {Gaulme, Patrick and Schmider, F-X and Gay, Jean and Guillot, Tristan and Jacob, Cedric},
+	journal = {Astronomy \& Astrophysics},
+	volume = {531},
+	pages = {A104},
+	year = {2011},
+	publisher = {EDP Sciences}
+}
+
+
+@article{durante2022juno,
+	title = {Juno spacecraft gravity measurements provide evidence for normal modes of Jupiter},
+	author = {Durante, Daniele and Guillot, Tristan and Iess, Luciano and Stevenson, David J and Mankovich, Christopher R and Markham, Steve and Galanti, Eli and Kaspi, Yohai and Zannoni, Marco and Gomez Casajus, Luis and others},
+	journal = {Nature communications},
+	volume = {13},
+	number = {1},
+	pages = {4632},
+	year = {2022},
+	publisher = {Nature Publishing Group UK London}
+}
+
+
+@incollection{gaulme2015review,
+	author = {{Gaulme}, P. and {Mosser}, B. and {Schmider}, F. -X. and {Guillot}, T.},
+	title = {{Seismology of giant planets}},
+	booktitle = {Extraterrestrial Seismology},
+	year = {2015},
+	publisher = {Cambridge University Press},
+	number = {14},
+	pages = {189-202}
+}
+
+
+@article{dederick2018analysis,
+	title = {An analysis of stochastic Jovian oscillation excitation by moist convection},
+	author = {Dederick, Ethan and Jackiewicz, Jason and Guillot, Tristan},
+	journal = {The Astrophysical Journal},
+	volume = {856},
+	number = {1},
+	pages = {50},
+	year = {2018},
+	publisher = {IOP Publishing}
+}
+
+
+@article{vazan2018jupiter,
+	title = {Jupiter's evolution with primordial composition gradients},
+	author = {Vazan, Allona and Helled, Ravit and Guillot, Tristan},
+	journal = {Astronomy \& Astrophysics},
+	volume = {610},
+	pages = {L14},
+	year = {2018},
+	publisher = {EDP Sciences}
+}
+
+
+@article{mullan1988radial,
+	title = {Radial and nonradial pulsations of polytropes-high precision eigenvalues and the approach of p-modes to asymptotic behavior},
+	author = {Mullan, DJ and Ulrich, RK},
+	journal = {The Astrophysical Journal},
+	volume = {331},
+	pages = {1013--1028},
+	year = {1988}
+}
+
+
+@article{christensen1994accurate,
+	title = {Accurate frequencies of polytropic models},
+	author = {Christensen-Dalsgaard, J and Mullan, DJ},
+	journal = {Monthly Notices of the Royal Astronomical Society},
+	volume = {270},
+	number = {4},
+	pages = {921--935},
+	year = {1994},
+	publisher = {Oxford University Press Oxford, UK}
+}
+
+
+@article{le2013pulsation,
+	title = {Pulsation frequencies and modes of giant exoplanets},
+	author = {Le Bihan, Bastien and Burrows, Adam},
+	journal = {The Astrophysical Journal},
+	volume = {764},
+	number = {1},
+	pages = {18},
+	year = {2013},
+	publisher = {IOP Publishing}
+}
+
+
+@article{saumon1995equation,
+	title = {An equation of state for low-mass stars and giant planets},
+	author = {Saumon, Didier and Chabrier, Gilles and van Horn, Hugh M},
+	journal = {Astrophysical Journal Supplement v. 99, p. 713},
+	volume = {99},
+	pages = {713},
+	year = {1995}
+}
+
+
+@article{ibgui2009coupled,
+	author = {{Ibgui}, Laurent and {Burrows}, Adam},
+	title = {{Coupled Evolution with Tides of the Radius and Orbit of Transiting Giant Planets: General Results}},
+	journal = {\apj},
+	keywords = {planetary systems, planets and satellites: general, Astrophysics - Earth and Planetary Astrophysics},
+	year = {2009},
+	month = {aug},
+	volume = {700},
+	number = {2},
+	pages = {1921-1932}
+}
+
+
+@article{chabrier2019new,
+	title = {A new equation of state for dense hydrogen--helium mixtures},
+	author = {Chabrier, G and Mazevet, S and Soubiran, Fran{\c{c}}ois},
+	journal = {The Astrophysical Journal},
+	volume = {872},
+	number = {1},
+	pages = {51},
+	year = {2019},
+	publisher = {IOP Publishing}
+}
+
+
+@article{chabrier2021new,
+	title = {A New Equation of State for Dense Hydrogen--Helium Mixtures. II. Taking into Account Hydrogen--Helium Interactions},
+	author = {Chabrier, Gilles and Debras, Florian},
+	journal = {The Astrophysical Journal},
+	volume = {917},
+	number = {1},
+	pages = {4},
+	year = {2021},
+	publisher = {IOP Publishing}
+}
+
+
+@article{militzer2013ab,
+	title = {Ab initio equation of state for hydrogen--helium mixtures with recalibration of the giant-planet mass--radius relation},
+	author = {Militzer, Burkhard and Hubbard, William B},
+	journal = {The Astrophysical Journal},
+	volume = {774},
+	number = {2},
+	pages = {148},
+	year = {2013},
+	publisher = {IOP Publishing}
+}
+
+
+@article{brygoo2015analysis,
+	title = {Analysis of laser shock experiments on precompressed samples using a quartz reference and application to warm dense hydrogen and helium},
+	author = {Brygoo, Stephanie and Millot, Marius and Loubeyre, Paul and Lazicki, Amy E and Hamel, Sebastien and Qi, Tingting and Celliers, Peter M and Coppari, Federica and Eggert, Jon H and Fratanduono, Dayne E and others},
+	journal = {Journal of Applied Physics},
+	volume = {118},
+	number = {19},
+	pages = {195901},
+	year = {2015},
+	publisher = {AIP Publishing LLC}
+}
+
+
+@article{howard2023,
+	author = {{Howard}, S. and {Guillot}, T. and {Bazot}, M. and {Miguel}, Y. and {Stevenson}, D.~J. and {Galanti}, E. and {Kaspi}, Y. and {Hubbard}, W.~B. and {Militzer}, B. and {Helled}, R. and {Nettelmann}, N. and {Idini}, B. and {Bolton}, S.},
+	title = {{Jupiter's interior from Juno: Equation-of-state uncertainties and dilute core extent}},
+	journal = {arXiv e-prints},
+	keywords = {Astrophysics - Earth and Planetary Astrophysics},
+	year = {2023},
+	month = {feb},
+	eid = {arXiv:2302.09082},
+	pages = {arXiv:2302.09082}
+}
+
+
+@article{dombard1995excitation,
+	author = {{Dombard}, Andrew J. and {Boughn}, Stephen P.},
+	title = {{Excitation of Low-Order Jovian p-Modes by Cometary Impacts}},
+	journal = {\apjl},
+	keywords = {Cometary Collisions, Excitation, Jupiter (Planet), Momentum Transfer, P Waves, Pressure Pulses, Shock Waves, Shoemaker-Levy 9 Comet, Delta Function, Eigenvectors, Temperature Gradients, Astrophysics, COMETS: INDIVIDUAL NAME: SHOEMAKER-LEVY/9, PLANETS AND SATELLITES: INDIVIDUAL JUPITER},
+	year = {1995},
+	month = {apr},
+	volume = {443},
+	pages = {L89}
+}
+
+
+@article{mankovich2019cassini,
+	title = {Cassini ring seismology as a probe of Saturnâ€™s interior. I. Rigid rotation},
+	author = {Mankovich, Christopher and Marley, Mark S and Fortney, Jonathan J and Movshovitz, Naor},
+	journal = {The Astrophysical Journal},
+	volume = {871},
+	number = {1},
+	pages = {1},
+	year = {2019},
+	publisher = {IOP Publishing}
+}
+
+
+@article{lin2023dynamical,
+	author = {{Lin}, Yufeng},
+	title = {{Dynamical tides in Jupiter and the role of interior structure}},
+	journal = {arXiv e-prints},
+	keywords = {Astrophysics - Earth and Planetary Astrophysics},
+	year = {2023},
+	month = {jan},
+	eid = {arXiv:2301.02418},
+	pages = {arXiv:2301.02418},
+	doi = {10.48550/arXiv.2301.02418},
+	archivePrefix = {arXiv},
+	eprint = {2301.02418},
+	primaryClass = {astro-ph.EP},
+	adsurl = {https://ui.adsabs.harvard.edu/abs/2023arXiv230102418L},
+	adsnote = {Provided by the SAO/NASA Astrophysics Data System}
+}
+
+
+@article{nettelmann2012jupiter,
+	title = {Jupiter models with improved ab initio hydrogen equation of state (H-REOS. 2)},
+	author = {Nettelmann, Nadine and Becker, Andreas and Holst, Bastian and Redmer, Ronald},
+	journal = {The Astrophysical Journal},
+	volume = {750},
+	number = {1},
+	pages = {52},
+	year = {2012},
+	publisher = {IOP Publishing}
+}
+
+
+@article{saumon2004shock,
+	title = {Shock compression of deuterium and the interiors of Jupiter and Saturn},
+	author = {Saumon, Didier and Guillot, Tristan},
+	journal = {The Astrophysical Journal},
+	volume = {609},
+	number = {2},
+	pages = {1170},
+	year = {2004},
+	publisher = {IOP Publishing}
+}
+
+
+@article{christensen2002helioseismology,
+	title = {Helioseismology},
+	author = {Christensen-Dalsgaard, J{\o}rgen},
+	journal = {Reviews of Modern Physics},
+	volume = {74},
+	number = {4},
+	pages = {1073},
+	year = {2002},
+	publisher = {APS}
+}
+
+
+@book{stein2009introduction,
+	title = {An introduction to seismology, earthquakes, and earth structure},
+	author = {Stein, Seth and Wysession, Michael},
+	year = {2009},
+	publisher = {John Wiley \& Sons}
+}
+
+
+@article{aerts2021probing,
+	title = {Probing the interior physics of stars through asteroseismology},
+	author = {Aerts, C},
+	journal = {Reviews of Modern Physics},
+	volume = {93},
+	number = {1},
+	pages = {015001},
+	year = {2021},
+	publisher = {APS}
+}
+
+
+@article{koch2010kepler,
+	title = {Kepler mission design, realized photometric performance, and early science},
+	author = {Koch, David G and Borucki, William J and Basri, Gibor and Batalha, Natalie M and Brown, Timothy M and Caldwell, Douglas and Christensen-Dalsgaard, J{\o}rgen and Cochran, William D and DeVore, Edna and Dunham, Edward W and others},
+	journal = {The Astrophysical Journal Letters},
+	volume = {713},
+	number = {2},
+	pages = {L79},
+	year = {2010},
+	publisher = {IOP Publishing}
+}
+
+
+@article{ricker2015transiting,
+	title = {Transiting exoplanet survey satellite},
+	author = {Ricker, George R and Winn, Joshua N and Vanderspek, Roland and Latham, David W and Bakos, G{\'a}sp{\'a}r {\'A} and Bean, Jacob L and Berta-Thompson, Zachory K and Brown, Timothy M and Buchhave, Lars and Butler, Nathaniel R and others},
+	journal = {Journal of Astronomical Telescopes, Instruments, and Systems},
+	volume = {1},
+	number = {1},
+	pages = {014003--014003},
+	year = {2015},
+	publisher = {Society of Photo-Optical Instrumentation Engineers}
 }

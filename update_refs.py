@@ -72,5 +72,7 @@ def merge_bib2():
         bp.write_file(f, lib1)
 
 if __name__ == '__main__':
-    # update_refs_bib()
-    merge_bib2()
+    if len(sys.argv) == 1:
+        update_refs_bib()
+    else:
+        merge_bib2()
