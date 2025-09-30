@@ -3,7 +3,7 @@ import os, sys, requests, time
 from bs4 import BeautifulSoup as bs
 
 URL = 'https://arxiv.org/list/astro-ph/new'
-FLDR = '%s/tmp/arxiv' % os.getenv('HOME')
+FLDR = '%s/Dropbox/arxiv' % os.getenv('HOME')
 PDF_URL = 'https://arxiv.org%s'
 
 if __name__ == '__main__':
