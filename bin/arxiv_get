@@ -46,7 +46,7 @@ if __name__ == '__main__':
             author_bodies = dd.find('div', { 'class': 'list-authors' }).contents[ ::2]
             authors = [e.text for e in author_bodies]
             abstract = dd.find('p').text.strip()
-            f.write('%s\n    Authors: %s\n    Link: %s\n    Abstract: %s\n\n' % (
+            f.write('Title: %s\n    Authors: %s\n    Link: %s\n    Abstract: %s\n\n' % (
                 title,
                 ', '.join(authors),
                 pdf_link,
