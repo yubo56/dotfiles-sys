@@ -1,0 +1,77 @@
+#!/usr/bin/env python
+# usage: grab the url from astroph/recent and change the `show` param to 250
+# e.g.: `arxiv_makeup 'https://arxiv.org/list/astro-ph/recent?skip=94&show=250'`
+import os, sys, requests, time
+from bs4 import BeautifulSoup as bs
+import sys
+
+URL = sys.argv[1]
+FLDR = '%s/Dropbox/arxiv' % os.getenv('HOME')
+PDF_URL = 'https://arxiv.org%s'
+ARXIV_EXPORT_URL = 'http://export.arxiv.org/api/query?max_results=200&id_list=%s'
+
+if __name__ == '__main__':
+    os.makedirs(FLDR + '/pdf', exist_ok=True)
+
+    html_req = requests.get(URL)
+    if html_req.status_code != 200:
+        print('url lookup', html_req.status_code)
+        exit(1)
+    html_contents = html_req.text
+
+    arxivsoup = bs(html_contents, 'html.parser')
+
+    # NB: generate updated HTML, then download pdfs in background
+    contents_div = arxivsoup.find('div', {'id': 'dlpage'})
+    datelenstr = contents_div.find_next('h3').text.split()
+    datestr = ' '.join(datelenstr[1:4])
+    lenstr = int(datelenstr[5])
+    lenstr2 = int(datelenstr[7])
+    assert lenstr == lenstr2
+    parseddate = time.strptime(datestr, '%d %b %Y')
+    newdate = time.strftime('%y%m%d', parseddate)
+    filename = '%s/%s.arxiv' % (FLDR, newdate)
+
+    os.makedirs((FLDR + '/pdf/%s.arxiv') % newdate, exist_ok=True)
+
+    dts = contents_div.find_all('dt')
+    dds = contents_div.find_all('dd')
+    today_items = list(zip(dts, dds))[ :lenstr]
+    arxiv_ids = []
+    for dt, dd in today_items:
+        pdf_link = PDF_URL % dt.find_all('a')[2]['href']
+        arxiv_id = pdf_link.split('/')[-1]
+        arxiv_ids.append(arxiv_id)
+
+    ### now, get abstracts by bulk export
+    abstract_lookup_url = ARXIV_EXPORT_URL % (','.join(arxiv_ids))
+    abstract_req = requests.get(abstract_lookup_url)
+    if html_req.status_code != 200:
+        print('abstracts lookup', html_req.status_code)
+        exit(1)
+    abstract_contents = abstract_req.text
+
+    abstractsoup = bs(abstract_contents, 'xml')
+    entries = abstractsoup.find_all('entry')
+    abstracts_by_id = {}
+    for entry in entries:
+        # truncate trailing "version" if has any
+        arxiv_id = entry.find('id').text.split('/')[-1].split('v')[0]
+        summary = entry.find('summary').text.replace('\n', ' ').strip()
+        abstracts_by_id[arxiv_id] = summary
+
+    with open(filename, 'w') as f:
+        for dt, dd in today_items:
+            pdf_link = PDF_URL % dt.find_all('a')[2]['href']
+            title = dd.find('div', { 'class': 'list-title' }).contents[1].strip()
+            author_bodies = dd.find('div', { 'class': 'list-authors' }).contents[ ::2]
+            authors = [e.text for e in author_bodies]
+            arxiv_id = pdf_link.split('/')[-1].split('v')[0]
+            abstract = abstracts_by_id[arxiv_id]
+            f.write('Title: %s\n    Authors: %s\n    Link: %s\n    Abstract: %s\n\n' % (
+                title,
+                ', '.join(authors),
+                pdf_link,
+                abstract.replace('\n', ''),
+            ))
+        f.write('%s:' % newdate)

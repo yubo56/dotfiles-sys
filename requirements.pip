@@ -1,1 +1,4 @@
-bibtexparser@1.4.3
+bs4
+bibtexparser
+lxml
+requests
