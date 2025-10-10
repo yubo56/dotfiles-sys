@@ -1,0 +1,10 @@
+#!/bin/bash
+for i in $(xinput | grep pointer | sed -rn 's/.*id=([0-9]+).*/\1/p'); do xinput --set-prop $i 'libinput Accel Profile Enabled' 0, 1 2> /dev/null; done
+setxkbmap us -variant dvorak
+xmodmap ~/.xmodmap
+xmodmap -e 'keycode 9 = grave asciitilde grave asciitilde'
+xmodmap -e 'keycode 49 = Escape Escape'
+xmodmap -e 'keycode 41 = u U grave asciitilde'
+
+xset r rate 200 60
+mouseaccel

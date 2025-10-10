@@ -1,11 +1,12 @@
 #! /bin/zsh
 . ~/.shell_envs
-abcd=$(xinput list-props $xinput_touchpad_idx | grep 'Device Enabled')
+touchpad_name='PNP0C50:0b 36B6:C001 Touchpad'
+abcd=$(xinput list-props $touchpad_name | grep 'Device Enabled')
 echo $abcd
 if [[ $abcd =~ ':.*0' ]]; then
     echo 'enabling'
-    xinput enable $xinput_touchpad_idx
+    xinput enable $touchpad_name
 else
     echo 'disabling'
-    xinput disable $xinput_touchpad_idx
+    xinput disable $touchpad_name
 fi

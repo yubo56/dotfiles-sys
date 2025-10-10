@@ -24,23 +24,19 @@ xcompmgr -o.00 &
 xscreensaver -nosplash &
 
 ## various system settings
-setxkbmap us -variant dvorak
-xmodmap ~/.xmodmap
 dconf load / < .dconf
-xset r rate 150 60 && xset -dpms && xset s off
+xset -dpms && xset s off
 xrdb ~/.Xresources
+dwm_usbconnect
 
 # seems like need to start ibus after X server launches
 # ibus-daemon -drx
 
 ## statusbar stuff
 statusLoop
-# dwm_rebg
 
 # try to enable bluetooth
-# bluetoothctl power on || :
-# try to start ultimate remote server
-# (/opt/urserver/urserver-start --no-manager || :) &!
+bluetoothctl power on || :
 
 gsettings set org.gnome.desktop.peripherals.touchpad disable-while-typing false
 gsettings set org.gnome.desktop.peripherals.mouse double-click 100

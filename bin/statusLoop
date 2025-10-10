@@ -5,7 +5,7 @@ while true; do
     if [[ "$(ip link | grep 'enp.s0' | grep ' UP ')" != "" || "$(iw dev $WIFI link 2> /dev/null | grep "Connected")" != "" ]]; then
 
         #-----------------------------------------------------------WEATHER------------------------------------------------------------
-        curl "https://api.open-meteo.com/v1/forecast?latitude=43.6619675&longitude=-79.3863289&daily=temperature_2m_max,temperature_2m_min&current=temperature_2m,weather_code&timezone=America%2FNew_York&forecast_days=1" > /tmp/weatherGrep 2> /dev/null
+        curl "https://api.open-meteo.com/v1/forecast?latitude=43.662104&longitude=-79.3891657&daily=temperature_2m_max,temperature_2m_min&current=temperature_2m,weather_code&timezone=America%2FNew_York&forecast_days=1" > /tmp/weatherGrep 2> /dev/null
         gawk 'match($0, /current":.*temperature_2m":(.*),"weather_code":([0-9]*)},"daily_units.*temperature_2m_max":\[([\.0-9]*)\],"temperature_2m_min":\[([\.0-9]*)\]/, a) {print a[1] "(" a[2] ")/" a[3] "/" a[4]}' < /tmp/weatherGrep > /tmp/weather
 
     #-------------------------------------------------------------ELSE WE'RE DISCONNECTED-------------------------------------------------
@@ -15,7 +15,7 @@ while true; do
     fi
 
     #5 minute delay
-    sleep 5m
+    sleep 1m
 done &
 
 sep='|'

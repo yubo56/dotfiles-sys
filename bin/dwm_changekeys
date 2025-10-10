@@ -8,6 +8,3 @@ elif [[ $(setxkbmap -query | grep 'variant') =~ "dvorak-l" ]]; then
 else
     setxkbmap us -variant dvorak-l
 fi
-
-xset r rate 150 60
-mouseaccel
