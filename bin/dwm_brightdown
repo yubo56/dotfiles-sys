@@ -7,3 +7,4 @@ new=$( (( $new >= $inc)) && echo $new || echo $inc)
 echo $new | sudo tee $brightfile > /dev/null
 
 echo $(( $(cat $brightfile) * 100 / $(cat $brightmax) )) > /tmp/brightness
+update_status

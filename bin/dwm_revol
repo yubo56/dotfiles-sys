@@ -3,11 +3,11 @@
 # amixer sets return the current Master via stddout
 
 if [[ $1 == 'up' ]]; then
-    amixermaster=$(amixer -D pulse set Master '1%+')
+    amixermaster=$(amixer -D pulse set Master '5%+')
 fi
 
 if [[ $1 == 'down' ]]; then
-    amixermaster=$(amixer -D pulse set Master '1%-')
+    amixermaster=$(amixer -D pulse set Master '5%-')
 fi
 
 if [[ $1 == 'toggle' ]]; then
@@ -22,3 +22,4 @@ vol1=$(grep 'Front Left:' <<< "$amixermaster" | perl -e "my \$string = <>;print 
 vol2=$(grep 'Mono:' <<< "$amixermaster" | perl -e "my \$string = <>;print \"Mu\" if \$string =~ /off/;\$string =~ s/\[(\d+)%\]// if \$string =~ /\[on\]/;print \$1;")
 
 echo $vol1$vol2 > /tmp/vol
+update_status
