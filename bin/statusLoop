@@ -14,7 +14,13 @@ while true; do
         rm -f /tmp/weather
     fi
 
-    #5 minute delay
+    echo $(date) $(cat /proc/acpi/button/lid/LID0/state) >> /tmp/lidstate
+    if [[ ! $(cat /proc/acpi/button/lid/LID0/state) =~ 'open' ]]; then
+        echo "\tresuspending..." $(date) >> /tmp/lidstate
+        sudo systemctl suspend
+    fi
+
+    # repeat every 1m
     sleep 1m
 done &
 
