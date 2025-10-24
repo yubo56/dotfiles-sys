@@ -25,9 +25,13 @@ if __name__ == '__main__':
 
     os.makedirs((FLDR + '/pdf/%s.arxiv') % newdate, exist_ok=True)
 
+    dts = contents_div.find_all('dt')
+    dds = contents_div.find_all('dd')
+
+    if os.path.exists(filename):
+        print(filename, 'exists, not regenerating')
+        exit(1)
     with open(filename, 'w') as f:
-        dts = contents_div.find_all('dt')
-        dds = contents_div.find_all('dd')
         for dt, dd in zip(dts, dds):
             pdf_link = PDF_URL % dt.find_all('a')[2]['href']
             title = dd.find('div', { 'class': 'list-title' }).contents[1].strip()

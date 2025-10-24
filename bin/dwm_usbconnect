@@ -6,5 +6,5 @@ xmodmap -e 'keycode 9 = grave asciitilde grave asciitilde'
 xmodmap -e 'keycode 49 = Escape Escape'
 xmodmap -e 'keycode 41 = u U grave asciitilde'
 
-xset r rate 200 60
+xset r rate 150 60
 mouseaccel
