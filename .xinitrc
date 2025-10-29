@@ -3,9 +3,9 @@
 if [[ "$(hostnamectl hostname)" =~ ArchTest ]]; then
     echo "disable" | sudo tee /sys/firmware/acpi/interrupts/gpe61
 fi
-if [[ "$(hostnamectl hostname)" =~ YuboAcer ]]; then
-    echo 0 | sudo tee /sys/devices/system/cpu/cpufreq/boost
-fi
+# if [[ "$(hostnamectl hostname)" =~ YuboAcer ]]; then
+#     echo 0 | sudo tee /sys/devices/system/cpu/cpufreq/boost
+# fi
 
 ## font stuff
 xset +fp /usr/share/fonts/TTF && xset fp rehash

@@ -81,10 +81,13 @@ while true; do
     previdle=$idle
 
     #---------------------------------------------------------- TEMPERATURE ----------------------------------------------------------
+    cpumhz=$(cat /tmp/cpumhz | tail -n 1 | cut -c1-4)
     temp=""
     if [[ -a $temp_file ]]; then
         currtemp=$(printf "%02d" $(( $(cat $temp_file) / 1000 )))
-        temp="(${currtemp})"
+        temp="(${cpumhz};${currtemp})"
+    else
+        temp="(${cpumhz})"
     fi
 
     #-------------------------------------------------------MEMSTATS--------------------------------------------
@@ -138,3 +141,7 @@ while true; do
     sleep $((( $refresh_interval - ($(date +%s%N) - $startTime) / 1000000000.0 )))s
 done &
 
+while true; do
+lscpu -e="MHZ" | sort > /tmp/cpumhz
+sleep 1s
+done &
