@@ -63,5 +63,8 @@ alias mkvenv='python3 -m venv venv && source venv/bin/activate'
 alias venv='source venv/bin/activate'
 alias arxiv='source ~/dotfiles/sys/venv/bin/activate && arxiv_get; cd ~/Dropbox/arxiv && vim $(date +%y%m%d.arxiv) astrophnotes.txt'
 
+# vim open a temporary file
+alias vt='mkdir -p ~/tmp/vimtemp && vim ~/tmp/vimtemp/$(date +%y%m%d_%H%M%S)'
+
 # https://open-meteo.com/en/docs?hourly=&current=weather_code,temperature_2m#weather_variable_documentation
 alias weathercodes='echo "0              Clear sky\n1, 2, 3        Mainly clear, partly cloudy, and overcast\n45, 48         Fog and depositing rime fog\n51, 53, 55     Drizzle: Light, moderate, and dense intensity\n56, 57         Freezing Drizzle: Light and dense intensity\n61, 63, 65     Rain: Slight, moderate and heavy intensity\n66, 67         Freezing Rain: Light and heavy intensity\n71, 73, 75     Snow fall: Slight, moderate, and heavy intensity\n77             Snow grains\n80, 81, 82     Rain showers: Slight, moderate, and violent\n85, 86         Snow showers slight and heavy\n95 *           Thunderstorm: Slight or moderate\n96, 99 *       Thunderstorm with slight and heavy hail"'
