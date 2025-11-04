@@ -14,10 +14,13 @@ while true; do
         rm -f /tmp/weather
     fi
 
-    echo $(date) $(cat /proc/acpi/button/lid/LID0/state) >> /tmp/lidstate
-    if [[ ! $(cat /proc/acpi/button/lid/LID0/state) =~ 'open' ]]; then
-        echo "\tresuspending..." $(date) >> /tmp/lidstate
-        sudo systemctl suspend
+    # if lid state exists, try to resuspend if possible
+    if [[ -f /proc/acpi/button/lid/LID0/state ]]; then
+        echo $(date) $(cat /proc/acpi/button/lid/LID0/state) >> /tmp/lidstate
+        if [[ ! $(cat /proc/acpi/button/lid/LID0/state) =~ 'open' ]]; then
+            echo "\tresuspending..." $(date) >> /tmp/lidstate
+            sudo systemctl suspend
+        fi
     fi
 
     # repeat every 1m

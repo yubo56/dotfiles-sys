@@ -29,6 +29,7 @@ xset -dpms && xset s off
 xrdb ~/.Xresources
 xkbset bo 60
 dwm_usbconnect
+dwm_rebg
 
 # seems like need to start ibus after X server launches
 # ibus-daemon -drx

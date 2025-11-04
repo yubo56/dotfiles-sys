@@ -10,3 +10,4 @@ else
     xmodmap -e 'keycode 9 = Escape Escape'
     xmodmap -e 'keycode 41 = u U Escape'
 fi
+xset r rate 150 60
