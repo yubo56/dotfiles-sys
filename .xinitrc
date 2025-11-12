@@ -30,6 +30,7 @@ xrdb ~/.Xresources
 # xkbset exp =bo && xkbset bo 30
 dwm_usbconnect
 redshift
+dwm_rebg
 
 # seems like need to start ibus after X server launches
 # ibus-daemon -drx
