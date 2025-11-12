@@ -3,7 +3,7 @@
 
 curr=`cat $brightfile`
 new=`echo "$curr-$inc" | 'bc'`
-new=$( (( $new >= $inc)) && echo $new || echo $inc)
+new=$( (( $new >= $inc)) && echo $new || echo 1)
 echo $new | sudo tee $brightfile > /dev/null
 
 echo $(( $(cat $brightfile) * 100 / $(cat $brightmax) )) > /tmp/brightness

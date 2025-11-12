@@ -27,8 +27,9 @@ xscreensaver -nosplash &
 dconf load / < .dconf
 xset -dpms && xset s off
 xrdb ~/.Xresources
-xkbset bo 60
+# xkbset exp =bo && xkbset bo 30
 dwm_usbconnect
+redshift
 
 # seems like need to start ibus after X server launches
 # ibus-daemon -drx

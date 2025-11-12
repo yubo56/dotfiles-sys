@@ -211,7 +211,7 @@ srchp() {
             let i=$i+1
         done <<< "${FILES}"
         FILE=$(sed "${2-1}q;d" <<< $FILES)
-        zathura $FILE 2> /dev/null || open $FILE
+        ( zathura $FILE 2> /dev/null || open $FILE ) &!
     else;
         echo "No files found for pattern \"$1.pdf\""
     fi
