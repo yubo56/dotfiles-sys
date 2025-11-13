@@ -64,13 +64,18 @@ if __name__ == '__main__':
         for dt, dd in today_items:
             pdf_link = PDF_URL % dt.find_all('a')[2]['href']
             title = dd.find('div', { 'class': 'list-title' }).contents[1].strip()
+            try:
+                comments = dd.find('div', { 'class': 'list-comments' }).contents[1].strip()
+            except:
+                comments = 'N/A'
             author_bodies = dd.find('div', { 'class': 'list-authors' }).contents[ ::2]
             authors = [e.text for e in author_bodies]
             arxiv_id = pdf_link.split('/')[-1].split('v')[0]
             abstract = abstracts_by_id[arxiv_id]
-            f.write('Title: %s\n    Authors: %s\n    Link: %s\n    Abstract: %s\n\n' % (
+            f.write('Title: %s\n    Authors: %s\n    Comments: %s\n    Link: %s\n    Abstract: %s\n\n' % (
                 title,
                 ', '.join(authors),
+                comments,
                 pdf_link,
                 abstract.replace('\n', ''),
             ))
