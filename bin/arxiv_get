@@ -18,35 +18,41 @@ if __name__ == '__main__':
     arxivsoup = bs(html_contents, 'html.parser')
 
     contents_div = arxivsoup.find('div', {'id': 'dlpage'})
+    dls = contents_div.find_all('dl')
     datestr = ' '.join(contents_div.find_next('h3').text.split()[-3: ])
     parseddate = time.strptime(datestr, '%d %B %Y')
     newdate = time.strftime('%y%m%d', parseddate)
     filename = '%s/%s.arxiv' % (FLDR, newdate)
 
     os.makedirs((FLDR + '/pdf/%s.arxiv') % newdate, exist_ok=True)
-
-    dts = contents_div.find_all('dt')
-    dds = contents_div.find_all('dd')
-
     if os.path.exists(filename):
         print(filename, 'exists, not regenerating')
         exit(1)
+
+    # 3 subsections corresponding to [new, cross-list, replacements]
     with open(filename, 'w') as f:
-        for dt, dd in zip(dts, dds):
-            pdf_link = PDF_URL % dt.find_all('a')[2]['href']
-            title = dd.find('div', { 'class': 'list-title' }).contents[1].strip()
-            try:
-                comments = dd.find('div', { 'class': 'list-comments' }).contents[1].strip()
-            except:
-                comments = 'N/A'
-            author_bodies = dd.find('div', { 'class': 'list-authors' }).contents[ ::2]
-            authors = [e.text for e in author_bodies]
-            abstract = dd.find('p').text.strip()
-            f.write('Title: %s\n    Authors: %s\n    Comments: %s\n    Link: %s\n    Abstract: %s\n\n' % (
-                title,
-                ', '.join(authors),
-                comments,
-                pdf_link,
-                abstract.replace('\n', ''),
-            ))
+        for dl in dls:
+            titlestr = dl.find('h3').text
+            dashesstr = '-' * len(titlestr)
+            f.write('%s\n%s\n%s\n\n' % (dashesstr, titlestr, dashesstr))
+            dts = contents_div.find_all('dt')
+            dds = contents_div.find_all('dd')
+
+            for dt, dd in zip(dts, dds):
+                pdf_link = PDF_URL % dt.find_all('a')[2]['href']
+                title = dd.find('div', { 'class': 'list-title' }).contents[1].strip()
+                try:
+                    comments = dd.find('div', { 'class': 'list-comments' }).contents[1].strip()
+                except:
+                    comments = 'N/A'
+                author_bodies = dd.find('div', { 'class': 'list-authors' }).contents[ ::2]
+                authors = [e.text for e in author_bodies]
+                abstract = dd.find('p').text.strip()
+                f.write('Title: %s\n    Authors: %s\n    Comments: %s\n    Link: %s\n    Abstract: %s\n\n' % (
+                    title,
+                    ', '.join(authors),
+                    comments,
+                    pdf_link,
+                    abstract.replace('\n', ''),
+                ))
         f.write('%s:' % newdate)

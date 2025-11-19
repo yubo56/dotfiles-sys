@@ -29,14 +29,14 @@ xset -dpms && xset s off
 xrdb ~/.Xresources
 # xkbset exp =bo && xkbset bo 30
 dwm_usbconnect
-redshift
+redshift &!
 dwm_rebg
 
 # seems like need to start ibus after X server launches
 # ibus-daemon -drx
 
 ## statusbar stuff
-statusLoop
+statusLoop &!
 
 # try to enable bluetooth
 bluetoothctl power on || :

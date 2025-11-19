@@ -1,5 +1,11 @@
 #! /bin/zsh
 . ~/.shell_envs
+
+while true; do
+lscpu -e="MHZ" | sort > /tmp/cpumhz
+sleep 1s
+done &
+
 while true; do
     #------------------------------------------------------IF ONLINE----------------------------------------------------------------
     if [[ "$(ip link | grep 'enp.s0' | grep ' UP ')" != "" || "$(iw dev $WIFI link 2> /dev/null | grep "Connected")" != "" ]]; then
@@ -142,9 +148,4 @@ while true; do
 
     echo "$REPLY" > /tmp/status
     sleep $((( $refresh_interval - ($(date +%s%N) - $startTime) / 1000000000.0 )))s
-done &
-
-while true; do
-lscpu -e="MHZ" | sort > /tmp/cpumhz
-sleep 1s
-done &
+done
