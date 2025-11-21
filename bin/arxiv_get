@@ -35,8 +35,8 @@ if __name__ == '__main__':
             titlestr = dl.find('h3').text
             dashesstr = '-' * len(titlestr)
             f.write('%s\n%s\n%s\n\n' % (dashesstr, titlestr, dashesstr))
-            dts = contents_div.find_all('dt')
-            dds = contents_div.find_all('dd')
+            dts = dl.find_all('dt')
+            dds = dl.find_all('dd')
 
             for dt, dd in zip(dts, dds):
                 pdf_link = PDF_URL % dt.find_all('a')[2]['href']
