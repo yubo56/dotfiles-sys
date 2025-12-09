@@ -1,5 +1,6 @@
 #! /bin/zsh
 . ~/.shell_envs
+_battdir=/sys/class/power_supply/BAT0
 
 while true; do
 lscpu -e="MHZ" | sort > /tmp/cpumhz
@@ -58,7 +59,7 @@ while true; do
         if [[ $(cat /sys/class/drm/card1-HDMI-A-1/status) == 'connected' ]]; then
             if [[ $(cat /sys/class/drm/card1-HDMI-A-1/status) != $HDMI1_val ]]; then
                 read HDMI1_val < /sys/class/drm/card1-HDMI-A-1/status
-                xrandr --output HDMI-1 --mode 2560x1440 --left-of eDP-1
+                xrandr --output HDMI-1 --mode 2560x1440 --left-of eDP-1 --output eDP-1 --off
             fi
         else
             if [[ $(cat /sys/class/drm/card1-HDMI-A-1/status) != $HDMI1_val ]]; then
@@ -113,7 +114,6 @@ while true; do
     fi
 
     #-------------------------------------------------------BATTSTATS--------------------------------------------
-    _battdir=/sys/class/power_supply/BAT0
     if [[ -e $_battdir/status ]]; then
         read _battstat < $_battdir/status
         battstat=${_battstat:0:1}
