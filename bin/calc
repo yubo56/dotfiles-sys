@@ -17,10 +17,7 @@ import sys
 import os
 import numpy as np
 # Macos Python 3.11 broke readline for me...
-try:
-    import gnureadline as readline
-except ImportError:
-    import readline
+import readline
 
 # map of supported units -> (val, (units))
 ONE_AU = 1.496e11
