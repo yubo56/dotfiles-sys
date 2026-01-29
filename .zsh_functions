@@ -202,7 +202,7 @@ srchp() {
             -name "opt" -prune -false -o \
             -iname '*.pdf' > /tmp/pdf_filelist
     fi
-    FILES=$('grep' -i $1 /tmp/pdf_filelist)
+    FILES=$('grep' -i "$1[^/]*$" /tmp/pdf_filelist)
     if [[ $FILES != '' ]]; then
         echo "Found:"
         let i=1

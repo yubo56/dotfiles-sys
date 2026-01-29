@@ -61,7 +61,7 @@ alias xsetacpi='systemctl --user stop statusbar.timer && while :; do xsetroot -n
 
 alias mkvenv='python3 -m venv venv && source venv/bin/activate'
 alias venv='source venv/bin/activate'
-alias arxiv='source ~/dotfiles/sys/venv/bin/activate && arxiv_get; cd ~/Dropbox/arxiv && vim $(date +%y%m%d.arxiv) astrophnotes.txt'
+alias arxiv='source ~/dotfiles/sys/venv/bin/activate && arxiv_get; cd ~/Dropbox/arxiv && vim $('\''ls'\'' -c | head -n 1) astrophnotes.txt'
 alias arxiv_mu='source ~/dotfiles/sys/venv/bin/activate && arxiv_makeup'
 
 alias vpn_princeton='sudo -E gpclient --fix-openssl connect --browser firefox vpn.princeton.edu'
