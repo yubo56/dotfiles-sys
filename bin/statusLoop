@@ -14,7 +14,7 @@ while true; do
         #-----------------------------------------------------------WEATHER------------------------------------------------------------
         # Toronto
         # curl "https://api.open-meteo.com/v1/forecast?latitude=43.662104&longitude=-79.3891657&daily=temperature_2m_max,temperature_2m_min&current=temperature_2m,weather_code&timezone=America%2FNew_York&forecast_days=1" > /tmp/weatherGrep 2> /dev/null
-        # Jersey CIty
+        # Jersey City
         curl "https://api.open-meteo.com/v1/forecast?latitude=40.71555&longitude=-74.04529&daily=temperature_2m_max,temperature_2m_min&current=temperature_2m,weather_code&timezone=America%2FNew_York&forecast_days=1" > /tmp/weatherGrep 2> /dev/null
         gawk 'match($0, /current":.*temperature_2m":(.*),"weather_code":([0-9]*)},"daily_units.*temperature_2m_max":\[([\-\.0-9]*)\],"temperature_2m_min":\[([\-\.0-9]*)\]/, a) {print a[1] "(" a[2] ")/" a[3] "/" a[4]}' < /tmp/weatherGrep > /tmp/weather
 
@@ -26,8 +26,10 @@ while true; do
 
     # if lid state exists, try to resuspend if possible
     if [[ -f /proc/acpi/button/lid/LID0/state ]]; then
-        echo $(date) $(cat /proc/acpi/button/lid/LID0/state) >> /tmp/lidstate
-        if [[ ! $(cat /proc/acpi/button/lid/LID0/state) =~ 'open' ]]; then
+        read _battstat < $_battdir/status
+        battstat=${_battstat:0:1}
+        echo $(date) $(cat /proc/acpi/button/lid/LID0/state) $battstat >> /tmp/lidstate
+        if [[ ! $(cat /proc/acpi/button/lid/LID0/state) =~ 'open' && $battstat == 'D' ]]; then
             echo "\tresuspending..." $(date) >> /tmp/lidstate
             sudo systemctl suspend
         fi
@@ -43,6 +45,7 @@ refresh_interval=1 # cpu usage is averaged over 2 such intervals
 DP1_val='disconnected'
 HDMI1_val='disconnected'
 DOUBLE_val='disconnected'
+LIDSTATE=''
 
 while true; do
     startTime=$(date +%s%N) # sleep (1s - execution time)
@@ -60,9 +63,14 @@ while true; do
         xrandr --output HDMI-1 --auto --right-of DP-1 --rotate right
     else if [[ "$(hostnamectl hostname)" == YuboAcer ]]; then
         if [[ $(cat /sys/class/drm/card1-HDMI-A-1/status) == 'connected' ]]; then
-            if [[ $(cat /sys/class/drm/card1-HDMI-A-1/status) != $HDMI1_val ]]; then
+            if [[ $(cat /sys/class/drm/card1-HDMI-A-1/status) != $HDMI1_val || $(cat /proc/acpi/button/lid/LID0/state) != $LIDSTATE  ]]; then
                 read HDMI1_val < /sys/class/drm/card1-HDMI-A-1/status
-                xrandr --output HDMI-1 --mode 2560x1440 --left-of eDP-1 --output eDP-1 --off
+                read LIDSTATE < /proc/acpi/button/lid/LID0/state
+                if [[ $LIDSTATE =~ 'open' ]]; then
+                    xrandr --output HDMI-1 --mode 2560x1440 --left-of eDP-1 --output eDP-1 --auto
+                else
+                    xrandr --output HDMI-1 --mode 2560x1440 --left-of eDP-1 --output eDP-1 --off
+                fi
             fi
         else
             if [[ $(cat /sys/class/drm/card1-HDMI-A-1/status) != $HDMI1_val ]]; then
