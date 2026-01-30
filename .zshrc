@@ -107,10 +107,13 @@ if [ $OSTYPE =~ "linux-gnu" ]; then
     # [[ $(sysctl kernel/unprivileged_userns_clone | grep 1) ]] ||\
     #     sudo sysctl kernel/unprivileged_userns_clone=1 # for brave
 
-    # KER1=$(uname -r | sed -E 's/-arch(.).*/-\1/g')
-    # KER2=$(pacman -Q linux | sed -E 's/linux (.*)\.arch(.).*/\1-\2/g')
-    KER1=$(uname -r | sed -E 's/(.)-cachyos/\1/g')
-    KER2=$(pacman -Q linux-cachyos | sed -E 's/linux-cachyos (.*)/\1/g')
+    if [[ "$(hostnamectl hostname)" == YuboAcer ]]; then
+        KER1=$(uname -r | sed -E 's/(.)-cachyos/\1/g')
+        KER2=$(pacman -Q linux-cachyos | sed -E 's/linux-cachyos (.*)/\1/g')
+    else
+        KER1=$(uname -r | sed -E 's/-arch(.).*/-\1/g')
+        KER2=$(pacman -Q linux | sed -E 's/linux (.*)\.arch(.).*/\1-\2/g')
+    fi
     KER=" (%F{white}$( [[ $KER1 == $KER2 ]] && echo $KER1 || echo '!!')%f)"
 
     # ibus

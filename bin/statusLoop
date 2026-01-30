@@ -24,17 +24,6 @@ while true; do
         rm -f /tmp/weather
     fi
 
-    # if lid state exists, try to resuspend if possible
-    if [[ -f /proc/acpi/button/lid/LID0/state ]]; then
-        read _battstat < $_battdir/status
-        battstat=${_battstat:0:1}
-        echo $(date) $(cat /proc/acpi/button/lid/LID0/state) $battstat >> /tmp/lidstate
-        if [[ ! $(cat /proc/acpi/button/lid/LID0/state) =~ 'open' && $battstat == 'D' ]]; then
-            echo "\tresuspending..." $(date) >> /tmp/lidstate
-            sudo systemctl suspend
-        fi
-    fi
-
     # repeat every 1m
     sleep 1m
 done &
@@ -62,6 +51,7 @@ while true; do
     else if [[ "$(hostnamectl hostname)" == YuboDesktop ]]; then
         xrandr --output HDMI-1 --auto --right-of DP-1 --rotate right
     else if [[ "$(hostnamectl hostname)" == YuboAcer ]]; then
+        # handle HDMI connection logic
         if [[ $(cat /sys/class/drm/card1-HDMI-A-1/status) == 'connected' ]]; then
             if [[ $(cat /sys/class/drm/card1-HDMI-A-1/status) != $HDMI1_val || $(cat /proc/acpi/button/lid/LID0/state) != $LIDSTATE  ]]; then
                 read HDMI1_val < /sys/class/drm/card1-HDMI-A-1/status
@@ -76,6 +66,17 @@ while true; do
             if [[ $(cat /sys/class/drm/card1-HDMI-A-1/status) != $HDMI1_val ]]; then
                 read HDMI1_val < /sys/class/drm/card1-HDMI-A-1/status
                 xrandr --auto
+            fi
+        fi
+
+        # resuspend loop, since this stupid laptop keeps unsuspending
+        if [[ -f /proc/acpi/button/lid/LID0/state ]]; then
+            read _battstat < $_battdir/status
+            battstat=${_battstat:0:1}
+            echo $(date) $(cat /proc/acpi/button/lid/LID0/state) $battstat >> /tmp/lidstate
+            if [[ ! $(cat /proc/acpi/button/lid/LID0/state) =~ 'open' && $battstat == 'D' ]]; then
+                echo "\tresuspending..." $(date) >> /tmp/lidstate
+                sudo systemctl suspend
             fi
         fi
     fi; fi; fi; fi
