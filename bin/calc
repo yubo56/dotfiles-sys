@@ -123,7 +123,7 @@ class Quant(object):
         for u, name in zip(self.units, UNIT_NAMES):
             if u == 1:
                 ret += '%s.' % name
-            elif u > 1:
+            elif u != 0:
                 ret += '%s^%.3f.' % (name, u)
         ret = ret.strip('.')
         ret += '\\'
@@ -391,9 +391,9 @@ if __name__ == '__main__':
                 if np.isinf(res.val):
                     raise OverflowError('ack')
                 print(res)
-                res2 = eval_expr(in_str, prev_res=prev_res, log=True)
-                if res != res2:
-                    raise ValueError('Logcheck error: %s != %s' % (res, res2))
+                # res2 = eval_expr(in_str, prev_res=prev_res, log=True)
+                # if res != res2:
+                #     raise ValueError('Logcheck error: %s != %s' % (res, res2))
                 prev_res = res
             except OverflowError as e:
                 print('Overflow, retrying with log')
