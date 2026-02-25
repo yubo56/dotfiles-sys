@@ -7,6 +7,7 @@
 #
 
 # global exports
+export BROWSER='google-chrome-stable'
 export LC_ALL=C
 export HOMEBREW_NO_AUTO_UPDATE=1
 . ~/.shell_envs

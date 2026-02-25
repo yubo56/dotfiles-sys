@@ -220,7 +220,7 @@ srchp() {
 # fun function to scroll thru files in local
 ys_scroll() {
     for i in $(\
-        find ${1=/opt/homebrew/Cellar/gcc/12.2.0} \
+        find ${1=~/tmp/linux} \
         -iname '*.c' -or -iname '*.cpp' -or -iname '*.h' -or -iname '*.hpp' \
         2> /dev/null | shuf
     ); do

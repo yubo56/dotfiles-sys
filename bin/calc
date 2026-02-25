@@ -123,7 +123,7 @@ class Quant(object):
         for u, name in zip(self.units, UNIT_NAMES):
             if u == 1:
                 ret += '%s.' % name
-            elif u != 0:
+            elif abs(u) >= 1e-3:
                 ret += '%s^%.3f.' % (name, u)
         ret = ret.strip('.')
         ret += '\\'

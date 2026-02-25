@@ -13,7 +13,7 @@ alias ll="ls -A"
 alias rm='rm -i' # the mark of a man who has seen things
 
 # options for common programs
-alias feh='feh -B white -. -d'
+alias feh='feh -. -d'
 alias g++='g++ -Wall --std=c++0x'
 alias gcc='gcc -Wall -Wstrict-prototypes -ansi -pedantic -D_GNU_SOURCE'
 alias acpi='acpi --everything'
@@ -25,7 +25,7 @@ alias less='less -R'
 alias za='zathura --fork'
 alias ts='ts "$fg[cyan]%b %d %H:%M:%.S${reset_color}"'
 alias venv='source venv/bin/activate'
-alias ip='ipython3 --no-banner --pylab'
+alias ip='ipython3 --no-banner'
 
 # Utilities
 alias g='git'
@@ -64,7 +64,7 @@ alias venv='source venv/bin/activate'
 alias arxiv='source ~/dotfiles/sys/venv/bin/activate && arxiv_get; cd ~/Dropbox/arxiv && vim $('\''ls'\'' -c | head -n 1) astrophnotes.txt'
 alias arxiv_mu='source ~/dotfiles/sys/venv/bin/activate && arxiv_makeup'
 
-alias vpn_princeton='sudo -E gpclient --fix-openssl connect --browser firefox vpn.princeton.edu'
+alias vpn_princeton='sudo -E gpclient --fix-openssl connect --browser google-chrome-stable vpn.princeton.edu'
 alias vpn_cita='sudo openvpn CITAvpn.ovpn'
 alias rehdmi='xrandr --output HDMI-1 --left-of eDP-1 --mode'
 
