@@ -1,0 +1,1 @@
+chromium --app=https://claude.ai --disable-extensions --disable-features=UseOzonePlatform

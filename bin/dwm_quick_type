@@ -7,7 +7,7 @@ case $1 in
         FILENAME=\'"screenshots/$(date +'%m-%d-%y_%H_%M_%S').png"\'
         mkdir -p screenshots &&
             sleep 0.1 &&
-            xdotool key --delay 2 --clearmodifiers Super_L+apostrophe &&
+            xdotool key --delay $TYPE_DELAY --clearmodifiers Super_L+apostrophe &&
             sleep 0.1 &&
             xdotool type --delay $TYPE_DELAY --clearmodifiers "import $FILENAME" &&
             xdotool key Return
@@ -26,13 +26,8 @@ case $1 in
             xdotool key Return
         done
         ;;
-    deer)
-        xdotool key --delay $TYPE_DELAY --clearmodifiers Control_L+Shift_L+u &&
-        xdotool type --delay $TYPE_DELAY --clearmodifiers 1f98c &&
-        xdotool key Return
-        ;;
     _run)
-        CHOICES='sshot\nshrug\ntableflip\ndeer'
+        CHOICES='sshot\nshrug\ntableflip'
 
         nb="-nb \#000000"
         nf="-nf \#49e20e"
