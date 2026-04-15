@@ -1,13 +1,18 @@
 #! /bin/bash
 
 # on 60% keeb, need to run this at start
-if xmodmap -pke | grep ' 9 = Escape' 2> /dev/null; then
-    xmodmap -e 'keycode 9 = grave asciitilde grave asciitilde'
-    xmodmap -e 'keycode 49 = Escape Escape'
-    xmodmap -e 'keycode 41 = u U grave asciitilde'
+if xkbcomp "$DISPLAY" -xkb - | grep 'key.*<ESC>.*grave'; then
+    xkbcomp -I"$HOME/.xkb" "$HOME/.xkb/keymap/dvorak_caps_nav" "$DISPLAY" 2> /dev/null
 else
-    xmodmap -e 'keycode 49 = grave asciitilde grave asciitilde'
-    xmodmap -e 'keycode 9 = Escape Escape'
-    xmodmap -e 'keycode 41 = u U Escape'
+    xkbcomp -I"$HOME/.xkb" "$HOME/.xkb/keymap/dvorak_caps_nav_grave" "$DISPLAY" 2> /dev/null
 fi
+# if xmodmap -pke | grep ' 9 = Escape' 2> /dev/null; then
+#     xmodmap -e 'keycode 9 = grave asciitilde grave asciitilde'
+#     xmodmap -e 'keycode 49 = Escape Escape'
+#     xmodmap -e 'keycode 41 = u U grave asciitilde'
+# else
+#     xmodmap -e 'keycode 9 = grave asciitilde grave asciitilde'
+#     xmodmap -e 'keycode 49 = Escape Escape'
+#     xmodmap -e 'keycode 41 = u U Escape'
+# fi
 xset r rate 150 60

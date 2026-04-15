@@ -153,3 +153,11 @@ cd .
 # magenta | 5
 # cyan | 6
 # white | 7
+
+# pnpm
+export PNPM_HOME="/home/yssu/.local/share/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+# pnpm end
