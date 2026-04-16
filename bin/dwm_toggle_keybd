@@ -6,5 +6,5 @@ else
     setxkbmap us -variant dvorak-intl
 fi
 
-xmodmap ~/.xmodmap
+xkbcomp -I"$HOME/.xkb" "$HOME/.xkb/keymap/dvorak_caps_nav" "$DISPLAY" 2> /dev/null
 xset r rate 150 60
