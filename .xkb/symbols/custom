@@ -78,4 +78,5 @@ xkb_symbols "dvorak_caps_nav_grave" {
 
     // map esc to grave
     key <ESC> { [ grave, asciitilde ] };
+    key <TLDE> { [ Escape, Escape ] };
 };
