@@ -64,7 +64,7 @@ alias venv='source venv/bin/activate'
 alias arxiv='source ~/dotfiles/sys/venv/bin/activate && arxiv_get; cd ~/Dropbox/arxiv && vim $('\''ls'\'' -c | head -n 1) astrophnotes.txt'
 alias arxiv_mu='source ~/dotfiles/sys/venv/bin/activate && arxiv_makeup'
 
-alias vpn_princeton='sudo -E gpclient --fix-openssl connect --browser google-chrome-stable vpn.princeton.edu'
+alias vpn_princeton='sudo -E gpclient --fix-openssl connect --browser firefox vpn.princeton.edu'
 alias vpn_cita='sudo openvpn CITAvpn.ovpn'
 alias rehdmi='xrandr --output HDMI-1 --left-of eDP-1 --mode'
 

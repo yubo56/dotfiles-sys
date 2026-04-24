@@ -33,6 +33,9 @@ bindkey -r '^J' # unbind ^J to be able to use tmux
 # bindkey '^B' backward-word
 # bindkey '^F' forward-word
 bindkey '^U' backward-kill-line # bash-like
+# alt keycodes for home and end when declaring as xterm
+bindkey "^[[7~" beginning-of-line
+bindkey "^[[8~" end-of-line
 bindkey "${terminfo[khome]}" beginning-of-line
 bindkey "${terminfo[kend]}" end-of-line
 bindkey "${terminfo[kdch1]}" delete-char
@@ -54,8 +57,12 @@ grep -q darwin <<< $OSTYPE 2> /dev/null && {
 #   - start tmux without name in otherwise
 if [ "$NO_TMUX" != "true" ]; then
     if [ "$TERM" =~ "xterm" ] || [ "$TERM" =~ "rxvt" ]; then
+        # ncurses 6.4 breaks rxvt keycodes (F11 shows up as F13)
+        # declare as xterm instead, and overwrite home/end keycodes above
+        TERM=xterm-256color
         hash tmux && {
-            FIRST_SESSION=$(tmux ls -F '#{session_attached}#{session_id}' | 'grep' '0\$' | head -n 1 | cut -c 2-)
+            FIRST_SESSION=$(tmux ls -F '#{session_attached}#{session_id}' \
+                    | 'grep' '0\$' | head -n 1 | cut -c 2-)
             if [[ -z $FIRST_SESSION ]]; then
                 exec tmux -2;
             else
