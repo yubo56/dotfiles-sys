@@ -3,17 +3,17 @@ URxvt*foreground: rgb:b9/80/00
 URxvt*background: black
 URxvt.color4: cyan
 URxvt.color12: #1f77dd
-*fading: 20
+URxvt.fading: 10
 
 URxvt*transparent: true
-URxvt*shading: 30
+URxvt*shading: 40
 URxvt*scrollBar: false
 ! URxvt*font: xft:xos4 Terminus-17
 URxvt*font: xft:Source Code Pro Medium:size=13
 
 ! disable urxvt perl extensions
-URxvt.perl-ext:
-URxvt.perl-ext-common:
+! URxvt.perl-ext:
+! URxvt.perl-ext-common:
 
 ! neutralize highlight blue a bit
 ! command to print all colors out

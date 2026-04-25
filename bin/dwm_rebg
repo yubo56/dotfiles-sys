@@ -1,4 +1,4 @@
-#! /bin/sh
+#! /bin/bash
 # feh --bg-fill --no-fehbg -Z ~/walls
 # feh --bg-max --no-fehbg -Z ~/single_walls/gaia_allsky.jpg
 # feh --bg-fill --no-fehbg -Z ~/single_walls/kipchoge_berlin.jpg
