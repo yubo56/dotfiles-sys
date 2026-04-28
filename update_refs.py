@@ -10,11 +10,11 @@ def isequal(e1, e2):
             return False
     return True
 
-def update_refs_bib():
+def update_refs_bib(fn='refs.bib'):
     '''
     interactively dedupes refs.bib
     '''
-    library = bp.parse_file('refs.bib')
+    library = bp.parse_file(fn)
     print('library had %d entries' % len(library.entries))
 
     # dupe keys
@@ -48,7 +48,7 @@ def update_refs_bib():
 
     print('found %d dupes, removing' % len(rm_lst))
     library.remove(rm_lst)
-    with open('refs.bib', 'w') as f:
+    with open(fn, 'w') as f:
         bp.write_file(f, library)
 
 def merge_bib2():
@@ -57,6 +57,8 @@ def merge_bib2():
     print('lib1 had %d entries' % len(lib1.entries))
     lib2 = bp.parse_file(fn)
     print('newlib had %d entries' % len(lib2.entries))
+    import pdb
+    pdb.set_trace()
     for e2 in lib2.entries:
         for e1 in lib1.entries:
             if isequal(e1, e2):
