@@ -41,3 +41,5 @@
 .ipynb_checkpoints
 
 *.so
+
+.codex

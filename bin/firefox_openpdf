@@ -1,8 +1,8 @@
+#!/usr/bin/env python3
 '''
 GPT-5.5 generated script that will hook into firefox addon so that pdf files are
 forcibly downloaded and opened using local reader (xdg-open)
 '''
-#!/usr/bin/env python3
 import json
 import os
 import pathlib
