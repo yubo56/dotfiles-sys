@@ -33,11 +33,8 @@ bindkey -r '^J' # unbind ^J to be able to use tmux
 # bindkey '^B' backward-word
 # bindkey '^F' forward-word
 bindkey '^U' backward-kill-line # bash-like
-# alt keycodes for home and end when declaring as xterm
-bindkey "^[[7~" beginning-of-line
-bindkey "^[[8~" end-of-line
-bindkey "${terminfo[khome]}" beginning-of-line
-bindkey "${terminfo[kend]}" end-of-line
+# bindkey "${terminfo[khome]}" beginning-of-line
+# bindkey "${terminfo[kend]}" end-of-line
 bindkey "${terminfo[kdch1]}" delete-char
 bindkey "${terminfo[kpp]}" up-line-or-history
 bindkey "${terminfo[knp]}" down-line-or-history

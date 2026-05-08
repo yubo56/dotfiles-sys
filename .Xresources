@@ -38,6 +38,6 @@ XFontsel*MenuButton*Justify: left
 XFontsel*MenuButton*MenuButtonStyle: select
 xfontsel*Font: xft:Inconsolata:size=12:antialias=true:hinting=true
 
-! fix home and end keys globally
+# fix keysims for home and end so they work in python
 URxvt.keysym.Home: \001
 URxvt.keysym.End:  \005
