@@ -37,3 +37,7 @@ XFontsel*Toggle*ToggleStyle: check
 XFontsel*MenuButton*Justify: left
 XFontsel*MenuButton*MenuButtonStyle: select
 xfontsel*Font: xft:Inconsolata:size=12:antialias=true:hinting=true
+
+! fix home and end keys globally
+URxvt.keysym.Home: \001
+URxvt.keysym.End:  \005
