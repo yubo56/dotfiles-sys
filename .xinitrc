@@ -47,4 +47,13 @@ bluetoothctl power on || :
 gsettings set org.gnome.desktop.peripherals.touchpad disable-while-typing false
 gsettings set org.gnome.desktop.peripherals.mouse double-click 100
 
+# https://bbs.archlinux.org/viewtopic.php?id=308200
+xinitdir="/etc/X11/xinit"
+if [ -d "$xinitdir"/xinitrc.d ] ; then
+	for f in "$xinitdir/xinitrc.d"/?*.sh ; do
+		[ -x "$f" ] && . "$f"
+	done
+	unset f
+fi
+
 exec dwmalt
