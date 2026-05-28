@@ -53,7 +53,7 @@ grep -q darwin <<< $OSTYPE 2> /dev/null && {
 #   - try to start main (and fail if already existing) in OS X
 #   - start tmux without name in otherwise
 if [ "$NO_TMUX" != "true" ]; then
-    if [ "$TERM" =~ "xterm" ] || [ "$TERM" =~ "rxvt" ]; then
+    if [ "$TERM" =~ "xterm" ] || [ "$TERM" =~ "rxvt" ] || [ "$TERM" =~ "foot" ]; then
         # ncurses 6.4 breaks rxvt keycodes (F11 shows up as F13)
         # declare as xterm instead, and overwrite home/end keycodes above
         TERM=xterm-256color
