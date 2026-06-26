@@ -61,7 +61,8 @@ if [ "$NO_TMUX" != "true" ]; then
             FIRST_SESSION=$(tmux ls -F '#{session_attached}#{session_id}' \
                     | 'grep' '0\$' | head -n 1 | cut -c 2-)
             if [[ -z $FIRST_SESSION ]]; then
-                exec tmux -2u new;
+                exec tmux -2;
+                # exec tmux -2u new;
             else
                 exec tmux attach-session -t $FIRST_SESSION
             fi
