@@ -70,7 +70,7 @@ alias rehdmi='xrandr --output HDMI-1 --left-of eDP-1 --mode'
 
 alias startall='tmux split-window -h "zsh -ic reconn"\
     && tmux split-window -h "zsh -ic redhcpcd"\
-    && tmux select-layout main-vertical\
+    && tmux select-layout even-vertical\
     && echo waiting for wpa_supplicant for 20s... && sleep 20s && exec /home/yssu/tmp/apt_script/apartment_monitor.py | ts'
 
 # https://open-meteo.com/en/docs?hourly=&current=weather_code,temperature_2m#weather_variable_documentation
