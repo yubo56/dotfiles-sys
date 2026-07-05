@@ -1,0 +1,49 @@
+# Translated from the old xrandr monitor cases in bin/statusLoop.
+# Use `wlr-randr` in a running dwl session to confirm output names and widths.
+
+# ArchTest:
+#   xrandr --output HDMI1 --auto --left-of eDP1
+# wlroots usually exposes these as HDMI-A-1 and eDP-1.
+profile archtest-hdmi-left {
+	output HDMI-A-1 enable mode preferred position 0,0
+	output eDP-1 enable mode preferred position 1920,0
+	exec /home/yssu/bin/dwl_rebg
+}
+
+# exo15c:
+#   xrandr --output HDMI-1 --auto --left-of VGA-1 --output VGA-1 --auto --rotate left
+# X11 "rotate left" is represented as transform 270 here.
+profile exo15c-hdmi-vga {
+	output HDMI-A-1 enable mode preferred position 0,0
+	output VGA-1 enable mode preferred position 1920,0 transform 270
+	exec /home/yssu/bin/dwl_rebg
+}
+
+# YuboDesktop:
+#   xrandr --output HDMI-1 --auto --right-of DP-1 --rotate right
+# Adjust HDMI-A-1's x position if DP-1 is not 2560 pixels wide.
+profile yubodesktop-dp-hdmi {
+	output DP-1 enable mode preferred position 0,0
+	output HDMI-A-1 enable mode preferred position 2560,0 transform 270
+	exec /home/yssu/bin/dwl_rebg
+}
+
+# YuboAcer, lid open:
+#   xrandr --output HDMI-1 --mode 2560x1440 --left-of eDP-1 --output eDP-1 --auto
+profile yuboacer-hdmi-open {
+	output HDMI-A-1 enable mode 2560x1440 position 0,0
+	output eDP-1 enable mode preferred position 2560,0
+	exec /home/yssu/bin/dwl_rebg
+}
+
+# YuboAcer, lid closed:
+#   xrandr --output HDMI-1 --mode 2560x1440 --left-of eDP-1 --output eDP-1 --off
+#
+# Kanshi cannot infer lid state from connected outputs, so switch to this
+# explicitly with `kanshictl switch yuboacer-hdmi-closed` or drive that command
+# from an ACPI/lid watcher.
+profile yuboacer-hdmi-closed {
+	output HDMI-A-1 enable mode 2560x1440 position 0,0
+	output eDP-1 disable
+	exec /home/yssu/bin/dwl_rebg
+}

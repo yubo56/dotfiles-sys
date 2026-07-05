@@ -1,0 +1,12 @@
+#! /bin/sh
+
+export XCURSOR_THEME=Adwaita
+export XCURSOR_SIZE=48
+export XMODIFIERS='@im=ibus'
+export GTK_IM_MODULE=ibus
+export QT_IM_MODULE=ibus
+
+/home/yssu/bin/dwl_ibus &
+redshift &
+
+exec /bin/sh -c '/home/yssu/bin/statusWayland | exec dwlalt -s "kanshi -c /home/yssu/.config/kanshi/config"'

@@ -9,7 +9,6 @@
 # global exports
 # export BROWSER='google-chrome-stable'
 export BROWSER='firefox'
-export LC_ALL=C
 export HOMEBREW_NO_AUTO_UPDATE=1
 . ~/.shell_envs
 
@@ -33,8 +32,8 @@ bindkey -r '^J' # unbind ^J to be able to use tmux
 # bindkey '^B' backward-word
 # bindkey '^F' forward-word
 bindkey '^U' backward-kill-line # bash-like
-# bindkey "${terminfo[khome]}" beginning-of-line
-# bindkey "${terminfo[kend]}" end-of-line
+bindkey "${terminfo[khome]}" beginning-of-line
+bindkey "${terminfo[kend]}" end-of-line
 bindkey "${terminfo[kdch1]}" delete-char
 bindkey "${terminfo[kpp]}" up-line-or-history
 bindkey "${terminfo[knp]}" down-line-or-history
@@ -61,8 +60,8 @@ if [ "$NO_TMUX" != "true" ]; then
             FIRST_SESSION=$(tmux ls -F '#{session_attached}#{session_id}' \
                     | 'grep' '0\$' | head -n 1 | cut -c 2-)
             if [[ -z $FIRST_SESSION ]]; then
-                exec tmux -2;
-                # exec tmux -2u new;
+                # exec tmux -2;
+                exec tmux -2u new;
             else
                 exec tmux attach-session -t $FIRST_SESSION
             fi

@@ -3,7 +3,7 @@
 _battdir=/sys/class/power_supply/BAT0
 
 while true; do
-lscpu -e="MHZ" | sort > /tmp/cpumhz
+lscpu -e="MHZ" | sort -n > /tmp/cpumhz
 sleep 1s
 done &
 

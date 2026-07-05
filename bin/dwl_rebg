@@ -1,0 +1,71 @@
+#! /bin/sh
+
+horizontal_wall=$HOME/single_walls/gaia_allsky.jpg
+vertical_wall=$HOME/tmp/gaia_vert.jpg
+pidfile=/tmp/dwl_rebg.$(id -u).pids
+
+if ! command -v swaybg >/dev/null 2>&1; then
+	printf '%s\n' 'dwl_rebg: swaybg is not installed' >&2
+	exit 1
+fi
+
+if [ -f "$pidfile" ]; then
+	while IFS= read -r pid; do
+		case $pid in
+			*[!0-9]*|'') continue ;;
+		esac
+		kill "$pid" 2>/dev/null
+	done < "$pidfile"
+fi
+: > "$pidfile"
+
+wlr-randr 2>/dev/null | awk '
+	/^[^[:space:]]/ {
+		if (output != "" && enabled)
+			print output, width, height, transform
+		output = $1
+		enabled = 1
+		width = 0
+		height = 0
+		transform = "normal"
+		next
+	}
+	/^[[:space:]]*Enabled:/ {
+		enabled = ($2 == "yes")
+		next
+	}
+	/^[[:space:]]*Transform:/ {
+		transform = $2
+		next
+	}
+	/^[[:space:]]*[0-9]+x[0-9]+ px/ {
+		split($1, dims, "x")
+		if (width == 0) {
+			width = dims[1]
+			height = dims[2]
+		}
+		if ($0 ~ /\(.*current.*\)/) {
+			width = dims[1]
+			height = dims[2]
+		}
+		next
+	}
+	END {
+		if (output != "" && enabled)
+			print output, width, height, transform
+	}
+' | while read -r output width height transform; do
+	wall=$horizontal_wall
+	case $transform in
+		90|270|flipped-90|flipped-270)
+			wall=$vertical_wall
+			;;
+		*)
+			if [ "$height" -gt "$width" ] 2>/dev/null; then
+				wall=$vertical_wall
+			fi
+			;;
+	esac
+	swaybg -o "$output" -i "$wall" -m fit &
+	printf '%s\n' "$!" >> "$pidfile"
+done

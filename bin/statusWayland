@@ -1,0 +1,181 @@
+#! /bin/zsh
+
+[[ -f ~/.shell_envs ]] && . ~/.shell_envs 2> /dev/null
+TRAPPIPE() { exit 0; }
+PATH=/home/yssu/bin:$PATH
+
+sep='|'
+refresh_interval=1
+output_interval=0.1
+_battdir=/sys/class/power_supply/BAT0
+weather_file=/tmp/weather
+status_cache_file=/tmp/statusWayland.$$
+status_slow_suffix_file=/tmp/statusWayland_slow_suffix.$$
+xkb_suffix_file=${DWL_XKB_SUFFIX_FILE:-/tmp/dwl_xkb_suffix}
+host=$(hostname 2> /dev/null)
+
+update_weather() {
+    while true; do
+        if { ip link 2> /dev/null | grep -q 'enp.s0.* UP '; } \
+                || { [[ -n "$WIFI" ]] && iw dev "$WIFI" link 2> /dev/null | grep -q Connected; }; then
+            curl -fsS --max-time 10 "https://api.open-meteo.com/v1/forecast?latitude=40.71555&longitude=-74.04529&daily=temperature_2m_max,temperature_2m_min&current=temperature_2m,weather_code&timezone=America%2FNew_York&forecast_days=1" \
+                > /tmp/weatherGrep 2> /dev/null
+            gawk 'match($0, /current":.*temperature_2m":(.*),"weather_code":([0-9]*)},"daily_units.*temperature_2m_max":\[([\-\.0-9]*)\],"temperature_2m_min":\[([\-\.0-9]*)\]/, a) {print a[1] "(" a[2] ")/" a[3] "/" a[4]}' \
+                < /tmp/weatherGrep > "$weather_file"
+        else
+            rm -f "$weather_file"
+        fi
+        sleep 1m
+    done
+}
+
+volume_status() {
+    if [[ -f /tmp/vol ]]; then
+        cat /tmp/vol
+        return
+    fi
+
+    local amixermaster vol
+    amixermaster=$(amixer get Master 2> /dev/null)
+    if grep -q '\[off\]' <<< "$amixermaster"; then
+        vol=Mu
+    else
+        vol=$(sed -nE 's/.*\[([0-9]+)%\].*/\1/p' <<< "$amixermaster" | head -n 1)
+    fi
+    [[ -n "$vol" ]] && echo "$vol" > /tmp/vol
+    print -r -- "$vol"
+}
+
+brightness_status() {
+    if [[ -f /tmp/brightness ]]; then
+        cat /tmp/brightness
+        return
+    fi
+
+    if [[ -n "$brightfile" && -r "$brightfile" && -r "$brightmax" ]]; then
+        local bright
+        bright=$(( $(cat "$brightfile") * 100 / $(cat "$brightmax") ))
+        echo "$bright" > /tmp/brightness
+        print -r -- "$bright"
+    fi
+}
+
+keyboard_suffix() {
+    if [[ -s "$xkb_suffix_file" ]]; then
+        cat "$xkb_suffix_file"
+    else
+        print -r -- D
+    fi
+}
+
+update_weather &
+weather_pid=$!
+
+prevused=0
+previdle=0
+prev2used=0
+prev2idle=0
+
+update_status_fields() {
+    cpustat=$(sed -n '1p' /proc/stat)
+    read _name user nice system incidle _rest <<< "$cpustat"
+
+    used=$(( user + nice + system ))
+    idle=$incidle
+    denom=$(( (used - prev2used) + (idle - prev2idle) ))
+    if (( denom > 0 )); then
+        usage=$(printf '%04.1f' $(( 100.0 * (used - prev2used) / denom - 0.1 )))
+    else
+        usage='00.0'
+    fi
+    prev2used=$prevused
+    prev2idle=$previdle
+    prevused=$used
+    previdle=$idle
+
+    cpumhz=$(lscpu -e=MHZ 2> /dev/null | sort -n | tail -n 1 | cut -c1-4)
+    if [[ -r "$temp_file" ]]; then
+        currtemp=$(printf '%02d' $(( $(cat "$temp_file") / 1000 )))
+        temp="(${cpumhz};${currtemp})"
+    else
+        temp="(${cpumhz})"
+    fi
+
+    total=$(sed -nE 's/MemTotal:\s+(.*) kB/\1/p' /proc/meminfo)
+    free=$(sed -nE 's/MemAvailable:\s+(.*) kB/\1/p' /proc/meminfo)
+    mem=$(( 100 * (total - free) / total ))
+
+    pingMS=$(ping 8.8.8.8 -c 1 -W 0.7 2> /dev/null | sed -nE 's/.*time=([^ ]+) ms/\1/p')
+    if [[ -n "$pingMS" ]]; then
+        pingstat=$(printf '%05.1f' "$pingMS")
+    else
+        pingstat='(!!)'
+    fi
+
+    battAll=''
+    if [[ -r "$_battdir/status" && -n "$_battname" \
+            && -r "$_battdir/${_battname}_now" && -r "$_battdir/${_battname}_full" ]]; then
+        read _battstat < "$_battdir/status"
+        battstat=${_battstat:0:1}
+        battperc=$(printf '%d' $(( 100.0 * $(cat "$_battdir/${_battname}_now") / $(cat "$_battdir/${_battname}_full") )))
+        if [[ "$battstat" = D ]] && (( battperc < 95 )); then
+            battdisplay=$(acpi -b 2> /dev/null | awk '{print $5}' | head -n 1)
+        elif [[ -r "$_battdir/${_battname}_full_design" ]]; then
+            battdisplay=$(printf '%.1f' $(( 100.0 * $(cat "$_battdir/${_battname}_full") / $(cat "$_battdir/${_battname}_full_design") )))
+        fi
+        battAll="${sep}${battperc}${battstat}(${battdisplay})"
+    fi
+
+    net=''
+    if [[ -n "$WIFI" ]]; then
+        IWDEVLINK=$(iw dev "$WIFI" link 2> /dev/null)
+        if [[ -n "$IWDEVLINK" && "$IWDEVLINK" != 'Not connected.' ]]; then
+            net="${sep}$(grep signal <<< "$IWDEVLINK" | awk '{print $2}' | sed 's/ //g')"
+        fi
+    fi
+
+    base="${usage}${temp}${sep}${mem}${sep}${pingstat}${net}${battAll}"
+    if [[ "$host" =~ BlendArch ]]; then
+        read fan_in < /sys/devices/platform/applesmc.768/fan1_output
+        read fan_min < /sys/devices/platform/applesmc.768/fan1_min
+        read fan_max < /sys/devices/platform/applesmc.768/fan1_max
+        FAN=$(( (fan_in - fan_min) * 100 / (fan_max - fan_min) ))
+        base="${FAN}${sep}${base}"
+    fi
+    echo "$base" > /tmp/status
+
+    weather=''
+    [[ -s "$weather_file" ]] && weather="${sep}$(cat "$weather_file")"
+
+    print -r -- "$base" > "${status_cache_file}.tmp"
+    mv "${status_cache_file}.tmp" "$status_cache_file"
+    print -r -- "${weather}${batttime}" > "${status_slow_suffix_file}.tmp"
+    mv "${status_slow_suffix_file}.tmp" "$status_slow_suffix_file"
+}
+
+update_status_fields
+while true; do
+    update_status_fields
+    sleep "$refresh_interval"
+done &
+status_pid=$!
+
+trap 'kill "$weather_pid" "$status_pid" 2> /dev/null; rm -f "$status_cache_file" "$status_slow_suffix_file" "${status_cache_file}.tmp" "${status_slow_suffix_file}.tmp"' EXIT INT TERM
+
+while true; do
+    if [[ -s "$status_cache_file" ]]; then
+        status_prefix=$(cat "$status_cache_file")
+    else
+        status_prefix=''
+    fi
+    if [[ -s "$status_slow_suffix_file" ]]; then
+        status_slow_suffix=$(cat "$status_slow_suffix_file")
+    else
+        status_slow_suffix=''
+    fi
+    vol=$(volume_status)
+    bright=$(brightness_status)
+    [[ -n "$bright" ]] && bright="${sep}${bright}"
+    print -r -- "${status_prefix}${sep}${vol}${bright}${status_slow_suffix} $(dateWeek)$(date +'%y%m%d %H:%M:%S.%1N')$(keyboard_suffix)" 2> /dev/null || exit
+    sleep "$output_interval"
+done

@@ -1,0 +1,32 @@
+#! /bin/sh
+
+mode=${1:-blank}
+
+notify_failure() {
+	if command -v notify-send >/dev/null 2>&1; then
+		notify-send 'No Wayland locker installed' 'Install swaylock, gtklock, or waylock for dwl.'
+	fi
+	printf '%s\n' 'dwl_lock: install swaylock, gtklock, or waylock' >&2
+	exit 1
+}
+
+if command -v swaylock >/dev/null 2>&1; then
+	case $mode in
+		blank)
+			exec swaylock -f -c 000000
+			;;
+		*)
+			exec swaylock -f -c 111111
+			;;
+	esac
+fi
+
+if command -v gtklock >/dev/null 2>&1; then
+	exec gtklock
+fi
+
+if command -v waylock >/dev/null 2>&1; then
+	exec waylock
+fi
+
+notify_failure

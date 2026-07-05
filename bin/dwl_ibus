@@ -1,0 +1,14 @@
+#! /bin/sh
+
+export XMODIFIERS='@im=ibus'
+export GTK_IM_MODULE=ibus
+export QT_IM_MODULE=ibus
+
+case ${1:-start} in
+	restart)
+		pkill -9 ibus-daemon 2>/dev/null
+		pkill -9 ibus 2>/dev/null
+		;;
+esac
+
+exec ibus-daemon -drx
