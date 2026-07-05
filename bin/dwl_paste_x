@@ -1,0 +1,12 @@
+#! /bin/sh
+
+case "$1" in
+	-c)
+		sleep 0.1 && wl-paste --no-newline | wtype - &&
+			wtype -m logo -m shift
+		;;
+	*)
+		sleep 0.1 && wl-paste --primary --no-newline | wtype - &&
+			wtype -m logo -m shift
+		;;
+esac
