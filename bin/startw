@@ -7,6 +7,5 @@ export GTK_IM_MODULE=ibus
 export QT_IM_MODULE=ibus
 
 /home/yssu/bin/dwl_ibus &
-redshift &
 
-exec /bin/sh -c '/home/yssu/bin/statusWayland | exec dwlalt -s "kanshi -c /home/yssu/.config/kanshi/config"'
+exec /bin/sh -c '/home/yssu/bin/statusWayland | exec dwlalt -s "wlsunset -l 40.73 -L -73.93 -T 6000 -t 5000 & exec kanshi -c /home/yssu/.config/kanshi/config"'

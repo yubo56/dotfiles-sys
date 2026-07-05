@@ -1,4 +1,4 @@
 #!/usr/bin/env zsh
 
 # chromium --app=https://chatgpt.com --disable-extensions --disable-features=UseOzonePlatform
-firefox --profile ~/.mozilla/firefox/ChatGPT.Profile https://chatgpt.com
+firefox --profile ~/.mozilla/firefox/ChatGPT.Profile https://chatgpt.com --kiosk
