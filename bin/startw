@@ -2,10 +2,5 @@
 
 export XCURSOR_THEME=Adwaita
 export XCURSOR_SIZE=48
-export XMODIFIERS='@im=ibus'
-export GTK_IM_MODULE=ibus
-export QT_IM_MODULE=ibus
-
-/home/yssu/bin/dwl_ibus &
 
 exec /bin/sh -c '/home/yssu/bin/statusWayland | exec dwlalt -s "wlsunset -l 40.73 -L -73.93 -T 6000 -t 5000 & exec kanshi -c /home/yssu/.config/kanshi/config"'

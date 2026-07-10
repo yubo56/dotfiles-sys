@@ -73,6 +73,7 @@ UNITS_DICT = {
     'yr': (86400 * 365.24, [0, 0, 1, 0]),
 
     'pc': (3.0856e16, [0, 1, 0, 0]),
+    'kpc': (3.0856e19, [0, 1, 0, 0]),
     'ly': (9.461e15, [0, 1, 0, 0]),
 
     'J': (1, [1, 2, -2, 0]),
@@ -120,19 +121,22 @@ class Quant(object):
                 ret += '%f ' % self.val
             else:
                 ret += '%e ' % self.val
+        pos_entries = []
         for u, name in zip(self.units, UNIT_NAMES):
             if u == 1:
-                ret += '%s.' % name
-            elif abs(u) >= 1e-3:
-                ret += '%s^%.3f.' % (name, u)
-        ret = ret.strip('.')
-        ret += '\\'
+                pos_entries.append('%s' % name)
+            elif u >= 1e-3:
+                pos_entries.append('%s^%.3f' % (name, u))
+        ret += '.'.join(pos_entries)
+        neg_entries = []
         for u, name in zip(self.units, UNIT_NAMES):
             if u == -1:
-                ret += '%s.' % name
-            elif u < -1:
-                ret += '%s^%.3f.' % (name, -u)
-        return ret.strip('.\\')
+                neg_entries.append('%s' % name)
+            elif u <= -1e-3:
+                neg_entries.append('%s^%.3f' % (name, -u))
+        if neg_entries:
+            ret += '\\' + ('.'.join(neg_entries))
+        return ret
 
     def __add__(self, q1):
         for u1, u2 in zip(self.units, q1.units):
