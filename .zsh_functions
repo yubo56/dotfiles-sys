@@ -88,6 +88,7 @@ function cd() {
         # python venv
         if [[ $(command -v deactivate) ]]; then
             deactivate
+            [[ -e ~/venv ]] && source ~/venv/bin/activate
         fi
 
         # shvenv
@@ -110,6 +111,7 @@ function cd() {
         # python venv
         venvroot=$(find $root -maxdepth 1 -iname venv | head -n 1)
         if [[ -f $venvroot/bin/activate && ! $(command -v deactivate) ]]; then
+            [[ -n $VIRTUAL_ENV ]] && deactivate
             source $venvroot/bin/activate
         fi
     fi
@@ -239,5 +241,13 @@ ys_scroll() {
 rename_mac() {
     for i in $(find . -iname $3); do
         mv $i $(sed "s/$1/$2/g" <<< $i)
+    done
+}
+
+ztab() {
+    xid=$(tabbed -cd)
+
+    for pdf in "$@"; do
+        'zathura' -e "$xid" "$pdf" &
     done
 }

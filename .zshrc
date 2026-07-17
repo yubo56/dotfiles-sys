@@ -141,6 +141,8 @@ fi
 export SSH_AUTH_SOCK=/tmp/ssh_auth_sock
 ssh-add -l > /dev/null || ssh-add ~/.ssh/id_rsa
 
+[[ -e ~/venv ]] && source ~/venv/bin/activate
+
 # trigger any venv stuff
 cd .
 
@@ -153,11 +155,3 @@ cd .
 # magenta | 5
 # cyan | 6
 # white | 7
-
-# pnpm
-export PNPM_HOME="/home/yssu/.local/share/pnpm"
-case ":$PATH:" in
-  *":$PNPM_HOME:"*) ;;
-  *) export PATH="$PNPM_HOME:$PATH" ;;
-esac
-# pnpm end
