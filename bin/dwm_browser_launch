@@ -1,5 +1,5 @@
 #!/usr/bin/zsh
 # brave-beta # &
 # sleep 1s && dwm_set_transp
-MOZ_ENABLE_WAYLAND=0 firefox &
+firefox &
 # google-chrome-stable&

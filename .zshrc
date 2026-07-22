@@ -16,6 +16,9 @@ export _JAVA_AWT_WM_NONREPARENTING=1 # java swing hates dwm
 export PYTHONUNBUFFERED=1
 export OPENBLAS_NUM_THREADS=2
 
+# double click speed
+gsettings set org.gnome.desktop.peripherals.mouse double-click 400
+
 # config options
 unsetopt beep nomatch notify
 unsetopt completealiases # completes aliases too, spellcheck
