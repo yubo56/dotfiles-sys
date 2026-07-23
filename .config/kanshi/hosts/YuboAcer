@@ -1,0 +1,22 @@
+# Translated from the old xrandr monitor cases in bin/statusLoop.
+# Use `wlr-randr` in a running dwl session to confirm output names and widths.
+
+# Lid open:
+#   xrandr --output HDMI-1 --mode 2560x1440 --right-of eDP-1 --output eDP-1 --auto
+profile open {
+	output eDP-1 enable mode preferred position 0,0
+	output HDMI-A-1 enable mode 2560x1440 position 1920,0
+	exec /home/yssu/bin/dwl_rebg
+}
+
+# Lid closed:
+#   xrandr --output HDMI-1 --mode 2560x1440 --left-of eDP-1 --output eDP-1 --off
+#
+# Kanshi cannot infer lid state from connected outputs, so switch to this
+# explicitly with `kanshictl switch closed` or drive that command
+# from an ACPI/lid watcher.
+profile closed {
+	output HDMI-A-1 enable mode 2560x1440 position 0,0
+	output eDP-1 disable
+	exec /home/yssu/bin/dwl_rebg
+}

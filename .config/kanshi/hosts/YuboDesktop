@@ -1,0 +1,8 @@
+# Translated from the old xrandr monitor case in bin/statusLoop.
+# Adjust HDMI-A-1's x position if DP-1 is not 2560 pixels wide.
+
+profile default {
+	output DP-1 enable mode preferred position 0,0
+	output HDMI-A-1 enable mode preferred position 2560,0 transform 270
+	exec /home/yssu/bin/dwl_rebg
+}

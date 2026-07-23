@@ -3,5 +3,5 @@
 export XCURSOR_THEME=Adwaita
 export XCURSOR_SIZE=60
 
-# exec /bin/sh -c '/home/yssu/bin/statusWayland | exec dwlalt -s "wlsunset -l 40.73 -L -73.93 -T 6000 -t 5000 & exec kanshi -c /home/yssu/.config/kanshi/config"'
-exec /bin/sh -c '/home/yssu/bin/statusWayland | exec dwlalt -d -s "wlsunset -l 40.73 -L -73.93 -T 6000 -t 5000 & exec kanshi -c /home/yssu/.config/kanshi/config" 2>>/home/yssu/dwlalt-debug.log'
+# exec /bin/sh -c '/home/yssu/bin/statusWayland | exec dwlalt -s "wlsunset -l 40.73 -L -73.93 -T 6000 -t 5000 & exec kanshi -c /home/yssu/.config/kanshi/hosts/$(hostnamectl hostname)"'
+exec /bin/sh -c '/home/yssu/bin/statusWayland | exec dwlalt -d -s "wlsunset -l 40.73 -L -73.93 -T 6000 -t 5000 & exec kanshi -c /home/yssu/.config/kanshi/hosts/$(hostnamectl hostname)" 2>>/home/yssu/dwlalt-debug.log'

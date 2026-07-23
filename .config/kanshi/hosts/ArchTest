@@ -1,0 +1,8 @@
+# Translated from the old xrandr monitor case in bin/statusLoop.
+# wlroots usually exposes X11's HDMI1 and eDP1 as HDMI-A-1 and eDP-1.
+
+profile default {
+	output HDMI-A-1 enable mode preferred position 0,0
+	output eDP-1 enable mode preferred position 1920,0
+	exec /home/yssu/bin/dwl_rebg
+}
