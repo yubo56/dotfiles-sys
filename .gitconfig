@@ -1,3 +1,5 @@
+[init]
+    defaultBranch = main
 [user]
     email = yubo56@gmail.com
     name = Yubo Su
