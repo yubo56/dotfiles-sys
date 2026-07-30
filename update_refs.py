@@ -57,8 +57,6 @@ def merge_bib2():
     print('lib1 had %d entries' % len(lib1.entries))
     lib2 = bp.parse_file(fn)
     print('newlib had %d entries' % len(lib2.entries))
-    import pdb
-    pdb.set_trace()
     for e2 in lib2.entries:
         for e1 in lib1.entries:
             if isequal(e1, e2):
