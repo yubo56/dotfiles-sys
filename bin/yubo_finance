@@ -1,0 +1,36 @@
+#!/bin/zsh
+if [[ "$1" == "-s" || "$1" == "--start" ]]; then
+    mkdir -p ~/.mozilla/firefox/Finance.Profile ~/.mozilla/firefox/Finance2.Profile
+    firefox --profile ~/.mozilla/firefox/Finance.Profile \
+        https://wealthfront.com/login \
+        https://chase.com \
+        https://bankofamerica.com \
+        "https://www.americanexpress.com/en-us/account/login?inav=en_us_menu_login" \
+        https://capitalone.com \
+        https://schwab.com \
+        "https://auth.tiaa.org/public/authentication/securelogin" \
+        https://citi.com \
+        "https://digital.fidelity.com/prgw/digital/signin/retail" \
+        https://www.marriott.com/loyalty/myAccount/default.mi \
+        https://www.hilton.com \
+        https://www.hyatt.com/en-US/member/sign-in/traditional \
+        https://account.venmo.com \
+        https://www.paypal.com \
+        https://www.ihg.com \
+        https://www.united.com \
+        https://www.delta.com \
+        "https://www.aa.com/loyalty/login" \
+        https://www.alaskaair.com \
+        "https://flyasiana.com/I/US/EN/viewLogin.do?callType=IBE" \
+        https://www.bilt.com/wallet \
+        &!
+    firefox --profile ~/.mozilla/firefox/Finance2.Profile \
+        https://chase.com \
+        &!
+elif [[ "$1" == "-p" || "$1" == "--print" ]]; then
+    python ~/code/firefoxaddons/2026finance/scripts/net_worth.py
+else
+    echo "Usage: \n"\
+        "\t-s/--start: Starts firefox windows\n"\
+        "\t-p/--print: Prints using net_worth script"
+fi
