@@ -28,9 +28,10 @@ if [[ "$1" == "-s" || "$1" == "--start" ]]; then
         https://chase.com \
         &!
 elif [[ "$1" == "-p" || "$1" == "--print" ]]; then
-    python ~/code/firefoxaddons/2026finance/scripts/net_worth.py
+    shift
+    python ~/code/firefoxaddons/2026finance/scripts/net_worth.py "$@"
 else
     echo "Usage: \n"\
         "\t-s/--start: Starts firefox windows\n"\
-        "\t-p/--print: Prints using net_worth script"
+        "\t-p/--print [net_worth flags]: Prints using net_worth script"
 fi
