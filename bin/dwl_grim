@@ -1,1 +1,13 @@
-mkdir -p ~/screenshots && grim -g "$(slurp)" ~/screenshots/$(date +%y%m%d_%H%M%S).png
+#!/bin/sh
+set -eu
+
+screenshots_dir="${HOME}/screenshots"
+filename="${screenshots_dir}/$(date +%y%m%d_%H%M%S).png"
+
+mkdir -p "$screenshots_dir"
+
+if [ "${1:-}" = "--select" ]; then
+	grim -g "$(slurp)" "$filename"
+else
+	grim "$filename"
+fi

@@ -2,11 +2,12 @@
 if [[ "$1" == "-s" || "$1" == "--start" ]]; then
     mkdir -p ~/.mozilla/firefox/Finance.Profile ~/.mozilla/firefox/Finance2.Profile
     firefox --profile ~/.mozilla/firefox/Finance.Profile \
+        https://venmo.com \
         https://wealthfront.com/login \
         https://chase.com \
         https://bankofamerica.com \
         "https://www.americanexpress.com/en-us/account/login?inav=en_us_menu_login" \
-        https://capitalone.com \
+        https://verified.capitalone.com/auth/signin \
         https://schwab.com \
         "https://auth.tiaa.org/public/authentication/securelogin" \
         https://citi.com \
@@ -14,8 +15,7 @@ if [[ "$1" == "-s" || "$1" == "--start" ]]; then
         https://www.marriott.com/loyalty/myAccount/default.mi \
         https://www.hilton.com \
         https://www.hyatt.com/en-US/member/sign-in/traditional \
-        https://account.venmo.com \
-        https://www.paypal.com \
+        https://www.paypal.com/signin \
         https://www.ihg.com \
         https://www.united.com \
         https://www.delta.com \
