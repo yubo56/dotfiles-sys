@@ -144,8 +144,6 @@ fi
 export SSH_AUTH_SOCK=/tmp/ssh_auth_sock
 ssh-add -l > /dev/null || ssh-add ~/.ssh/id_rsa
 
-[[ -e ~/venv ]] && source ~/venv/bin/activate
-
 # trigger any venv stuff
 cd .
 
