@@ -37,6 +37,7 @@
 *.hi
 
 *.h5
+*.npz
 
 .ipynb_checkpoints
 
