@@ -88,7 +88,6 @@ function cd() {
         # python venv
         if [[ $(command -v deactivate) ]]; then
             deactivate
-            [[ -e ~/venv ]] && source ~/venv/bin/activate
         fi
 
         # shvenv
@@ -111,9 +110,11 @@ function cd() {
         # python venv
         venvroot=$(find $root -maxdepth 1 -iname venv | head -n 1)
         if [[ -f $venvroot/bin/activate && ! $(command -v deactivate) ]]; then
-            [[ -n $VIRTUAL_ENV ]] && deactivate
             source $venvroot/bin/activate
         fi
+    else
+        unset _CURR_VENV
+        [[ -e ~/venv ]] && source ~/venv/bin/activate && export _CURR_VENV="~/venv"
     fi
 }
 
