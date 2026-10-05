@@ -27,11 +27,31 @@ if [[ "$1" == "-s" || "$1" == "--start" ]]; then
     firefox --profile ~/.mozilla/firefox/Finance2.Profile \
         https://chase.com \
         &!
+elif [[ "$1" == "-s2" || "$1" == "--start2" ]]; then
+    firefox --profile ~/.mozilla/firefox/Finance3.Profile \
+        https://wealthfront.com/login \
+        https://chase.com \
+        https://bankofamerica.com \
+        "https://www.americanexpress.com/en-us/account/login?inav=en_us_menu_login" \
+        https://schwab.com \
+        https://citi.com \
+        "https://digital.fidelity.com/prgw/digital/signin/retail" \
+        https://www.marriott.com/loyalty/myAccount/default.mi \
+        https://www.hyatt.com/en-US/member/sign-in/traditional \
+        https://www.united.com \
+        https://www.delta.com \
+        "https://www.aa.com/loyalty/login" \
+        https://www.bilt.com/wallet \
+        &!
 elif [[ "$1" == "-p" || "$1" == "--print" ]]; then
     shift
     python ~/code/firefoxaddons/2026finance/scripts/net_worth.py "$@"
+elif [[ "$1" == "-t" || "$1" == "--transactions" ]]; then
+    python ~/code/firefoxaddons/2026creditkarma_transactions/creditkarma_transactions.py
 else
     echo "Usage: \n"\
-        "\t-s/--start: Starts firefox windows\n"\
-        "\t-p/--print [net_worth flags]: Prints using net_worth script"
+        "\t-s/--start: Starts Yubo firefox windows\n"\
+        "\t-s2/--start2: Starts Yubei firefox windows\n"\
+        "\t-p/--print [net_worth flags]: Prints using net_worth script\n"\
+        "\t-t/--transactions: runs creditkarma transactions cli"
 fi
