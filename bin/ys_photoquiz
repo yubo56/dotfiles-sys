@@ -1,0 +1,339 @@
+#!/usr/bin/env bash
+# made with codex
+
+set -u
+
+usage() {
+    cat <<EOF
+Usage: ${0##*/} [--property PROPERTY] PHOTO [PHOTO ...]
+
+Quiz yourself on a photo's EXIF metadata. If --property is omitted, a menu is
+shown at launch.
+
+Properties:
+  focal-length       Focal length in millimetres
+  shutter-speed      Exposure time (answers such as 1/250 or 0.004)
+  aperture           F-number (answers such as f/2.8 or 2.8)
+  iso                ISO sensitivity
+  exposure-bias      Exposure compensation in EV
+  focal-length-35mm  35 mm-equivalent focal length
+EOF
+}
+
+normalize_property() {
+    case ${1,,} in
+        focal-length|focal|length)       printf '%s\n' focal-length ;;
+        shutter-speed|shutter|speed)     printf '%s\n' shutter-speed ;;
+        aperture|f-number|fnumber)       printf '%s\n' aperture ;;
+        iso|sensitivity)                 printf '%s\n' iso ;;
+        exposure-bias|exposure-compensation|compensation|ev)
+                                         printf '%s\n' exposure-bias ;;
+        focal-length-35mm|35mm|equivalent)
+                                         printf '%s\n' focal-length-35mm ;;
+        *) return 1 ;;
+    esac
+}
+
+property_label() {
+    case $1 in
+        focal-length)      printf 'Focal length' ;;
+        shutter-speed)     printf 'Shutter speed' ;;
+        aperture)          printf 'Aperture' ;;
+        iso)               printf 'ISO' ;;
+        exposure-bias)     printf 'Exposure compensation' ;;
+        focal-length-35mm) printf '35 mm-equivalent focal length' ;;
+    esac
+}
+
+property_subject() {
+    case $1 in
+        focal-length)      printf 'focal length' ;;
+        shutter-speed)     printf 'shutter speed' ;;
+        aperture)          printf 'aperture' ;;
+        iso)               printf 'ISO' ;;
+        exposure-bias)     printf 'exposure compensation' ;;
+        focal-length-35mm) printf '35 mm-equivalent focal length' ;;
+    esac
+}
+
+property_prompt() {
+    case $1 in
+        focal-length|focal-length-35mm) printf 'Your guess (mm): ' ;;
+        shutter-speed)                  printf 'Your guess (e.g. 1/250): ' ;;
+        aperture)                       printf 'Your guess (e.g. f/2.8): ' ;;
+        iso)                            printf 'Your ISO guess: ' ;;
+        exposure-bias)                  printf 'Your guess (EV): ' ;;
+    esac
+}
+
+property_tags() {
+    case $1 in
+        focal-length)      printf '%s\n' FocalLength ;;
+        shutter-speed)     printf '%s\n' ExposureTime ;;
+        aperture)          printf '%s\n' FNumber ;;
+        iso)               printf '%s\n' PhotographicSensitivity ISOSpeedRatings RecommendedExposureIndex ;;
+        exposure-bias)     printf '%s\n' ExposureBiasValue ;;
+        focal-length-35mm) printf '%s\n' FocalLengthIn35mmFilm FocalLengthIn35mmFormat ;;
+    esac
+}
+
+exif_value() {
+    local photo=$1 tag raw
+    shift
+    for tag in "$@"; do
+        raw=$(identify -quiet -format "%[EXIF:$tag]" -- "$photo" 2>/dev/null) || true
+        if [[ -n $raw ]]; then
+            printf '%s\n' "$raw"
+            return 0
+        fi
+    done
+    return 1
+}
+
+# Print a decimal representation of a number or rational such as 1/250.
+parse_number() {
+    awk -v value="$1" 'BEGIN {
+        gsub(/^[[:space:]]+|[[:space:]]+$/, "", value)
+        number = "^[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)$"
+        count = split(value, part, "/")
+        if (count == 1 && value ~ number)
+            result = value
+        else if (count == 2 && part[1] ~ number && part[2] ~ number && part[2] != 0)
+            result = part[1] / part[2]
+        else
+            exit 1
+        printf "%.10g", result
+    }'
+}
+
+metadata_value() {
+    local property=$1 photo=$2 raw value
+    local -a tags
+    mapfile -t tags < <(property_tags "$property")
+    raw=$(exif_value "$photo" "${tags[@]}") || return 1
+    value=$(parse_number "$raw") || return 1
+    printf '%s\n' "$value"
+}
+
+clean_guess() {
+    local property=$1 value=${2,,} parsed
+    value=${value//[[:space:]]/}
+    case $property in
+        focal-length|focal-length-35mm) value=${value%mm} ;;
+        shutter-speed)
+            value=${value%seconds}; value=${value%second}
+            value=${value%secs}; value=${value%sec}; value=${value%s}
+            ;;
+        aperture) value=${value#f/}; value=${value#f} ;;
+        iso) value=${value#iso} ;;
+        exposure-bias) value=${value%ev} ;;
+    esac
+    parsed=$(parse_number "$value") || return 1
+    if [[ $property != exposure-bias ]] &&
+        ! awk -v value="$parsed" 'BEGIN { exit !(value > 0) }'; then
+        return 1
+    fi
+    printf '%s\n' "$parsed"
+}
+
+format_value() {
+    local property=$1 value=$2
+    case $property in
+        focal-length|focal-length-35mm)
+            awk -v value="$value" 'BEGIN { printf "%.1f mm", value }'
+            ;;
+        shutter-speed)
+            awk -v value="$value" 'BEGIN {
+                if (value > 0 && value < 1) {
+                    denominator = 1 / value
+                    if (denominator == int(denominator + .5))
+                        printf "1/%.0f s", denominator
+                    else
+                        printf "%.4g s", value
+                } else {
+                    printf "%.4g s", value
+                }
+            }'
+            ;;
+        aperture)      awk -v value="$value" 'BEGIN { printf "f/%.1f", value }' ;;
+        iso)           awk -v value="$value" 'BEGIN { printf "ISO %.0f", value }' ;;
+        exposure-bias) awk -v value="$value" 'BEGIN { printf "%+.2g EV", value }' ;;
+    esac
+}
+
+print_result() {
+    local property=$1 guess=$2 actual=$3 subject difference
+    subject=$(property_subject "$property")
+    printf '\nActual %s: %s\n' "$subject" "$(format_value "$property" "$actual")"
+    printf 'Your guess:    %s' "$(format_value "$property" "$guess")"
+
+    case $property in
+        focal-length|focal-length-35mm)
+            difference=$(awk -v guess="$guess" -v actual="$actual" \
+                'BEGIN { d = guess - actual; if (d < 0) d = -d; printf "%.1f", d }')
+            printf ' (off by %s mm)\n' "$difference"
+            ;;
+        exposure-bias)
+            difference=$(awk -v guess="$guess" -v actual="$actual" \
+                'BEGIN { d = guess - actual; if (d < 0) d = -d; printf "%.2g", d }')
+            printf ' (off by %s EV)\n' "$difference"
+            ;;
+        shutter-speed|iso|aperture)
+            if awk -v guess="$guess" -v actual="$actual" \
+                'BEGIN { exit !(guess > 0 && actual > 0) }'; then
+                difference=$(awk -v guess="$guess" -v actual="$actual" -v property="$property" \
+                    'BEGIN {
+                        d = log(guess / actual) / log(2)
+                        if (property == "aperture") d *= 2
+                        if (d < 0) d = -d
+                        printf "%.2f", d
+                    }')
+                printf ' (off by %s stops)\n' "$difference"
+            else
+                printf '\n'
+            fi
+            ;;
+    esac
+}
+
+choose_property() {
+    local choice
+    printf '%s\n' \
+        'What would you like to guess?' \
+        '  1) Focal length' \
+        '  2) Shutter speed' \
+        '  3) Aperture' \
+        '  4) ISO' \
+        '  5) Exposure compensation' \
+        '  6) 35 mm-equivalent focal length' >&2
+    while true; do
+        printf 'Choose 1-6: ' >&2
+        IFS= read -r choice || return 1
+        case $choice in
+            1) printf '%s\n' focal-length; return ;;
+            2) printf '%s\n' shutter-speed; return ;;
+            3) printf '%s\n' aperture; return ;;
+            4) printf '%s\n' iso; return ;;
+            5) printf '%s\n' exposure-bias; return ;;
+            6) printf '%s\n' focal-length-35mm; return ;;
+            *) printf 'Please enter a number from 1 to 6.\n' >&2 ;;
+        esac
+    done
+}
+
+if [[ ${1-} == --ask ]]; then
+    property=${2-}
+    photo=${3-}
+    if ! property=$(normalize_property "$property"); then
+        printf 'Error: unknown quiz property: %s\n' "${2-}" >&2
+        exit 2
+    fi
+
+    property_prompt "$property"
+    IFS= read -r guess
+    subject=$(property_subject "$property")
+
+    if actual=$(metadata_value "$property" "$photo"); then
+        if cleaned=$(clean_guess "$property" "$guess"); then
+            print_result "$property" "$cleaned" "$actual"
+        else
+            printf '\nActual %s: %s\n' "$subject" "$(format_value "$property" "$actual")"
+            printf 'Your guess could not be parsed.\n'
+        fi
+    else
+        printf '\nNo EXIF %s was found for this photo.\n' "$subject"
+    fi
+
+    printf '\nPress Enter for the next photo...'
+    IFS= read -r _
+    exit 0
+fi
+
+property=
+while (( $# > 0 )); do
+    case $1 in
+        -p|--property)
+            if (( $# < 2 )); then
+                printf 'Error: %s requires a property name.\n' "$1" >&2
+                exit 2
+            fi
+            property=$2
+            shift 2
+            ;;
+        --property=*) property=${1#*=}; shift ;;
+        -h|--help) usage; exit 0 ;;
+        --) shift; break ;;
+        *) break ;;
+    esac
+done
+
+if (( $# == 0 )); then
+    usage >&2
+    exit 2
+fi
+
+for photo in "$@"; do
+    if [[ ! -f $photo ]]; then
+        printf 'Error: not a file: %s\n' "$photo" >&2
+        exit 2
+    fi
+done
+
+for command in feh foot identify; do
+    if ! command -v "$command" >/dev/null 2>&1; then
+        printf 'Error: required command not found: %s\n' "$command" >&2
+        exit 1
+    fi
+done
+
+if [[ -n $property ]]; then
+    requested_property=$property
+    if ! property=$(normalize_property "$property"); then
+        printf 'Error: unknown quiz property: %s\n' "$requested_property" >&2
+        printf 'Run %s --help to list valid properties.\n' "${0##*/}" >&2
+        exit 2
+    fi
+else
+    property=$(choose_property) || exit 1
+fi
+
+label=$(property_label "$property")
+subject=$(property_subject "$property")
+self=$(realpath -- "$0")
+printf -v self_q '%q' "$self"
+printf -v property_q '%q' "$property"
+printf -v foot_q '%q' "$(command -v foot)"
+
+# feh gets a temporary XDG config below. Restore the caller's XDG config for
+# Foot so it can still load ~/.config/foot/foot.ini (or a custom equivalent).
+if [[ -v XDG_CONFIG_HOME ]]; then
+    printf -v xdg_config_q '%q' "$XDG_CONFIG_HOME"
+    foot_command="env XDG_CONFIG_HOME=$xdg_config_q $foot_q"
+else
+    foot_command="env -u XDG_CONFIG_HOME $foot_q"
+fi
+
+# An isolated config directory prevents the default "feh" theme (including
+# --draw-filename) and custom key bindings from leaking into the quiz.
+quiz_config=$(mktemp -d "${TMPDIR:-/tmp}/photo-quiz.XXXXXX") || exit 1
+cleanup() {
+    if [[ -n ${quiz_config-} && -d $quiz_config && $quiz_config == *photo-quiz.* ]]; then
+        rm -rf -- "$quiz_config"
+    fi
+}
+trap cleanup EXIT HUP INT TERM
+mkdir -p -- "$quiz_config/feh"
+: > "$quiz_config/feh/themes"
+: > "$quiz_config/feh/keys"
+: > "$quiz_config/feh/buttons"
+
+printf 'Photos are randomized. Press Enter in feh when you are ready to guess %s.\n' "$subject"
+
+XDG_CONFIG_HOME=$quiz_config feh \
+    --randomize \
+    --scale-down \
+    --title "$label quiz — %u/%l" \
+    --info "printf 'Guess the $subject.\\nPress Enter to answer.'" \
+    --action "$foot_command --log-level=error --title='$label guess' $self_q --ask $property_q %F" \
+    --on-last-slide quit \
+    -- "$@"
