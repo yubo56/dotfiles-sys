@@ -105,6 +105,9 @@ fi
 if [ -e ~/.zsh_functions ]; then
     . ~/.zsh_functions
 fi
+if [ -e ~/.rdx_aliases ]; then
+    . ~/.rdx_aliases
+fi
 
 # variables
 export EDITOR="vim"
