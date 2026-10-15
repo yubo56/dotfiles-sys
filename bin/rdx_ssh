@@ -1,2 +1,2 @@
 #!/bin/bash
-foot -e bash -c "TERM=xterm-256color ssh rdx"
+foot -e bash -c "TERM=xterm-256color ssh rdx; bash"
